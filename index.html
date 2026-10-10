@@ -14,7 +14,7 @@
 }
 
 body {
-  background-color: #fff5f8;
+  background-color: #fff0f6;
   padding-bottom: 90px;
   color: #333;
 }
@@ -24,8 +24,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: #fff5f8;
-  padding: 18px 20px 10px;
+  background: #fff0f6;
+  padding: 20px 20px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,129 +34,128 @@ body {
 .topbar-title {
   display: flex;
   align-items: center;
-  gap:8px;
-  font-size:20px;
-  font-weight:800;
-  color:#442233;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #4b2e3b;
 }
-.topbar-title svg{
-  width:28px;
-  height:28px;
+
+.cat-logo{
+  font-size:30px;
 }
-.voice-icon{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  background:#ffffff;
-  box-shadow:0 3px 10px #00000015;
+
+.voice-icon {
+  width:44px;
+  height:44px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:0 3px 10px #00000010;
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:20px;
+  cursor:pointer;
 }
 
 /* 备注输入框 */
 .remark-input-wrap{
-  margin:12px 20px 20px;
+  margin:14px 20px 22px;
   background:#ffffff;
-  border-radius:16px;
-  padding:14px 16px;
+  border-radius:22px;
+  padding:16px 18px;
   display:flex;
-  gap:8px;
+  gap:10px;
   align-items:center;
-  box-shadow:0 4px 14px #0000000c;
+  box-shadow:0 4px 14px #00000008;
 }
-.remark-input-wrap svg{
-  width:20px;
-  height:20px;
+.pen-icon{
+  font-size:20px;
 }
 #topRemark{
   flex:1;
   border:none;
   outline:none;
-  font-size:16px;
+  font-size:17px;
   background:transparent;
 }
 
 .section-title{
-  padding:0 20px 10px;
+  padding:0 20px 12px;
   display:flex;
   justify-content:space-between;
-  color:#442233;
+  color:#4b2e3b;
   font-weight:700;
-  font-size:16px;
+  font-size:18px;
 }
 .section-title .tip{
-  color:#999;
+  color:#998890;
   font-weight:normal;
   font-size:14px;
 }
 
-/* 分类网格，和截图一模一样布局：4列卡片图标 */
+/* 分类网格，4列布局，和截图完全一致 */
 .cate-grid{
   display:grid;
   grid-template-columns: repeat(4, 1fr);
-  gap:14px;
-  padding:0 20px 24px;
+  gap:16px;
+  padding:0 20px 30px;
 }
 .cate-item{
   background:#ffffff;
-  border-radius:18px;
-  padding:16px 8px 10px;
+  border-radius:24px;
+  padding:20px 8px 12px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:6px;
-  box-shadow:0 3px 10px #00000008;
+  gap:8px;
+  box-shadow:0 3px 10px #00000007;
   cursor:pointer;
-  border:2px solid transparent;
-  transition:0.2s;
+  border:3px solid transparent;
+  transition: transform 0.15s ease, border-color 0.2s;
+}
+/* ✨点击缩放动画，可爱按压效果 */
+.cate-item:active{
+  transform:scale(0.94);
 }
 .cate-item.selected{
-  border-color:#ff94b8;
-  background:#fff0f4;
+  border-color:#ff87ad;
 }
 .cate-icon{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.cate-icon svg{
-  width:26px;
-  height:26px;
+  font-size:42px;
 }
 .cate-name{
-  font-size:13px;
-  color:#444;
+  font-size:14px;
+  color:#55444c;
 }
 
 /* 快捷备注区 */
 .fast-grid{
   display:grid;
   grid-template-columns: repeat(4, 1fr);
-  gap:14px;
+  gap:16px;
   padding:0 20px 24px;
 }
 .fast-item{
   background:#ffffff;
-  border-radius:18px;
-  padding:14px 6px 8px;
+  border-radius:24px;
+  padding:18px 6px 10px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:4px;
-  box-shadow:0 3px 10px #00000008;
+  gap:6px;
+  box-shadow:0 3px 10px #00000007;
   cursor:pointer;
+  transition: transform 0.15s ease;
+}
+.fast-item:active{
+  transform:scale(0.94);
 }
 .fast-icon{
-  width:42px;
-  height:42px;
-  border-radius:12px;
+  font-size:38px;
 }
 .fast-name{
-  font-size:13px;
+  font-size:14px;
+  color:#55444c;
 }
 
 /* 页面切换 */
@@ -190,7 +189,7 @@ body {
 .rec-amt-out { color: #ff6b6b; font-weight: 800; }
 .rec-amt-in { color: #28b968; font-weight: 800; }
 
-/* 底部tab导航，和截图一致 */
+/* 底部tab导航【和截图一模一样：记一笔 /日历 /备忘录 /我的】 */
 .tab-bar {
   position:fixed;
   bottom:0;
@@ -203,21 +202,20 @@ body {
 .tab {
   flex:1;
   text-align:center;
-  padding:10px 0;
-  font-size:12px;
+  padding:12px 0;
+  font-size:13px;
   cursor:pointer;
   color:#888;
 }
 .tab.active{
-  color:#ff6b6b;
+  color:#ff6b8b;
 }
 .tab-icon{
-  font-size:22px;
+  font-size:24px;
   display:block;
-  margin-bottom:3px;
+  margin-bottom:4px;
 }
 
-/* Toast反馈，去掉记账成功老文字 */
 #toast {
   position:fixed;
   left:50%;
@@ -243,14 +241,14 @@ body {
 <div id="page-add" class="page active">
   <div class="topbar">
     <div class="topbar-title">
-      <svg viewBox="0 0 24 24" fill="#442233"><path d="M8 5c0-1.7 1.3-3 3-3s3 1.3 3 3c0 .4-.1.8-.2 1.1L16 11h-1l-1.5-3h-3L9 11H8l2.2-4.9C9.1 5.7 8 5.4 8 5z"/><path d="M6 13c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2H6z"/></svg>
+      <span class="cat-logo">🐱</span>
       记一笔
     </div>
     <div class="voice-icon">🔊</div>
   </div>
 
   <div class="remark-input-wrap">
-    <svg viewBox="0 0 24 24" fill="#ff94b8"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+    <span class="pen-icon">✏️</span>
     <input id="topRemark" placeholder="火锅，打车">
   </div>
 
@@ -268,7 +266,7 @@ body {
 
 </div>
 
-<!-- 账单明细页面（新增导出按钮） -->
+<!-- 账单明细页面（导出按钮） -->
 <div id="page-list" class="page">
   <div class="topbar">
     <div class="topbar-title">账单明细</div>
@@ -296,7 +294,7 @@ body {
   </div>
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航完全还原截图 -->
 <div class="tab-bar">
   <div class="tab active" onclick="switchPage('add', this)">
     <span class="tab-icon">🖊️</span>记一笔
@@ -318,36 +316,36 @@ body {
 let records = JSON.parse(localStorage.getItem('myRecords')) || [];
 let currentCate = "饮品";
 
-// 分类图标库
+// ✅ 和截图一一对应的可爱图标！！
 const cateList = [
-  {name:"餐饮",bg:"#ffb74d",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 2h8l-1 9h-6L8 2z"/><path d="M7 13h10v3a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3v-3z"/></svg>`},
-  {name:"饮品",bg:"#b06fe3",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M7 3h10l-1 13a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3L7 3z"/></svg>`},
-  {name:"交通",bg:"#42a5f5",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M3 12l2-5a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 5v4H3v-4z"/></svg>`},
-  {name:"购物",bg:"#66bb6a",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M4 6h16l-1 12H5L4 6z"/></svg>`},
-  {name:"居住",bg:"#ef5350",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3L4 10v9h16v-9l-8-7z"/></svg>`},
-  {name:"娱乐",bg:"#7e57c2",svg:`<svg viewBox="0 0 24 24" fill="#fff"><rect x="4" y="7" width="16" height="10" rx="2"/></svg>`},
-  {name:"学习",bg:"#26a69a",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M5 4h10a3 3 0 0 1 3 3v11H8a3 3 0 0 1-3-3V4z"/></svg>`},
-  {name:"医疗",bg:"#78909c",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M4 11h16v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6z"/></svg>`},
-  {name:"人情",bg:"#ef5350",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M4 9h16v11H4V9z"/></svg>`},
-  {name:"宠物",bg:"#424242",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M6 10c0-2 2-4 4-4h4c2 0 4 2 4 4v7H6v-7z"/></svg>`},
-  {name:"护肤",bg:"#ec407a",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M9 3h6l-1 6h-4L9 3z"/></svg>`},
-  {name:"其他",bg:"#b0bec5",svg:`<svg viewBox="0 0 24 24" fill="#fff"><circle cx="7" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="17" cy="12" r="1.8"/></svg>`}
+  {name:"餐饮",icon:"🍔"},
+  {name:"饮品",icon:"☕"},
+  {name:"交通",icon:"🚕"},
+  {name:"购物",icon:"🛍️"},
+  {name:"居住",icon:"🏠"},
+  {name:"娱乐",icon:"🎮"},
+  {name:"学习",icon:"📖"},
+  {name:"医疗",icon:"❓"},
+  {name:"人情",icon:"🎁"},
+  {name:"宠物",icon:"🐈"},
+  {name:"护肤",icon:"💄"},
+  {name:"其他",icon:"•••"}
 ];
 
 const fastList = [
-  {name:"早餐",bg:"#ffcc80"},
-  {name:"午餐",bg:"#81d4fa"},
-  {name:"晚餐",bg:"#7986cb"},
-  {name:"火锅",bg:"#ef9a9a"}
+  {name:"早餐",icon:"🌅🍲"},
+  {name:"午餐",icon:"☀️🍜"},
+  {name:"晚餐",icon:"🌙🍲"},
+  {name:"火锅",icon:"❓"}
 ];
 
 function $(id){return document.getElementById(id);}
 
-//渲染分类
+//渲染分类【修复点击选中BUG！】
 function renderCate(){
   $('cateContainer').innerHTML = cateList.map(item=>`
     <div class="cate-item ${item.name===currentCate?'selected':''}" onclick="selectCate('${item.name}')">
-      <div class="cate-icon" style="background:${item.bg}">${item.svg}</div>
+      <div class="cate-icon">${item.icon}</div>
       <div class="cate-name">${item.name}</div>
     </div>
   `).join('');
@@ -361,7 +359,7 @@ function selectCate(name){
 function renderFast(){
   $('fastContainer').innerHTML = fastList.map(item=>`
     <div class="fast-item" onclick="applyFastNote('${item.name}')">
-      <div class="fast-icon" style="background:${item.bg}"></div>
+      <div class="fast-icon">${item.icon}</div>
       <div class="fast-name">${item.name}</div>
     </div>
   `).join('');
@@ -405,19 +403,18 @@ function renderStats(){
   $('statInc').textContent = '¥' + totalInc.toFixed(2);
 }
 
-// ==========【重点】导出账单CSV功能 ==========
+//导出账单CSV功能
 function exportBill(){
   if(records.length === 0){
     showToast('暂无账单可以导出');
     return;
   }
-  //表头
   const header = ["日期","收支类型","分类","金额","备注"];
   const rows = records.map(r=>{
     const typeText = r.type === 'exp' ? '支出' : '收入';
     return [r.date, typeText, r.category, r.amount, r.note];
   })
-  let csvContent = "\uFEFF"; //BOM解决Excel中文乱码
+  let csvContent = "\uFEFF";
   csvContent += header.join(",") + "\n";
   rows.forEach(row=>{
     csvContent += row.join(",") + "\n";
@@ -439,7 +436,7 @@ function showToast(msg){
   setTimeout(()=>t.classList.remove('show'),1600);
 }
 
-//初始化
+//初始化渲染
 renderCate();
 renderFast();
 </script>
