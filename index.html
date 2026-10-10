@@ -61,7 +61,10 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 <body>
 <header class="hd">
   <h1><span class="icon-cute anim-bounce" id="headerIcon">🐱</span><span id="pageTitle">记一笔</span></h1>
-  <button class="theme-btn" onclick="alert('皮肤切换功能已加载')">🎨</button>
+  <div style="display:flex;gap:8px;">
+    <button class="theme-btn" onclick="toggleSound()">🔊</button>
+    <button class="theme-btn" onclick="alert('皮肤切换功能已加载')">🎨</button>
+  </div>
 </header>
 <main class="main">
   <section class="page active" id="page-add">
@@ -79,7 +82,19 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
   <section class="page" id="page-list"><div class="balance-card" style="padding:20px;margin-bottom:16px;"><div class="balance-label">总资产结余</div><div class="balance-amount" style="font-size:30px;" id="totalBalance">¥0.00</div></div><div id="recordList"></div></section>
   <section class="page" id="page-stats"><div class="stats-card"><div class="stats-row"><div class="stats-item"><div class="label">本月收入</div><div class="val" id="stInc">¥0.00</div></div><div class="stats-item"><div class="label">本月支出</div><div class="val" id="stExp">¥0.00</div></div><div class="stats-item"><div class="label">本月结余</div><div class="val" id="stBal">¥0.00</div></div></div></div></section>
   <section class="page" id="page-goal"><div class="stats-card" style="text-align:center;padding:30px 20px;"><div class="icon-cute anim-float" style="font-size:60px;margin-bottom:10px;">🎯</div><div style="font-size:18px;font-weight:800;margin-bottom:8px;">我的储蓄目标</div><div style="color:#b3929f;font-size:13px;margin-bottom:16px;">为了心爱的小物件，加油攒钱吧！</div><div style="height:12px;background:#fff5f8;border-radius:6px;overflow:hidden;"><div id="goalBar" style="width:0%;height:100%;background:linear-gradient(90deg,#ff8fab,#ffb6c1);"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;font-weight:700;"><span id="goalCur">¥0</span><span id="goalTotal">目标：¥0</span></div><input type="number" id="goalInput" placeholder="设定目标金额" style="background:var(--card);padding:14px;border-radius:12px;width:100%;margin-top:16px;text-align:center;"><button class="btn-primary" onclick="saveGoal()">保存目标</button></div></section>
-  <section class="page" id="page-me"><div style="background:#fff;border-radius:24px;padding:20px;"><div class="setting-item"><div><div class="lbl">每日提醒</div><div class="desc">到点提醒你记账</div></div><div class="switch" style="width:50px;height:28px;border-radius:14px;background:#ffe4e9;position:relative;"><div style="width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;"></div></div></div></div></section>
+  <section class="page" id="page-me">
+    <div style="background:#fff;border-radius:24px;padding:20px;">
+      <div class="setting-item" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <div>
+          <div class="lbl" style="font-size:16px;font-weight:700;color:#5a3d4a;">每日提醒</div>
+          <div class="desc" style="font-size:13px;color:#b3929f;margin-top:4px;">到点提醒你记账</div>
+        </div>
+        <div id="remindSwitch" class="switch" onclick="toggleRemind()" style="width:50px;height:28px;border-radius:14px;background:#ffe4e9;position:relative;cursor:pointer;transition:0.3s;">
+          <div id="switchDot" style="width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:0.3s;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 <nav class="tabbar" id="tabbar">
   <button data-page="add" class="active" onclick="switchPage('add')"><span class="ico">✏️</span>记一笔</button>
@@ -98,53 +113,143 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 <script>
 const EMOJI_LIB = ['🍔','🍜','🍕','🍰','🍦','🍎','🍉','🥤','🧋','☕','🍺','🍣','🍞','🧁','🚗','🚌','🚲','✈️','🚇','🚕','🛍️','👗','👟','💄','💍','🎒','🧸','💻','🏠','💡','🧹','🛋️','🚿','🛏️','🎮','🎬','🎵','⚽','🎨','📚','📝','🎓','📖','🏥','💊','💉','🐱','🐶','🐼','🐰','🦁','🐘','🐵','🐯','🐻','🐭','🐸','💰','🧧','🎁','💎','⭐','🌟','✨','🔥','🌈','🌸','💖','❓'];
 let records=[],customCats=[],quickNotes=[],theme='pink',formAmount='0';
+let soundOn = localStorage.getItem("soundOn") !== "off";
+
 function $(id){return document.getElementById(id);}
 function fmt(n){return '¥'+Number(n||0).toFixed(2);}
 function toast(msg){const t=$('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translate(-50%,0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translate(-50%,12px)';},2000);}
+
+// 🔊 音效开关
+function toggleSound(){
+    soundOn = !soundOn;
+    localStorage.setItem("soundOn", soundOn?"on":"off");
+    toast(soundOn ? "音效已开启" : "音效已关闭");
+    renderSoundIcon();
+}
+function renderSoundIcon(){
+    const soundBtn = document.querySelector(".hd button:first-of-type");
+    soundBtn.innerText = soundOn ? "🔊" : "🔇";
+}
+
 function switchPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));const titles={add:'记一笔',list:'明细',stats:'统计',goal:'攒钱目标',me:'我的'};const icons={add:'🐱',list:'📋',stats:'📊',goal:'🎯',me:'👤'};$('headerIcon').textContent=icons[name];$('pageTitle').textContent=titles[name];if(name==='list')renderList();if(name==='stats')renderStats();if(name==='goal')renderGoal();window.scrollTo(0,0);}
+
 function openAmountSheet(){$('amountOverlay').classList.add('show');$('amountSheet').classList.add('show');formAmount='0';$('sheetAmount').textContent='¥ 0.00';}
 function closeAmountSheet(){$('amountOverlay').classList.remove('show');$('amountSheet').classList.remove('show');}
 function pressKey(k){if(k==='del')formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}else{formAmount=formAmount==='0'?k:formAmount+k;}$('sheetAmount').textContent='¥ '+formAmount;}
-function confirmAmount(){const v=parseFloat(formAmount)||0;if(v<=0){toast('请输入金额');return;}$('displayAmount').textContent=fmt(v);closeAmountSheet();setTimeout(()=>saveRecord(v),200);}
+
+function confirmAmount(){
+  const v=parseFloat(formAmount)||0;
+  if(v<=0){toast('请输入金额');return;}
+  $('displayAmount').textContent=fmt(v);
+  closeAmountSheet();
+  setTimeout(()=>saveRecord(v),200);
+}
+
+// ✅ 保存记账记录 +【核心：更新今日收支】
 function saveRecord(v){
   if(v<=0)return;
-  records.push({id:Date.now(),date:new Date().toLocaleDateString('zh-CN'),type:'expense',amount:v,category:'餐饮',note:$('noteInput').value.trim(),createdAt:Date.now()});
+  records.push({
+    id:Date.now(),
+    date:new Date().toLocaleDateString('zh-CN'),
+    type:'expense',
+    amount:v,
+    category:'餐饮',
+    note:$('noteInput').value.trim(),
+    createdAt:Date.now()
+  });
   toast('已记一笔 '+fmt(v));
   $('noteInput').value='';
-  renderList();renderStats();
+  calcToday();  // 记账立刻刷新今日支出！
+  renderList();
+  renderStats();
   $('displayAmount').textContent='¥ 0.00';
 }
+
+// ✅ 新增：计算今日支出今日收入
+function calcToday(){
+  const todayStr = new Date().toLocaleDateString('zh-CN');
+  let todayExpVal = 0;
+  let todayIncVal = 0;
+  records.forEach(r=>{
+    if(r.date === todayStr){
+      if(r.type==='expense') todayExpVal += Number(r.amount);
+      else todayIncVal += Number(r.amount);
+    }
+  })
+  $('todayExp').innerText = fmt(todayExpVal);
+  $('todayInc').innerText = fmt(todayIncVal);
+}
+
 function renderList(){
   if(!records.length){$('recordList').innerHTML='<div style="text-align:center;padding:40px;color:#b3929f;">还没有记录哦 🐣</div>';return;}
   let html='';records.slice().reverse().forEach(r=>{html+='<div class="rec-card"><div class="rec-icon" style="background:#fff0f5;">🍔</div><div class="rec-info"><div class="name">'+r.category+'</div>'+(r.note?'<div class="note">📝 '+r.note+'</div>':'')+'</div><div class="rec-amt exp">-'+fmt(r.amount)+'</div></div>';});
   $('recordList').innerHTML=html;
 }
+
 function renderStats(){
   const exp=records.filter(r=>r.type==='expense').reduce((s,r)=>s+Number(r.amount),0);
   $('stExp').textContent=fmt(exp);$('stInc').textContent='¥0.00';$('stBal').textContent=fmt(-exp);
 }
 function renderGoal(){const goal=parseFloat(localStorage.getItem('goal'))||0;$('goalInput').value=goal||'';$('goalTotal').textContent='目标：'+fmt(goal);$('goalCur').textContent='¥0';$('goalBar').style.width='0%';}
 function saveGoal(){const g=parseFloat($('goalInput').value)||0;localStorage.setItem('goal',g);renderGoal();toast('目标已保存');}
+
 function openAddCat(){$('catOverlay').classList.add('show');$('catSheet').classList.add('show');$('emojiPicker').innerHTML=EMOJI_LIB.map(e=>'<div style="font-size:24px;text-align:center;padding:6px;border-radius:10px;cursor:pointer;" onclick="selectEmoji(\''+e+'\',this)">'+e+'</div>').join('');}
 function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
 function selectEmoji(e,el){window.selectedEmoji=e;document.querySelectorAll('#emojiPicker div').forEach(c=>c.style.background='transparent');el.style.background='#fff0f5';}
 function saveNewCat(){const n=$('newCatName').value.trim();if(!n){toast('请输入名称');return;}customCats.push({name:n,icon:window.selectedEmoji||'🍔'});renderCatGrid();closeAddCat();$('newCatName').value='';toast('分类已添加');}
+
 function renderCatGrid(){
   const cats=[{name:'餐饮',icon:'🍔'},{name:'饮品',icon:'🧋'},{name:'交通',icon:'🚗'},{name:'购物',icon:'🛍️'},{name:'居住',icon:'🏠'},{name:'娱乐',icon:'🎮'},{name:'学习',icon:'📚'},{name:'医疗',icon:'💊'},{name:'人情',icon:'🧧'},{name:'宠物',icon:'🐱'},{name:'护肤',icon:'🧴'},{name:'其他',icon:'🌟'},...customCats];
   $('catGrid').innerHTML=cats.map(c=>'<div class="cat-item" onclick="selectCat(this)"><span class="icon-cute">'+c.icon+'</span><span class="cat-name">'+c.name+'</span></div>').join('');
 }
 function selectCat(el){document.querySelectorAll('#catGrid .cat-item').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
+
 function openAddNote(){$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');$('noteEmojiPicker').innerHTML=EMOJI_LIB.map(e=>'<div style="font-size:24px;text-align:center;padding:6px;border-radius:10px;cursor:pointer;" onclick="selectNoteEmoji(\''+e+'\',this)">'+e+'</div>').join('');}
 function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
 function selectNoteEmoji(e,el){window.selectedNoteEmoji=e;document.querySelectorAll('#noteEmojiPicker div').forEach(c=>c.style.background='transparent');el.style.background='#fff0f5';}
 function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}quickNotes.push({text:t,icon:window.selectedNoteEmoji||'📝'});renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('备注已添加');}
+
 function renderQuickNotes(){
   const defaultNotes=[{text:'早餐',icon:'🍳'},{text:'午餐',icon:'🍱'},{text:'晚餐',icon:'🍜'},{text:'打车',icon:'🚕'},{text:'网购',icon:'📦'},{text:'奶茶',icon:'🧋'},{text:'咖啡',icon:'☕'},{text:'看病',icon:'🏥'},{text:'买书',icon:'📖'},{text:'看电影',icon:'🎬'},{text:'送礼',icon:'🎁'},{text:'工资',icon:'💰'}];
   const allNotes=[...defaultNotes,...quickNotes];
   $('quickNotes').innerHTML=allNotes.map(n=>'<div class="cat-item" onclick="selectQuickNote(\''+n.text+'\')"><span class="icon-cute" style="font-size:22px;">'+n.icon+'</span><span class="cat-name" style="font-size:10px;">'+n.text+'</span></div>').join('');
 }
 function selectQuickNote(t){$('noteInput').value=t;toast('已选备注：'+t);}
+
+// 🕒每日提醒开关
+function initRemindSwitch(){
+  const isOn = localStorage.getItem('remindSwitch') === 'on';
+  setSwitchUI(isOn);
+}
+function setSwitchUI(isOn){
+  const sw = $('remindSwitch');
+  const dot = $('switchDot');
+  if(isOn){
+    sw.style.background = 'var(--primary)';
+    dot.style.left = '24px';
+  }else{
+    sw.style.background = '#ffe4e9';
+    dot.style.left = '2px';
+  }
+}
+function toggleRemind(){
+  const isOn = localStorage.getItem('remindSwitch') === 'on';
+  if(isOn){
+    localStorage.setItem('remindSwitch','off');
+    setSwitchUI(false);
+    toast("已关闭每日提醒");
+  }else{
+    localStorage.setItem('remindSwitch','on');
+    setSwitchUI(true);
+    toast("已开启每日提醒");
+  }
+}
+
+//页面初始化全部加载
 renderCatGrid();renderQuickNotes();renderList();renderStats();renderGoal();
+initRemindSwitch();
+renderSoundIcon();
+calcToday();
 </script>
 </body>
 </html>
