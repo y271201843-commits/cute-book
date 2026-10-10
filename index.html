@@ -6,385 +6,1019 @@
 <meta name="theme-color" content="#ffb6c1">
 <title>迷你萌宠记账本</title>
 <style>
-:root{--bg:#fff5f8;--card:#fff;--text:#5a3d4a;--sub:#b3929f;--line:#ffe4e9;--primary:#ff8fab;--primary-soft:#fff0f5;--green:#34d399;--red:#f87171;--orange:#fbbf24;--radius:26px;--radius-sm:18px;--shadow:0 10px 30px rgba(255,143,171,.15);}
+:root{
+  --bg:#fff5f8;
+  --card:#fff;
+  --text:#5a3d4a;
+  --sub:#b3929f;
+  --line:#ffe4e9;
+  --primary:#ff8fab;
+  --primary-soft:#fff0f5;
+  --green:#34d399;
+  --red:#f87171;
+  --orange:#fbbf24;
+  --radius:26px;
+  --radius-sm:18px;
+  --shadow:0 10px 30px rgba(255,143,171,.15);
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;padding-bottom:calc(80px + env(safe-area-inset-bottom));transition:background .3s;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
+  line-height:1.5;
+  padding-bottom:calc(90px + env(safe-area-inset-bottom));
+}
 button{border:none;background:none;font-family:inherit;color:inherit;cursor:pointer;outline:none;}
-input{font-family:inherit;outline:none;border:none;background:transparent;color:inherit;}
-.icon-cute{font-size:32px;line-height:1;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
-@keyframes floatCute{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(4deg);}}
-@keyframes bounceCute{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+input,textarea{font-family:inherit;outline:none;border:none;background:transparent;color:inherit;}
+img{display:block;max-width:100%;}
+
+/* ===== 通用动画 ===== */
+@keyframes floatCute{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-6px) rotate(4deg);}
+}
+@keyframes bounceCute{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+@keyframes wiggleCute{
+  0%,100%{transform:rotate(-3deg);}
+  50%{transform:rotate(3deg);}
+}
 .anim-float{animation:floatCute 2.5s ease-in-out infinite;}
 .anim-bounce{animation:bounceCute 1.8s ease-in-out infinite;}
-.hd{position:sticky;top:0;z-index:40;background:var(--bg);padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center;}
-.hd h1{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;}
-/* ==========全新音效开关样式========== */
-.theme-btn{width:44px;height:44px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);color:var(--sub);font-size:20px;cursor:pointer;transition:transform 0.2s ease;}
+
+/* ===== 顶部栏 ===== */
+.hd{
+  position:sticky;
+  top:0;
+  z-index:40;
+  background:var(--bg);
+  padding:16px 20px 10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.hd h1{
+  font-size:22px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.hd .logo-img{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+}
+.theme-btn{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:var(--shadow);
+  font-size:20px;
+  transition:transform .2s;
+}
 .theme-btn:active{transform:scale(0.92);}
+
+/* ===== 主体 ===== */
 .main{padding:0 20px;}
 .page{display:none;}
 .page.active{display:block;}
-.balance-card{background:linear-gradient(135deg,#ff8fab,#ffb6c1);color:#fff;border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:0 10px 30px rgba(255,143,171,.15);position:relative;overflow:hidden;}
+
+/* ===== 金额卡片 ===== */
+.balance-card{
+  background:linear-gradient(135deg,#ff8fab,#ffb6c1);
+  color:#fff;
+  border-radius:var(--radius);
+  padding:24px;
+  margin-bottom:16px;
+  box-shadow:0 10px 30px rgba(255,143,171,.18);
+  position:relative;
+  overflow:hidden;
+}
+.balance-card::before{
+  content:"";
+  position:absolute;
+  right:-40px;
+  top:-40px;
+  width:140px;
+  height:140px;
+  background:rgba(255,255,255,.18);
+  border-radius:50%;
+}
 .balance-label{font-size:14px;opacity:.9;font-weight:600;margin-bottom:6px;}
-.balance-amount{font-size:38px;font-weight:800;margin-bottom:16px;}
-.balance-footer{display:flex;gap:20px;font-size:13px;font-weight:600;background:rgba(255,255,255,.2);border-radius:12px;padding:8px 12px;}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 12px;display:flex;justify-content:space-between;align-items:center;}
-.section-title button{font-size:12px;color:var(--primary);font-weight:700;background:var(--primary-soft);padding:6px 12px;border-radius:20px;}
-.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.cat-item{background:var(--card);border-radius:var(--radius-sm);padding:14px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;}
-.cat-item:active{transform:scale(0.96);}
-.cat-item.active{border-color:var(--primary);background:var(--primary-soft);}
-.cat-item-img{width:40px;height:40px;border-radius:12px;object-fit:cover;}
+.balance-amount{font-size:40px;font-weight:800;margin-bottom:14px;}
+.balance-footer{
+  display:flex;
+  gap:14px;
+  font-size:13px;
+  font-weight:700;
+  background:rgba(255,255,255,.22);
+  border-radius:14px;
+  padding:10px 12px;
+}
+.balance-footer .item{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.balance-footer .label{opacity:.9;font-size:12px;}
+.balance-footer .val{font-size:18px;}
+
+/* ===== 自由输入区 ===== */
+.note-input-card{
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.note-input-card .pencil{
+  width:34px;
+  height:34px;
+  border-radius:12px;
+  background:var(--primary-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+.note-input-card textarea{
+  flex:1;
+  font-size:15px;
+  color:var(--text);
+  resize:none;
+  line-height:1.4;
+  max-height:80px;
+}
+.note-input-card textarea::placeholder{color:var(--sub);}
+
+/* ===== 区块标题 ===== */
+.section-title{
+  font-size:15px;
+  font-weight:800;
+  margin:18px 0 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.section-title .sub{font-size:12px;color:var(--sub);font-weight:600;}
+.section-title button{
+  font-size:12px;
+  color:var(--primary);
+  font-weight:800;
+  background:var(--primary-soft);
+  padding:6px 12px;
+  border-radius:20px;
+}
+
+/* ===== 分类网格 / 快捷标签 ===== */
+.cat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+.cat-item{
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  padding:12px 6px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  box-shadow:var(--shadow);
+  border:2px solid transparent;
+  cursor:pointer;
+  transition:transform .15s, border-color .2s, background .2s;
+}
+.cat-item:active{transform:scale(0.94);}
+.cat-item.active{
+  border-color:var(--primary);
+  background:var(--primary-soft);
+}
+.cat-item.active .mini-img{animation:wiggleCute .6s ease-in-out infinite;}
+.mini-img{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  object-fit:cover;
+  background:var(--primary-soft);
+}
 .cat-name{font-size:11px;color:var(--sub);font-weight:700;}
-.rec-card{background:var(--card);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
-.rec-icon{width:46px;height:46px;border-radius:14px;overflow:hidden;}
+
+/* ===== 明细记录卡片 ===== */
+.rec-card{
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.rec-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--primary-soft);
+  flex-shrink:0;
+}
 .rec-icon img{width:100%;height:100%;object-fit:cover;}
 .rec-info{flex:1;min-width:0;}
-.rec-info .name{font-size:15px;font-weight:700;}
-.rec-info .note{font-size:12px;color:var(--sub);margin-top:2px;}
+.rec-info .row1{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.rec-info .name{font-size:15px;font-weight:800;}
+.rec-info .note{
+  font-size:12px;
+  color:var(--sub);
+  margin-top:4px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
 .rec-amt{font-size:17px;font-weight:800;white-space:nowrap;}
 .rec-amt.exp{color:var(--red);}
-.rec-amt.inc{color:var(--green);}
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);}
-.tabbar button{flex:1;padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--sub);font-weight:700;transition:.2s;}
-.tabbar button .ico{display:flex;align-items:center;justify-content:center;opacity:.5;font-size:22px;}
+.rec-date{font-size:11px;color:var(--sub);margin-top:4px;}
+
+/* ===== 底部导航 ===== */
+.tabbar{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:60;
+  display:flex;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tabbar button{
+  flex:1;
+  padding:10px 0 8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  font-size:11px;
+  color:var(--sub);
+  font-weight:800;
+  transition:.2s;
+}
+.tabbar button .ico{
+  width:28px;
+  height:28px;
+  opacity:.5;
+  transition:.2s;
+}
 .tabbar button.active{color:var(--primary);}
 .tabbar button.active .ico{opacity:1;transform:scale(1.15);}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:101;background:var(--card);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .35s cubic-bezier(.25,.8,.25,1);padding:20px 20px calc(20px + env(safe-area-inset-bottom));max-height:80vh;overflow-y:auto;}
+
+/* ===== 弹窗 ===== */
+.sheet{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:101;
+  background:var(--card);
+  border-radius:28px 28px 0 0;
+  transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.25,.8,.25,1);
+  padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+  max-height:80vh;
+  overflow-y:auto;
+}
 .sheet.show{transform:translateY(0);}
-.sheet-handle{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 16px;}
-.sheet-title{font-size:18px;font-weight:800;margin-bottom:16px;text-align:center;}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
-.keypad button{padding:18px 0;background:var(--bg);border-radius:12px;font-size:24px;font-weight:800;cursor:pointer;}
-.keypad button:active{transform:scale(0.95);}
-.keypad .confirm{background:var(--primary);color:#fff;font-size:18px;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;}
+.sheet-handle{
+  width:40px;
+  height:5px;
+  border-radius:3px;
+  background:var(--line);
+  margin:0 auto 16px;
+}
+.sheet-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:16px;
+  text-align:center;
+}
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.4);
+  z-index:100;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s;
+}
 .overlay.show{opacity:1;pointer-events:auto;}
-.btn-primary{width:100%;padding:14px;border-radius:14px;background:var(--primary);color:#fff;font-size:16px;font-weight:800;margin-top:12px;}
-.switch{width:50px;height:28px;border-radius:14px;background:#ffe4e9;position:relative;cursor:pointer;transition:0.3s;}
-.switch:active{transform:scale(0.95);}
-.switch-dot{width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:0.3s;box-shadow:0 2px 6px #00000020;}
+
+/* ===== 数字键盘 ===== */
+.keypad{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:16px;
+}
+.keypad button{
+  padding:18px 0;
+  background:var(--bg);
+  border-radius:14px;
+  font-size:24px;
+  font-weight:800;
+  transition:transform .15s;
+}
+.keypad button:active{transform:scale(0.94);}
+.keypad .confirm{
+  background:var(--primary);
+  color:#fff;
+  font-size:17px;
+}
+
+/* ===== 按钮 ===== */
+.btn-primary{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  background:var(--primary);
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  margin-top:12px;
+}
+.btn-primary:active{transform:scale(0.98);}
+
+/* ===== 我的页面 / 提醒页面 ===== */
+.me-card{
+  background:var(--card);
+  border-radius:24px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.me-list{display:flex;flex-direction:column;gap:4px;}
+.me-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 12px;
+  border-radius:16px;
+  background:var(--bg);
+  margin-bottom:8px;
+}
+.me-item .left{display:flex;align-items:center;gap:12px;}
+.me-item .icon-box{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  background:var(--primary-soft);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+.me-item .title{font-size:15px;font-weight:800;}
+.me-item .desc{font-size:12px;color:var(--sub);margin-top:2px;}
+
+/* 开关 */
+.switch{
+  width:50px;
+  height:28px;
+  border-radius:14px;
+  background:#ffe4e9;
+  position:relative;
+  cursor:pointer;
+  transition:.3s;
+}
+.switch.active{background:var(--primary);}
+.switch-dot{
+  width:24px;
+  height:24px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:2px;
+  left:2px;
+  transition:.3s;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.switch.active .switch-dot{left:24px;}
+
+/* 提醒详情页 */
+.remind-card{
+  background:var(--card);
+  border-radius:24px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+.remind-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px dashed var(--line);
+}
+.remind-row:last-child{border-bottom:none;}
+.remind-row .label{font-weight:800;font-size:15px;}
+.remind-row .value{color:var(--sub);font-size:14px;}
+.time-picker{
+  background:var(--primary-soft);
+  color:var(--text);
+  font-weight:800;
+  padding:8px 14px;
+  border-radius:12px;
+}
+
+/* Toast */
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:110px;
+  transform:translate(-50%,12px);
+  background:#5a3d4a;
+  color:#fff;
+  padding:10px 22px;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:800;
+  opacity:0;
+  transition:.3s;
+  z-index:999;
+  white-space:nowrap;
+}
 </style>
 </head>
 <body>
+
 <header class="hd">
-  <h1><span class="icon-cute anim-bounce" id="headerIcon">🐱</span><span id="pageTitle">记一笔</span></h1>
+  <h1>
+    <img class="logo-img anim-bounce" id="headerLogo" src="https://img.icons8.com/color/96/cat--v1.png" alt="logo">
+    <span>萌宠记账本</span>
+  </h1>
   <div style="display:flex;gap:8px;">
     <button class="theme-btn" id="soundToggleBtn" onclick="toggleSound()">🔊</button>
-    <button class="theme-btn" onclick="alert('皮肤切换功能已加载')">🎨</button>
+    <button class="theme-btn" onclick="alert('皮肤切换已加载')">🎨</button>
   </div>
 </header>
+
 <main class="main">
+
+  <!-- 记一笔 -->
   <section class="page active" id="page-add">
     <div class="balance-card" onclick="openAmountSheet()">
-      <div class="balance-label">本次金额 (点击输入)</div>
+      <div class="balance-label">本次金额（点击输入）</div>
       <div class="balance-amount" id="displayAmount">¥ 0.00</div>
-      <div class="balance-footer"><span>📉 今日支出 <b id="todayExp">¥0.00</b></span><span>📈 今日收入 <b id="todayInc">¥0.00</b></span></div>
-    </div>
-    <input type="text" id="noteInput" placeholder="输入备注（也可以直接点下方快捷备注）" style="background:var(--card);padding:14px;border-radius:18px;width:100%;margin-bottom:16px;box-shadow:0 10px 30px rgba(255,143,171,.15);">
-    <div class="section-title"><span>选择分类</span><button onclick="openAddCat()">➕ 自定义</button></div>
-    <div class="cat-grid" id="catGrid"></div>
-    <div class="section-title"><span>快捷备注</span><button onclick="openAddNote()">➕ 自定义</button></div>
-    <div class="cat-grid" style="grid-template-columns:repeat(4,1fr);" id="quickNotes"></div>
-  </section>
-  <section class="page" id="page-list"><div class="balance-card" style="padding:20px;margin-bottom:16px;"><div class="balance-label">总资产结余</div><div class="balance-amount" style="font-size:30px;" id="totalBalance">¥0.00</div></div><div id="recordList"></div></section>
-  <section class="page" id="page-stats"><div class="stats-card"><div class="stats-row"><div class="stats-item"><div class="label">本月收入</div><div class="val" id="stInc">¥0.00</div></div><div class="stats-item"><div class="stats-item"><div class="label">本月支出</div><div class="val" id="stExp">¥0.00</div></div><div class="stats-item"><div class="label">本月结余</div><div class="val" id="stBal">¥0.00</div></div></div></div></section>
-  <section class="page" id="page-goal"><div class="stats-card" style="text-align:center;padding:30px 20px;"><div class="icon-cute anim-float" style="font-size:60px;margin-bottom:10px;">🎯</div><div style="font-size:18px;font-weight:800;margin-bottom:8px;">我的储蓄目标</div><div style="color:#b3929f;font-size:13px;margin-bottom:16px;">为了心爱的小物件，加油攒钱吧！</div><div style="height:12px;background:#fff5f8;border-radius:6px;overflow:hidden;"><div id="goalBar" style="width:0%;height:100%;background:linear-gradient(90deg,#ff8fab,#ffb6c1);"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;font-weight:700;"><span id="goalCur">¥0</span><span id="goalTotal">目标：¥0</span></div><input type="number" id="goalInput" placeholder="设定目标金额" style="background:var(--card);padding:14px;border-radius:12px;width:100%;margin-top:16px;text-align:center;"><button class="btn-primary" onclick="saveGoal()">保存目标</button></div></section>
-  <section class="page" id="page-me">
-    <div style="background:#fff;border-radius:24px;padding:20px;">
-      <div class="setting-item" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-        <div>
-          <div class="lbl" style="font-size:16px;font-weight:700;color:#5a3d4a;">每日提醒</div>
-          <div class="desc" style="font-size:13px;color:#b3929f;margin-top:4px;">到点提醒你记账</div>
+      <div class="balance-footer">
+        <div class="item">
+          <span class="label">今日支出</span>
+          <span class="val" id="todayExp">¥0.00</span>
         </div>
-        <div id="remindSwitch" class="switch" onclick="toggleRemind()">
-          <div id="switchDot" class="switch-dot"></div>
+        <div class="item">
+          <span class="label">今日收入</span>
+          <span class="val" id="todayInc">¥0.00</span>
         </div>
       </div>
     </div>
+
+    <div class="note-input-card">
+      <div class="pencil">✏️</div>
+      <textarea id="noteInput" rows="1" placeholder="写点什么，比如：今天吃了火锅、打车回家、买了新衣服……"></textarea>
+    </div>
+
+    <div class="section-title">
+      <span>选择分类</span>
+      <span class="sub">点一个对应萌宠</span>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+
+    <div class="section-title">
+      <span>快捷备注</span>
+      <span class="sub">点了也能继续改文字</span>
+    </div>
+    <div class="cat-grid" id="quickNotes"></div>
   </section>
+
+  <!-- 明细 -->
+  <section class="page" id="page-list">
+    <div class="balance-card" style="padding:20px;margin-bottom:16px;">
+      <div class="balance-label">累计结余</div>
+      <div class="balance-amount" style="font-size:30px;" id="totalBalance">¥0.00</div>
+    </div>
+    <div id="recordList"></div>
+  </section>
+
+  <!-- 统计 -->
+  <section class="page" id="page-stats">
+    <div class="me-card">
+      <div class="section-title"><span>本月统计</span></div>
+      <div class="remind-row">
+        <span class="label">本月收入</span>
+        <span class="value" id="stInc">¥0.00</span>
+      </div>
+      <div class="remind-row">
+        <span class="label">本月支出</span>
+        <span class="value" id="stExp">¥0.00</span>
+      </div>
+      <div class="remind-row">
+        <span class="label">本月结余</span>
+        <span class="value" id="stBal">¥0.00</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 我的 -->
+  <section class="page" id="page-me">
+    <div class="me-card">
+      <div class="section-title"><span>我的设置</span></div>
+      <div class="me-item">
+        <div class="left">
+          <div class="icon-box">🔊</div>
+          <div>
+            <div class="title">音效开关</div>
+            <div class="desc">按键音、确认音、提醒音</div>
+          </div>
+        </div>
+        <div class="switch" id="soundSwitch" onclick="toggleSound()">
+          <div class="switch-dot"></div>
+        </div>
+      </div>
+
+      <div class="me-item" onclick="openRemindPage()">
+        <div class="left">
+          <div class="icon-box">⏰</div>
+          <div>
+            <div class="title">每日提醒</div>
+            <div class="desc" id="remindDesc">设置记账时间与重复方式</div>
+          </div>
+        </div>
+        <span style="color:var(--primary);font-weight:800;">›</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 每日提醒详情页 -->
+  <section class="page" id="page-remind">
+    <div class="remind-card">
+      <div class="section-title">
+        <span>⏰ 每日提醒</span>
+      </div>
+
+      <div class="remind-row">
+        <span class="label">开启提醒</span>
+        <div class="switch" id="remindSwitch" onclick="toggleRemind()">
+          <div class="switch-dot"></div>
+        </div>
+      </div>
+
+      <div class="remind-row">
+        <span class="label">提醒时间</span>
+        <input type="time" class="time-picker" id="remindTime" value="20:00">
+      </div>
+
+      <div class="remind-row">
+        <span class="label">提醒内容</span>
+        <input type="text" class="time-picker" id="remindText" placeholder="写一句提醒自己" value="该记账啦，今天花了多少？">
+      </div>
+
+      <div class="remind-row">
+        <span class="label">重复</span>
+        <span class="value">每天</span>
+      </div>
+
+      <div class="remind-row">
+        <span class="label">提前预览音效</span>
+        <button class="time-picker" onclick="playAlarmSound()">🔔 播放闹钟声</button>
+      </div>
+
+      <button class="btn-primary" onclick="saveRemind()">保存提醒设置</button>
+    </div>
+  </section>
+
 </main>
+
+<!-- 底部导航 -->
 <nav class="tabbar" id="tabbar">
-  <button data-page="add" class="active" onclick="switchPage('add')"><span class="ico">✏️</span>记一笔</button>
-  <button data-page="list" onclick="switchPage('list')"><span class="ico">📋</span>明细</button>
-  <button data-page="stats" onclick="switchPage('stats')"><span class="ico">📊</span>统计</button>
-  <button data-page="goal" onclick="switchPage('goal')"><span class="ico">🎯</span>攒钱</button>
-  <button data-page="me" onclick="switchPage('me')"><span class="ico">👤</span>我的</button>
+  <button data-page="add" class="active" onclick="switchPage('add')">
+    <img class="ico" src="https://img.icons8.com/color/96/pencil--v1.png">
+    <span>记一笔</span>
+  </button>
+  <button data-page="list" onclick="switchPage('list')">
+    <img class="ico" src="https://img.icons8.com/color/96/notes.png">
+    <span>明细</span>
+  </button>
+  <button data-page="stats" onclick="switchPage('stats')">
+    <img class="ico" src="https://img.icons8.com/color/96/combo-chart.png">
+    <span>统计</span>
+  </button>
+  <button data-page="me" onclick="switchPage('me')">
+    <img class="ico" src="https://img.icons8.com/color/96/user-male-circle.png">
+    <span>我的</span>
+  </button>
 </nav>
+
+<!-- 金额输入弹窗 -->
 <div class="overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
-<div class="sheet" id="amountSheet"><div class="sheet-handle"></div><div class="sheet-title">输入金额</div><button class="sheet-close" onclick="closeAmountSheet()">✕</button><div style="text-align:center;font-size:44px;font-weight:800;color:#ff8fab;margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div><div class="keypad"><button onclick="pressKey('1');playKeypadSound()">1</button><button onclick="pressKey('2');playKeypadSound()">2</button><button onclick="pressKey('3');playKeypadSound()">3</button><button onclick="pressKey('4');playKeypadSound()">4</button><button onclick="pressKey('5');playKeypadSound()">5</button><button onclick="pressKey('6');playKeypadSound()">6</button><button onclick="pressKey('7');playKeypadSound()">7</button><button onclick="pressKey('8');playKeypadSound()">8</button><button onclick="pressKey('9');playKeypadSound()">9</button><button onclick="pressKey('.');playKeypadSound()">.</button><button onclick="pressKey('0');playKeypadSound()">0</button><button onclick="pressKey('del');playKeypadSound()">⌫</button><button class="confirm" style="grid-column:span 3;" onclick="confirmAmount();playConfirmSound()">确定并自动保存</button></div></div>
-<div class="overlay" id="catOverlay" onclick="closeAddCat()"></div>
-<div class="sheet" id="catSheet"><div class="sheet-handle"></div><div class="sheet-title">添加自定义分类</div><button class="sheet-close" onclick="closeAddCat()">✕</button><input type="text" id="newCatName" placeholder="分类名称" style="background:#fff5f8;padding:14px;border-radius:12px;width:100%;margin-bottom:12px;"><div style="font-size:13px;color:#b3929f;margin-bottom:8px;">👇 选择图片地址：</div><input type="text" id="newCatImgUrl" placeholder="粘贴图片链接" style="background:#fff5f8;padding:12px;border-radius:12px;width:100%;margin-bottom:12px;"><button class="btn-primary" onclick="saveNewCat()">保存分类</button></div>
-<div class="overlay" id="noteOverlay" onclick="closeAddNote()"></div>
-<div class="sheet" id="noteSheet"><div class="sheet-handle"></div><div class="sheet-title">添加快捷备注</div><button class="sheet-close" onclick="closeAddNote()">✕</button><input type="text" id="newNoteText" placeholder="备注标签" style="background:#fff5f8;padding:14px;border-radius:12px;width:100%;margin-bottom:12px;"><button class="btn-primary" onclick="saveNewNote()">保存标签</button></div>
-<div id="toast" style="position:fixed;left:50%;bottom:110px;transform:translate(-50%,12px);background:#5a3d4a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:.3s;z-index:999;white-space:nowrap;"></div>
+<div class="sheet" id="amountSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">输入金额</div>
+  <div style="text-align:center;font-size:44px;font-weight:800;color:#ff8fab;margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div>
+  <div class="keypad">
+    <button onclick="pressKey('1');playKeypadSound()">1</button>
+    <button onclick="pressKey('2');playKeypadSound()">2</button>
+    <button onclick="pressKey('3');playKeypadSound()">3</button>
+    <button onclick="pressKey('4');playKeypadSound()">4</button>
+    <button onclick="pressKey('5');playKeypadSound()">5</button>
+    <button onclick="pressKey('6');playKeypadSound()">6</button>
+    <button onclick="pressKey('7');playKeypadSound()">7</button>
+    <button onclick="pressKey('8');playKeypadSound()">8</button>
+    <button onclick="pressKey('9');playKeypadSound()">9</button>
+    <button onclick="pressKey('.');playKeypadSound()">.</button>
+    <button onclick="pressKey('0');playKeypadSound()">0</button>
+    <button onclick="pressKey('del');playKeypadSound()">⌫</button>
+    <button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定保存</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
 <script>
-// ===================== WebAudio音效引擎 =====================
+// ===================== 音效系统 =====================
 let audioCtx = null;
 function initAudio(){
-    if(!audioCtx){
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
+  if(!audioCtx){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
 }
-//按键打字音效，低柔
 function playKeypadSound(){
-    if(!soundOn) return;
-    initAudio();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(680, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.08);
+  if(!soundOn) return;
+  initAudio();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(720, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.07);
 }
-//确认记账完成音
 function playConfirmSound(){
-    if(!soundOn) return;
-    initAudio();
+  if(!soundOn) return;
+  initAudio();
+  [520,780].forEach((f,i)=>{
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(520, audioCtx.currentTime);
-    osc.frequency.setValueAtTime(720, audioCtx.currentTime + 0.12);
-    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.22);
+    osc.frequency.setValueAtTime(f, audioCtx.currentTime + i*0.08);
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime + i*0.08);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i*0.08 + 0.12);
+    osc.start(audioCtx.currentTime + i*0.08);
+    osc.stop(audioCtx.currentTime + i*0.08 + 0.12);
+  });
 }
-//开关切换音效
 function playSwitchSound(){
-    if(!soundOn) return;
-    initAudio();
+  if(!soundOn) return;
+  initAudio();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.1);
+}
+function playAlarmSound(){
+  if(!soundOn) return;
+  initAudio();
+  let t = audioCtx.currentTime;
+  for(let i=0;i<6;i++){
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.1);
-}
-//闹钟提醒音效（预留，后面定时功能直接调用 playAlarmSound()）
-function playAlarmSound(){
-    if(!soundOn) return;
-    initAudio();
-    let t = audioCtx.currentTime;
-    for(let i=0;i<6;i++){
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(880, t + i*0.25);
-        gain.gain.setValueAtTime(0.04, t + i*0.25);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + i*0.25 + 0.18);
-        osc.start(t + i*0.25);
-        osc.stop(t + i*0.25 + 0.18);
-    }
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(900, t + i*0.25);
+    gain.gain.setValueAtTime(0.04, t + i*0.25);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + i*0.25 + 0.18);
+    osc.start(t + i*0.25);
+    osc.stop(t + i*0.25 + 0.18);
+  }
 }
 
-// ===================== 分类全部改成萌宠图片，移除旧emoji =====================
+// ===================== 漫画萌宠分类图标 =====================
 const catList = [
-    {name:'餐饮',img:'https://picsum.photos/id/40/120/120'},
-    {name:'饮品',img:'https://picsum.photos/id/96/120/120'},
-    {name:'交通',img:'https://picsum.photos/id/1071/120/120'},
-    {name:'购物',img:'https://picsum.photos/id/26/120/120'},
-    {name:'居住',img:'https://picsum.photos/id/42/120/120'},
-    {name:'娱乐',img:'https://picsum.photos/id/9/120/120'},
-    {name:'学习',img:'https://picsum.photos/id/24/120/120'},
-    {name:'医疗',img:'https://picsum.photos/id/237/120/120'},
-    {name:'人情',img:'https://picsum.photos/id/180/120/120'},
-    {name:'宠物',img:'https://picsum.photos/id/40/120/120'},
-    {name:'护肤',img:'https://picsum.photos/id/64/120/120'},
-    {name:'其他',img:'https://picsum.photos/id/1025/120/120'},
+  {name:'餐饮', img:'https://img.icons8.com/color/96/hamburger.png'},
+  {name:'饮品', img:'https://img.icons8.com/color/96/tea.png'},
+  {name:'交通', img:'https://img.icons8.com/color/96/taxi.png'},
+  {name:'购物', img:'https://img.icons8.com/color/96/shopping-bag.png'},
+  {name:'居住', img:'https://img.icons8.com/color/96/cottage.png'},
+  {name:'娱乐', img:'https://img.icons8.com/color/96/controller.png'},
+  {name:'学习', img:'https://img.icons8.com/color/96/book.png'},
+  {name:'医疗', img:'https://img.icons8.com/color/96/medical.png'},
+  {name:'人情', img:'https://img.icons8.com/color/96/gift.png'},
+  {name:'宠物', img:'https://img.icons8.com/color/96/cat--v1.png'},
+  {name:'护肤', img:'https://img.icons8.com/color/96/lipstick.png'},
+  {name:'其他', img:'https://img.icons8.com/color/96/more.png'}
 ];
-let records=[],customCats=[],quickNotes=[],theme='pink',formAmount='0';
-let soundOn = localStorage.getItem("soundOn") !== "off";
+
+const quickNoteList = [
+  {name:'早餐', img:'https://img.icons8.com/color/96/breakfast.png'},
+  {name:'午餐', img:'https://img.icons8.com/color/96/lunch.png'},
+  {name:'晚餐', img:'https://img.icons8.com/color/96/dinner.png'},
+  {name:'火锅', img:'https://img.icons8.com/color/96/bbq.png'},
+  {name:'奶茶', img:'https://img.icons8.com/color/96/iced-coffee.png'},
+  {name:'打车', img:'https://img.icons8.com/color/96/taxi.png'},
+  {name:'网购', img:'https://img.icons8.com/color/96/online-shop.png'},
+  {name:'电影', img:'https://img.icons8.com/color/96/movie.png'},
+  {name:'买书', img:'https://img.icons8.com/color/96/book.png'},
+  {name:'送礼', img:'https://img.icons8.com/color/96/gift.png'},
+  {name:'零食', img:'https://img.icons8.com/color/96/candy.png'},
+  {name:'工资', img:'https://img.icons8.com/color/96/money.png'}
+];
+
+let records = JSON.parse(localStorage.getItem('records') || '[]');
+let customCats = [];
 let selectedCatIndex = 0;
+let formAmount = '0';
+let soundOn = localStorage.getItem('soundOn') !== 'off';
 
 function $(id){return document.getElementById(id);}
 function fmt(n){return '¥'+Number(n||0).toFixed(2);}
-function toast(msg){const t=$('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translate(-50%,0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translate(-50%,12px)';},2000);}
+function toast(msg){
+  const t=$('toast');
+  t.textContent=msg;
+  t.style.opacity='1';
+  t.style.transform='translate(-50%,0)';
+  setTimeout(()=>{
+    t.style.opacity='0';
+    t.style.transform='translate(-50%,12px)';
+  },1800);
+}
 
-// 🔊 音效开关
+// ===================== 页面切换 =====================
+function switchPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.tabbar button[data-page="'+name+'"]').classList.add('active');
+
+  const titles = {add:'记一笔',list:'明细',stats:'统计',me:'我的',remind:'每日提醒'};
+  document.querySelector('.hd h1 span').textContent = titles[name] || '萌宠记账本';
+
+  if(name==='list') renderList();
+  if(name==='stats') renderStats();
+}
+
+// ===================== 音效开关 =====================
 function toggleSound(){
-    playSwitchSound();
-    soundOn = !soundOn;
-    localStorage.setItem("soundOn", soundOn?"on":"off");
-    toast(soundOn ? "音效已开启" : "音效已关闭");
-    renderSoundIcon();
+  playSwitchSound();
+  soundOn = !soundOn;
+  localStorage.setItem('soundOn', soundOn ? 'on' : 'off');
+  renderSoundIcon();
+  toast(soundOn ? '音效已开启' : '音效已关闭');
 }
 function renderSoundIcon(){
-    const soundBtn = $('soundToggleBtn');
-    soundBtn.innerText = soundOn ? "🔊" : "🔇";
+  const btn = $('soundToggleBtn');
+  const sw = $('soundSwitch');
+  if(soundOn){
+    btn.textContent = '🔊';
+    sw.classList.add('active');
+  }else{
+    btn.textContent = '🔇';
+    sw.classList.remove('active');
+  }
 }
 
-function switchPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));const titles={add:'记一笔',list:'明细',stats:'统计',goal:'攒钱目标',me:'我的'};const icons={add:'🐱',list:'📋',stats:'📊',goal:'🎯',me:'👤'};$('headerIcon').textContent=icons[name];$('pageTitle').textContent=titles[name];if(name==='list')renderList();if(name==='stats')renderStats();if(name==='goal')renderGoal();window.scrollTo(0,0);}
-
-function openAmountSheet(){$('amountOverlay').classList.add('show');$('amountSheet').classList.add('show');formAmount='0';$('sheetAmount').textContent='¥ 0.00';}
-function closeAmountSheet(){$('amountOverlay').classList.remove('show');$('amountSheet').classList.remove('show');}
-function pressKey(k){if(k==='del')formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}else{formAmount=formAmount==='0'?k:formAmount+k;}$('sheetAmount').textContent='¥ '+formAmount;}
-
+// ===================== 金额输入 =====================
+function openAmountSheet(){
+  $('amountOverlay').classList.add('show');
+  $('amountSheet').classList.add('show');
+  formAmount = '0';
+  $('sheetAmount').textContent = '¥ 0.00';
+}
+function closeAmountSheet(){
+  $('amountOverlay').classList.remove('show');
+  $('amountSheet').classList.remove('show');
+}
+function pressKey(k){
+  if(k==='del'){
+    formAmount = formAmount.length>1 ? formAmount.slice(0,-1) : '0';
+  }else if(k==='.'){
+    if(!formAmount.includes('.')) formAmount += '.';
+  }else{
+    formAmount = formAmount==='0' ? k : formAmount + k;
+  }
+  $('sheetAmount').textContent = '¥ ' + formAmount;
+}
 function confirmAmount(){
-  const v=parseFloat(formAmount)||0;
+  const v = parseFloat(formAmount) || 0;
   if(v<=0){toast('请输入金额');return;}
-  $('displayAmount').textContent=fmt(v);
+  $('displayAmount').textContent = fmt(v);
   closeAmountSheet();
+  playConfirmSound();
   setTimeout(()=>saveRecord(v),200);
 }
 
-// ✅ 保存记账记录，绑定选中分类图片
+// ===================== 保存记录 =====================
 function saveRecord(v){
-  if(v<=0)return;
+  const note = $('noteInput').value.trim();
   const nowCat = catList[selectedCatIndex];
+
   records.push({
-    id:Date.now(),
-    date:new Date().toLocaleDateString('zh-CN'),
-    type:'expense',
-    amount:v,
-    category:nowCat.name,
-    catImg:nowCat.img,
-    note:$('noteInput').value.trim(),
-    createdAt:Date.now()
+    id: Date.now(),
+    date: new Date().toLocaleDateString('zh-CN'),
+    time: new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}),
+    type: 'expense',
+    amount: v,
+    category: nowCat.name,
+    catImg: nowCat.img,
+    note: note || '未填写备注'
   });
-  toast('已记一笔 '+fmt(v));
-  $('noteInput').value='';
+
+  localStorage.setItem('records', JSON.stringify(records));
+  toast('已保存 '+fmt(v));
+
+  $('noteInput').value = '';
   calcToday();
   renderList();
   renderStats();
-  $('displayAmount').textContent='¥ 0.00';
+  $('displayAmount').textContent = '¥ 0.00';
 }
 
-// ✅ 计算今日支出今日收入
+// ===================== 今日统计 =====================
 function calcToday(){
-  const todayStr = new Date().toLocaleDateString('zh-CN');
-  let todayExpVal = 0;
-  let todayIncVal = 0;
+  const today = new Date().toLocaleDateString('zh-CN');
+  let exp=0, inc=0;
   records.forEach(r=>{
-    if(r.date === todayStr){
-      if(r.type==='expense') todayExpVal += Number(r.amount);
-      else todayIncVal += Number(r.amount);
+    if(r.date===today){
+      if(r.type==='expense') exp += Number(r.amount);
+      else inc += Number(r.amount);
     }
-  })
-  $('todayExp').innerText = fmt(todayExpVal);
-  $('todayInc').innerText = fmt(todayIncVal);
+  });
+  $('todayExp').textContent = fmt(exp);
+  $('todayInc').textContent = fmt(inc);
 }
 
-// ✅明细列表渲染，加载对应分类图片
+// ===================== 渲染分类 =====================
+function renderCatGrid(){
+  const box = $('catGrid');
+  box.innerHTML = catList.map((c,i)=>`
+    <div class="cat-item ${i===selectedCatIndex?'active':''}" onclick="selectCat(${i})">
+      <img class="mini-img" src="${c.img}" alt="${c.name}">
+      <span class="cat-name">${c.name}</span>
+    </div>
+  `).join('');
+}
+function selectCat(i){
+  playSwitchSound();
+  selectedCatIndex = i;
+  renderCatGrid();
+  toast('已选分类：'+catList[i].name);
+}
+
+// ===================== 快捷备注 =====================
+function renderQuickNotes(){
+  $('quickNotes').innerHTML = quickNoteList.map(n=>`
+    <div class="cat-item" onclick="fillQuickNote('${n.name}')">
+      <img class="mini-img" src="${n.img}" alt="${n.name}">
+      <span class="cat-name">${n.name}</span>
+    </div>
+  `).join('');
+}
+function fillQuickNote(name){
+  const input = $('noteInput');
+  if(input.value.trim()){
+    input.value = input.value + '，' + name;
+  }else{
+    input.value = name;
+  }
+  playSwitchSound();
+  toast('已添加：'+name);
+}
+
+// ===================== 明细列表 =====================
 function renderList(){
-  if(!records.length){$('recordList').innerHTML='<div style="text-align:center;padding:40px;color:#b3929f;">还没有记录哦 🐣</div>';return;}
-  let html='';records.slice().reverse().forEach(r=>{
-    html+=`
-    <div class="rec-card">
+  const box = $('recordList');
+  if(!records.length){
+    box.innerHTML = '<div style="text-align:center;padding:40px;color:var(--sub);">还没有记录哦 🐣</div>';
+    $('totalBalance').textContent = '¥0.00';
+    return;
+  }
+
+  let html = '';
+  let total = 0;
+  records.slice().reverse().forEach(r=>{
+    total += r.type==='expense' ? -Number(r.amount) : Number(r.amount);
+    html += `
+      <div class="rec-card">
         <div class="rec-icon">
-            <img src="${r.catImg}" alt="${r.category}">
+          <img src="${r.catImg}" alt="${r.category}">
         </div>
         <div class="rec-info">
-            <div class="name">${r.category}</div>
-            ${r.note?'<div class="note">📝 '+r.note+'</div>':''}
+          <div class="row1">
+            <span class="name">${r.category}</span>
+            <span class="rec-amt ${r.type==='expense'?'exp':'inc'}">${r.type==='expense'?'-':'+'}${fmt(r.amount)}</span>
+          </div>
+          <div class="note">${r.note}</div>
+          <div class="rec-date">${r.date} ${r.time||''}</div>
         </div>
-        <div class="rec-amt exp">-${fmt(r.amount)}</div>
-    </div>
+      </div>
     `;
   });
-  $('recordList').innerHTML=html;
+
+  box.innerHTML = html;
+  $('totalBalance').textContent = fmt(total);
 }
 
+// ===================== 统计 =====================
 function renderStats(){
-  const exp=records.filter(r=>r.type==='expense').reduce((s,r)=>s+Number(r.amount),0);
-  $('stExp').textContent=fmt(exp);$('stInc').textContent='¥0.00';$('stBal').textContent=fmt(-exp);
-}
-function renderGoal(){const goal=parseFloat(localStorage.getItem('goal'))||0;$('goalInput').value=goal||'';$('goalTotal').textContent='目标：'+fmt(goal);$('goalCur').textContent='¥0';$('goalBar').style.width='0%';}
-function saveGoal(){const g=parseFloat($('goalInput').value)||0;localStorage.setItem('goal',g);renderGoal();toast('目标已保存');}
-
-function openAddCat(){$('catOverlay').classList.add('show');$('catSheet').classList.add('show');}
-function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
-function saveNewCat(){
-  const n=$('newCatName').value.trim();
-  const img = $('newCatImgUrl').value.trim();
-  if(!n){toast('请输入名称');return;}
-  customCats.push({name:n,img:img||'https://picsum.photos/id/1025/120/120'});
-  renderCatGrid();
-  closeAddCat();
-  $('newCatName').value='';
-  $('newCatImgUrl').value='';
-  toast('分类已添加');
+  const now = new Date().toLocaleDateString('zh-CN');
+  let exp=0, inc=0;
+  records.forEach(r=>{
+    if(r.date===now){
+      if(r.type==='expense') exp += Number(r.amount);
+      else inc += Number(r.amount);
+    }
+  });
+  $('stExp').textContent = fmt(exp);
+  $('stInc').textContent = fmt(inc);
+  $('stBal').textContent = fmt(inc - exp);
 }
 
-// ✅渲染分类网格，全部图片展示
-function renderCatGrid(){
-  const allCats = [...catList,...customCats];
-  let html = '';
-  allCats.forEach((c,idx)=>{
-    html += `
-    <div class="cat-item ${idx===selectedCatIndex?'active':''}" onclick="selectCat(${idx})">
-        <img class="cat-item-img" src="${c.img}" alt="${c.name}">
-        <span class="cat-name">${c.name}</span>
-    </div>
-    `
-  })
-  $('catGrid').innerHTML = html;
-}
-function selectCat(idx){
-    playSwitchSound();
-    selectedCatIndex = idx;
-    renderCatGrid();
-}
-
-function openAddNote(){$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');}
-function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
-function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}quickNotes.push({text:t});renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('备注已添加');}
-
-function renderQuickNotes(){
-  const defaultNotes=[{text:'早餐'},{text:'午餐'},{text:'晚餐'},{text:'打车'},{text:'网购'},{text:'奶茶'},{text:'咖啡'},{text:'看病'},{text:'买书'},{text:'看电影'},{text:'送礼'},{text:'工资'}];
-  const allNotes=[...defaultNotes,...quickNotes];
-  $('quickNotes').innerHTML=allNotes.map(n=>`<div class="cat-item" onclick="selectQuickNote('${n.text}')"><span class="icon-cute" style="font-size:22px;">📝</span><span class="cat-name" style="font-size:10px;">${n.text}</span></div>`).join('');
-}
-function selectQuickNote(t){$('noteInput').value=t;toast('已选备注：'+t);}
-
-// 🕒每日提醒开关
-function initRemindSwitch(){
-  const isOn = localStorage.getItem('remindSwitch') === 'on';
-  setSwitchUI(isOn);
-}
-function setSwitchUI(isOn){
-  const sw = $('remindSwitch');
-  const dot = $('switchDot');
-  if(isOn){
-    sw.style.background = 'var(--primary)';
-    dot.style.left = '24px';
-  }else{
-    sw.style.background = '#ffe4e9';
-    dot.style.left = '2px';
-  }
+// ===================== 每日提醒页 =====================
+function openRemindPage(){
+  switchPage('remind');
 }
 function toggleRemind(){
   playSwitchSound();
-  const isOn = localStorage.getItem('remindSwitch') === 'on';
+  const sw = $('remindSwitch');
+  const isOn = !sw.classList.contains('active');
   if(isOn){
-    localStorage.setItem('remindSwitch','off');
-    setSwitchUI(false);
-    toast("已关闭每日提醒");
-  }else{
+    sw.classList.add('active');
     localStorage.setItem('remindSwitch','on');
-    setSwitchUI(true);
-    toast("已开启每日提醒");
+    toast('已开启每日提醒');
+  }else{
+    sw.classList.remove('active');
+    localStorage.setItem('remindSwitch','off');
+    toast('已关闭每日提醒');
   }
+  updateRemindDesc();
+}
+function updateRemindDesc(){
+  const on = localStorage.getItem('remindSwitch') === 'on';
+  const time = localStorage.getItem('remindTime') || '20:00';
+  $('remindDesc').textContent = on ? '每日 '+time+' 提醒记账' : '设置记账时间与重复方式';
+}
+function saveRemind(){
+  playConfirmSound();
+  const time = $('remindTime').value || '20:00';
+  const text = $('remindText').value.trim() || '该记账啦';
+  localStorage.setItem('remindTime', time);
+  localStorage.setItem('remindText', text);
+  updateRemindDesc();
+  toast('提醒设置已保存');
 }
 
-//页面初始化全部加载
-renderCatGrid();renderQuickNotes();renderList();renderStats();renderGoal();
-initRemindSwitch();
-renderSoundIcon();
+// ===================== 初始化 =====================
+renderCatGrid();
+renderQuickNotes();
+renderList();
+renderStats();
 calcToday();
+renderSoundIcon();
+updateRemindDesc();
+
+$('remindTime').value = localStorage.getItem('remindTime') || '20:00';
+$('remindText').value = localStorage.getItem('remindText') || '该记账啦，今天花了多少？';
+if(localStorage.getItem('remindSwitch') === 'on'){
+  $('remindSwitch').classList.add('active');
+}
 </script>
+
 </body>
 </html>
