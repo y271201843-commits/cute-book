@@ -1,87 +1,86 @@
-<!DOCTYPE html><html lang="zh-CN">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#ff7eb3">
-<title>灵动记账本</title>
+<meta name="theme-color" content="#ffb6c1">
+<title>迷你萌宠记账本</title>
 <style>
-:root{--bg:#f7f8fc;--card:#fff;--text:#1c1c1e;--sub:#8e8e93;--line:#f0f0f5;--primary:#5b6ef5;--primary-soft:#eef0ff;--green:#34c759;--red:#ff3b30;--orange:#ff9500;--radius:24px;--radius-sm:16px;--shadow:0 8px 30px rgba(0,0,0,.04);--shadow-heavy:0 12px 40px rgba(0,0,0,.1);}
-[data-theme="pink"]{--bg:#fff5f8;--card:#fff;--text:#4a3b42;--sub:#a3929a;--line:#ffe4e9;--primary:#ff7eb3;--primary-soft:#fff0f5;--green:#00b894;--red:#ff7675;--orange:#fdcb6e;--shadow:0 8px 30px rgba(255,126,179,.1);}
-[data-theme="blue"]{--bg:#f0f7ff;--card:#fff;--text:#1e293b;--sub:#94a3b8;--line:#e2e8f0;--primary:#3b82f6;--primary-soft:#eff6ff;--green:#10b981;--red:#ef4444;--orange:#f59e0b;}
-[data-theme="purple"]{--bg:#f5f3ff;--card:#fff;--text:#2e1065;--sub:#a78bfa;--line:#ede9fe;--primary:#8b5cf6;--primary-soft:#f5f3ff;--green:#10b981;--red:#f43f5e;--orange:#f59e0b;}
-[data-theme="mint"]{--bg:#f0fdf4;--card:#fff;--text:#064e3b;--sub:#6ee7b7;--line:#d1fae5;--primary:#10b981;--primary-soft:#ecfdf5;--green:#10b981;--red:#ef4444;--orange:#f59e0b;}
-[data-theme="orange"]{--bg:#fff7ed;--card:#fff;--text:#7c2d12;--sub:#fdba74;--line:#ffedd5;--primary:#f97316;--primary-soft:#fff7ed;--green:#10b981;--red:#ef4444;--orange:#f59e0b;}
-[data-theme="dark"]{--bg:#0f0f13;--card:#1c1c1e;--text:#f2f2f7;--sub:#8e8e93;--line:#2c2c2e;--primary:#636366;--primary-soft:#2c2c2e;--green:#30d158;--red:#ff453a;--orange:#ff9f0a;}
+:root{--bg:#fff5f8;--card:#fff;--text:#5a3d4a;--sub:#b3929f;--line:#ffe4e9;--primary:#ff8fab;--primary-soft:#fff0f5;--green:#34d399;--red:#f87171;--orange:#fbbf24;--radius:26px;--radius-sm:18px;--shadow:0 10px 30px rgba(255,143,171,.15);--shadow-heavy:0 14px 40px rgba(255,143,171,.25);}
+[data-theme="blue"]{--bg:#f0f7ff;--card:#fff;--text:#1e293b;--sub:#94a3b8;--line:#e2e8f0;--primary:#60a5fa;--primary-soft:#eff6ff;--green:#10b981;--red:#ef4444;--orange:#f59e0b;}
+[data-theme="purple"]{--bg:#f5f3ff;--card:#fff;--text:#3b0764;--sub:#c4b5fd;--line:#ede9fe;--primary:#a78bfa;--primary-soft:#f5f3ff;--green:#10b981;--red:#f43f5e;--orange:#f59e0b;}
+[data-theme="dark"]{--bg:#0f0f13;--card:#1c1c1e;--text:#f2f2f7;--sub:#8e8e93;--line:#2c2c2e;--primary:#ff8fab;--primary-soft:#2c2c2e;--green:#30d158;--red:#ff453a;--orange:#ff9f0a;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;padding-bottom:calc(80px + env(safe-area-inset-bottom));transition:background .3s,color .3s;overflow-x:hidden;}
 button{border:none;background:none;font-family:inherit;color:inherit;cursor:pointer;outline:none;}
 input{font-family:inherit;outline:none;border:none;background:transparent;color:inherit;}
-.icon{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.icon-lg{width:28px;height:28px;}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
-@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
-@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-.anim-bounce{animation:bounce 1.5s ease-in-out infinite;}
-.anim-pulse{animation:pulse 2s ease-in-out infinite;}
-.anim-float{animation:float 2s ease-in-out infinite;}
-.hd{position:sticky;top:0;z-index:40;background:var(--bg);padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center;transition:background .3s;}
+.icon-cute{width:36px;height:36px;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+.icon-cute svg{width:100%;height:100%;fill:currentColor;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+@keyframes floatCute{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-5px) rotate(4deg);}}
+@keyframes wiggleCute{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-8deg);}75%{transform:rotate(8deg);}}
+@keyframes bounceCute{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.anim-float{animation:floatCute 2.5s ease-in-out infinite;}
+.anim-wiggle{animation:wiggleCute 0.5s ease-in-out infinite;}
+.anim-bounce{animation:bounceCute 1.8s ease-in-out infinite;}
+.hd{position:sticky;top:0;z-index:40;background:var(--bg);padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center;}
 .hd h1{font-size:22px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;}
-.theme-btn{width:36px;height:36px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);transition:transform .2s;color:var(--sub);}
+.theme-btn{width:40px;height:40px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);color:var(--sub);font-size:20px;}
 .theme-btn:active{transform:scale(.9) rotate(15deg);}
 .main{padding:0 20px;}
-.page{display:none;animation:fadeIn .3s cubic-bezier(.25,.8,.25,1);}
+.page{display:none;animation:slideUp .3s cubic-bezier(.25,.8,.25,1);}
 .page.active{display:block;}
-.balance-card{background:linear-gradient(135deg,var(--primary),#7c8cf8);color:#fff;border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-heavy);position:relative;overflow:hidden;}
-[data-theme="pink"] .balance-card{background:linear-gradient(135deg,#ffb6c1,#ff7eb3);}
+@keyframes slideUp{from{opacity:0;transform:translateY(15px);}to{opacity:1;transform:translateY(0);}}
+.balance-card{background:linear-gradient(135deg,var(--primary),#ffb6c1);color:#fff;border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-heavy);position:relative;overflow:hidden;}
+[data-theme="blue"] .balance-card{background:linear-gradient(135deg,#60a5fa,#a5b4fc);}
+[data-theme="purple"] .balance-card{background:linear-gradient(135deg,#a78bfa,#f0abfc);}
 [data-theme="dark"] .balance-card{background:linear-gradient(135deg,#2c2c2e,#3a3a3c);}
-.balance-card::after{content:"";position:absolute;right:-20px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.1);animation:float 3s ease-in-out infinite;}
-.balance-label{font-size:14px;opacity:.85;font-weight:500;margin-bottom:6px;}
-.balance-amount{font-size:36px;font-weight:800;letter-spacing:-1px;margin-bottom:16px;animation:float 2s ease-in-out infinite;}
-.balance-footer{display:flex;gap:20px;font-size:13px;font-weight:600;}
-.balance-footer span{opacity:.9;display:flex;align-items:center;gap:4px;}
-.section-title{font-size:15px;font-weight:700;margin:20px 0 12px;display:flex;justify-content:space-between;align-items:center;}
-.section-title button{font-size:12px;color:var(--primary);font-weight:600;background:var(--primary-soft);padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.balance-card::after{content:"";position:absolute;right:-20px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.15);animation:floatCute 4s ease-in-out infinite;}
+.balance-label{font-size:14px;opacity:.9;font-weight:600;margin-bottom:6px;}
+.balance-amount{font-size:38px;font-weight:800;letter-spacing:-1px;margin-bottom:16px;}
+.balance-footer{display:flex;gap:20px;font-size:13px;font-weight:600;background:rgba(255,255,255,.2);border-radius:12px;padding:8px 12px;backdrop-filter:blur(4px);}
+.balance-footer span{opacity:1;display:flex;align-items:center;gap:4px;}
+.section-title{font-size:15px;font-weight:700;margin:20px 0 12px;display:flex;justify-content:space-between;align-items:center;color:var(--text);}
+.section-title button{font-size:12px;color:var(--primary);font-weight:700;background:var(--primary-soft);padding:6px 12px;border-radius:20px;display:flex;align-items:center;gap:4px;}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.cat-item{background:var(--card);border-radius:var(--radius-sm);padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;border:1.5px solid transparent;cursor:pointer;}
+.cat-item{background:var(--card);border-radius:var(--radius-sm);padding:14px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s;border:2px solid transparent;cursor:pointer;}
 .cat-item:active{transform:scale(.92);}
-.cat-item.active{border-color:var(--primary);background:var(--primary-soft);}
-.cat-icon{display:flex;align-items:center;justify-content:center;height:28px;}
-.cat-name{font-size:11px;color:var(--sub);font-weight:600;}
+.cat-item.active{border-color:var(--primary);background:var(--primary-soft);box-shadow:0 4px 15px rgba(255,143,171,.2);}
+.cat-item.active .icon-cute{animation:wiggleCute 0.6s ease-in-out infinite;}
+.cat-name{font-size:11px;color:var(--sub);font-weight:700;}
 .rec-card{background:var(--card);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;transition:transform .2s;}
 .rec-card:active{transform:scale(.98);}
-.rec-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rec-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
 .rec-info{flex:1;min-width:0;}
 .rec-info .name{font-size:15px;font-weight:700;}
 .rec-info .note{font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .rec-amt{font-size:17px;font-weight:800;white-space:nowrap;}
 .rec-amt.exp{color:var(--red);}
 .rec-amt.inc{color:var(--green);}
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;background:rgba(255,255,255,.85);backdrop-filter:blur(20px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);}
-[data-theme="dark"] .tabbar{background:rgba(28,28,30,.85);}
-.tabbar button{flex:1;padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--sub);font-weight:600;transition:.2s;}
-.tabbar button .ico{display:flex;align-items:center;justify-content:center;opacity:.5;transition:.2s;}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);}
+[data-theme="dark"] .tabbar{background:rgba(28,28,30,.9);}
+.tabbar button{flex:1;padding:10px 0 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--sub);font-weight:700;transition:.2s;}
+.tabbar button .ico{display:flex;align-items:center;justify-content:center;opacity:.5;transition:.2s;font-size:22px;}
 .tabbar button.active{color:var(--primary);}
-.tabbar button.active .ico{opacity:1;transform:scale(1.15);}
+.tabbar button.active .ico{opacity:1;transform:scale(1.15) translateY(-2px);}
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;}
 .sheet-overlay.show{opacity:1;pointer-events:auto;}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:101;background:var(--card);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform .35s cubic-bezier(.25,.8,.25,1);padding:20px 20px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto;}
 .sheet.show{transform:translateY(0);}
 .sheet-handle{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 16px;}
 .sheet-title{font-size:18px;font-weight:800;margin-bottom:16px;text-align:center;}
-.sheet-close{position:absolute;top:20px;right:20px;color:var(--sub);width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:50%;}
+.sheet-close{position:absolute;top:20px;right:20px;color:var(--sub);width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:50%;font-size:16px;}
 .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
-.keypad button{padding:18px 0;background:var(--bg);border-radius:12px;font-size:22px;font-weight:700;transition:background .1s;color:var(--text);}
+.keypad button{padding:18px 0;background:var(--bg);border-radius:12px;font-size:24px;font-weight:800;transition:background .1s,transform .1s;color:var(--text);}
 .keypad button:active{background:var(--primary-soft);transform:scale(.95);}
-.keypad .special{font-size:16px;font-weight:600;color:var(--sub);display:flex;align-items:center;justify-content:center;}
-.keypad .confirm{background:var(--primary);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.keypad .special{font-size:18px;font-weight:600;color:var(--sub);display:flex;align-items:center;justify-content:center;}
+.keypad .confirm{background:var(--primary);color:#fff;font-size:18px;font-weight:800;}
 .stats-card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);}
 .stats-row{display:flex;justify-content:space-between;margin-bottom:16px;}
 .stats-item{text-align:center;flex:1;}
-.stats-item .label{font-size:12px;color:var(--sub);font-weight:600;margin-bottom:6px;}
+.stats-item .label{font-size:12px;color:var(--sub);font-weight:700;margin-bottom:6px;}
 .stats-item .val{font-size:18px;font-weight:800;}
 .bar-item{margin-bottom:14px;}
-.bar-head{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px;}
+.bar-head{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px;}
 .bar-track{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:4px;transition:width .6s;}
 .setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);}
@@ -92,65 +91,69 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 .switch.on{background:var(--primary);}
 .switch::after{content:"";position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.2);}
 .switch.on::after{left:24px;}
-#toast{position:fixed;left:50%;bottom:110px;transform:translate(-50%,12px);background:var(--text);color:var(--bg);padding:10px 22px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:999;}
+#toast{position:fixed;left:50%;bottom:110px;transform:translate(-50%,12px);background:var(--text);color:var(--bg);padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:.3s;z-index:999;white-space:nowrap;box-shadow:0 8px 25px rgba(0,0,0,.15);}
 #toast.show{opacity:1;transform:translate(-50%,0);}
-.empty{text-align:center;padding:50px 0;color:var(--sub);font-size:14px;font-weight:600;}
-.fab{position:fixed;right:20px;bottom:100px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#7c8cf8);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 25px rgba(91,110,245,.4);z-index:50;transition:transform .2s;}
-[data-theme="pink"] .fab{background:linear-gradient(135deg,#ffb6c1,#ff7eb3);}
-.fab:active{transform:scale(.9) rotate(90deg);}
-.btn-primary{width:100%;height:52px;border-radius:16px;font-size:16px;font-weight:800;background:var(--primary);color:#fff;box-shadow:0 6px 20px rgba(91,110,245,.3);display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;transition:transform .1s;}
-.btn-primary:active{transform:scale(.97);}
+.empty{text-align:center;padding:50px 0;color:var(--sub);font-size:14px;font-weight:700;}
 </style>
 </head>
-<body><svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-<symbol id="i-food" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9v7h18v-7a9 9 0 0 0-9-9z"/><line x1="12" y1="2" x2="12" y2="21"/><line x1="5" y1="13" x2="19" y2="13"/></symbol>
-<symbol id="i-drink" viewBox="0 0 24 24"><path d="M8 2h8l1 10H7L8 2z"/><path d="M6 13a6 6 0 0 0 12 0"/><line x1="12" y1="2" x2="12" y2="13"/></symbol>
-<symbol id="i-bus" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="17" r="2"/><circle cx="15" cy="17" r="2"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="14" x2="20" y2="14"/></symbol>
-<symbol id="i-shop" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
-<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
-<symbol id="i-game" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="4"/><line x1="7" y1="12" x2="11" y2="12"/><line x1="9" y1="10" x2="9" y2="14"/><line x1="17" y1="12" x2="17.01" y2="12"/><line x1="15" y1="14" x2="15.01" y2="14"/></symbol>
-<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 6h16v12H4z"/><line x1="4" y1="10" x2="20" y2="10"/></symbol>
-<symbol id="i-med" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="4"/><line x1="12" y1="7" x2="12" y2="17"/><line x1="7" y1="12" x2="17" y2="12"/></symbol>
-<symbol id="i-pet" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><circle cx="6" cy="8" r="2.5"/><circle cx="18" cy="8" r="2.5"/><circle cx="7" cy="16" r="2.5"/><circle cx="17" cy="16" r="2.5"/></symbol>
-<symbol id="i-skin" viewBox="0 0 24 24"><path d="M10 2h4v4h-4z"/><path d="M8 6h8v10a4 4 0 0 1-8 0z"/><line x1="12" y1="6" x2="12" y2="16"/></symbol>
-<symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="12" rx="2"/><line x1="12" y1="8" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></symbol>
-<symbol id="i-money" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="7" x2="12" y2="17"/><path d="M15 10a3 3 0 0 0-3-2 3 3 0 0 0 0 6 3 3 0 0 1 0 6 3 3 0 0 1-3-2"/></symbol>
-<symbol id="i-note" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></symbol>
-<symbol id="i-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></symbol>
-<symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.1 0 2-.9 2-2 0-.55-.22-1.05-.59-1.41A2.03 2.03 0 0 1 13 17c0-.55.45-1 1-1h2c2.76 0 5-2.24 5-5 0-4.96-4.04-9-9-9z"/><circle cx="6.5" cy="11.5" r="1.5"/><circle cx="9.5" cy="7.5" r="1.5"/><circle cx="14.5" cy="7.5" r="1.5"/><circle cx="17.5" cy="11.5" r="1.5"/></symbol>
-<symbol id="i-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></symbol>
-<symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
-<symbol id="i-chart" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
-<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
-<symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
-<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
-<symbol id="i-cancel" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
-</svg><header class="hd">
-  <h1><svg class="icon icon-lg anim-pulse" style="color:var(--primary)"><use href="#i-star"></use></svg><span id="pageTitle">记一笔</span></h1>
-  <button class="theme-btn" id="themeBtn"><svg class="icon anim-bounce"><use href="#i-palette"></use></svg></button>
-</header><main class="main">
+<body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="cat-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffb6c1"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/><path d="M12 16l-1.5 1h3l-1.5-1z" fill="#fff"/><path d="M6 8l2-3 3 2" stroke="#fff" stroke-width="1.5" fill="none"/><path d="M18 8l-2-3-3 2" stroke="#fff" stroke-width="1.5" fill="none"/></symbol>
+  <symbol id="cat-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffb6c1"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
+  <symbol id="cat-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#ffb6c1"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
+  <symbol id="cat-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffb6c1"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
+  <symbol id="dog-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#93c5fd"/><path d="M7 13s1.5 2.5 5 2.5 5-2.5 5-2.5" stroke="#fff" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/><path d="M8 16h8" stroke="#fff" stroke-width="1.5"/><path d="M5 8l3-3 4 2" stroke="#fff" stroke-width="2" fill="none"/><path d="M19 8l-3-3-4 2" stroke="#fff" stroke-width="2" fill="none"/></symbol>
+  <symbol id="dog-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#93c5fd"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
+  <symbol id="dog-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#93c5fd"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
+  <symbol id="dog-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#93c5fd"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
+  <symbol id="rabbit-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/><path d="M6 8l2-4 3 3" stroke="#fff" stroke-width="1.5" fill="none"/><path d="M18 8l-2-4-3 3" stroke="#fff" stroke-width="1.5" fill="none"/></symbol>
+  <symbol id="rabbit-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
+  <symbol id="rabbit-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#d8b4fe"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
+  <symbol id="rabbit-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
+  <symbol id="panda-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><circle cx="9" cy="12" r="3" fill="#1f2937"/><circle cx="15" cy="12" r="3" fill="#1f2937"/><circle cx="9" cy="12" r="1" fill="#fff"/><circle cx="15" cy="12" r="1" fill="#fff"/><path d="M10 16h4" stroke="#1f2937" stroke-width="1.5"/><path d="M6 6l3 3M18 6l-3 3" stroke="#1f2937" stroke-width="2"/></symbol>
+  <symbol id="panda-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><path d="M12 8v8" stroke="#1f2937" stroke-width="2"/><path d="M8 12h8" stroke="#1f2937" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#1f2937"/></symbol>
+  <symbol id="panda-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#e5e7eb"/><circle cx="8" cy="16" r="2" fill="#1f2937"/><circle cx="16" cy="16" r="2" fill="#1f2937"/><path d="M4 12h16" stroke="#1f2937" stroke-width="2"/></symbol>
+  <symbol id="panda-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><path d="M8 12l4 4 4-4" stroke="#1f2937" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#1f2937"/></symbol>
+  <symbol id="i-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3" fill="currentColor" opacity="0.2"/><path d="M2 10h20M6 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><rect x="4" y="12" width="4" height="8" rx="1" fill="currentColor"/><rect x="10" y="8" width="4" height="12" rx="1" fill="currentColor"/><rect x="16" y="4" width="4" height="16" rx="1" fill="currentColor"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5" fill="currentColor"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="currentColor" opacity="0.5"/></symbol>
+</svg>
+
+<header class="hd">
+  <h1><span class="icon-cute anim-bounce" id="headerIcon"><svg><use href="#cat-food"></use></svg></span><span id="pageTitle">记一笔</span></h1>
+  <button class="theme-btn" id="themeBtn">🎨</button>
+</header>
+
+<main class="main">
   <section class="page active" id="page-add">
     <div class="balance-card" onclick="openAmountSheet()">
       <div class="balance-label">本次金额 (点击输入)</div>
-      <div class="balance-amount anim-float" id="displayAmount">¥ 0.00</div>
+      <div class="balance-amount" id="displayAmount">¥ 0.00</div>
       <div class="balance-footer">
-        <span><svg class="icon" style="width:16px;height:16px"><use href="#i-chart"></use></svg>今日支出 <i id="todayExp">¥0.00</i></span>
-        <span><svg class="icon" style="width:16px;height:16px"><use href="#i-money"></use></svg>今日收入 <i id="todayInc">¥0.00</i></span>
+        <span>📉 今日支出 <b id="todayExp">¥0.00</b></span>
+        <span>📈 今日收入 <b id="todayInc">¥0.00</b></span>
       </div>
     </div>
-    <div class="section-title"><span>选择分类</span><button onclick="openAddCat()"><svg class="icon" style="width:14px;height:14px"><use href="#i-add"></use></svg>自定义</button></div>
+    <div class="section-title"><span>选择分类</span><button onclick="openAddCat()">➕ 自定义</button></div>
     <div class="cat-grid" id="catGrid"></div>
-    <div class="section-title">快捷备注</div>
-    <input type="text" id="noteInput" placeholder="点击输入备注，或点选下方快捷标签" style="background:var(--card);padding:12px 16px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;width:100%;margin-bottom:12px;box-shadow:var(--shadow);border:1.5px solid transparent;">
+    <div class="section-title"><span>快捷备注</span><button onclick="openAddNote()">➕ 自定义</button></div>
     <div class="cat-grid" style="grid-template-columns:repeat(4,1fr);" id="quickNotes"></div>
-    <button class="btn-primary" onclick="saveRecord()"><svg class="icon icon-lg anim-bounce"><use href="#i-edit"></use></svg>保存记录</button>
-  </section><section class="page" id="page-list">
+  </section>
+
+  <section class="page" id="page-list">
     <div class="balance-card" style="padding:20px;margin-bottom:16px;">
       <div class="balance-label">总资产结余</div>
       <div class="balance-amount" style="font-size:30px;" id="totalBalance">¥0.00</div>
     </div>
     <div id="recordList"></div>
-  </section><section class="page" id="page-stats">
+  </section>
+
+  <section class="page" id="page-stats">
     <div class="stats-card">
       <div class="stats-row">
         <div class="stats-item"><div class="label">本月收入</div><div class="val" style="color:var(--green)" id="stInc">¥0.00</div></div>
@@ -162,109 +165,138 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
       <div class="section-title" style="margin-top:0;">支出分类排行</div>
       <div class="bar-wrap" id="rankBox"></div>
     </div>
-  </section><section class="page" id="page-remind">
+  </section>
+
+  <section class="page" id="page-goal">
+    <div class="stats-card" style="text-align:center;padding:30px 20px;">
+      <div class="icon-cute anim-float" style="font-size:60px;margin-bottom:10px;color:var(--primary);"><svg><use href="#i-target"></use></svg></div>
+      <div style="font-size:18px;font-weight:800;margin-bottom:8px;">我的储蓄目标</div>
+      <div style="color:var(--sub);font-size:13px;margin-bottom:16px;">为了心爱的小物件，加油攒钱吧！</div>
+      <div class="bar-track" style="height:12px;"><div class="bar-fill" id="goalBar" style="width:0%;background:linear-gradient(90deg,var(--primary),#ffb6c1);"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;font-weight:700;">
+        <span id="goalCur">¥0</span>
+        <span id="goalTotal">目标：¥0</span>
+      </div>
+      <div class="setting-item" style="margin-top:16px;border:none;padding:0;">
+        <div class="lbl">设定目标金额</div>
+        <input type="number" id="goalInput" style="text-align:right;font-size:18px;font-weight:800;width:120px;color:var(--primary);" placeholder="0">
+      </div>
+      <button class="btn-primary" onclick="saveGoal()">保存目标</button>
+    </div>
+  </section>
+
+  <section class="page" id="page-me">
     <div class="stats-card">
       <div class="setting-item">
-        <div><div class="lbl"><svg class="icon" style="color:var(--primary)"><use href="#i-bell"></use></svg>每日记账提醒</div><div class="desc">到点弹出通知，提醒你记账</div></div>
+        <div><div class="lbl">每日提醒</div><div class="desc">到点提醒你记账</div></div>
         <div class="switch" id="remindSwitch" onclick="toggleRemind()"></div>
       </div>
       <div class="setting-item">
-        <div><div class="lbl">提醒时间</div><div class="desc">每天何时提醒你</div></div>
-        <input type="time" id="remindTime" style="font-size:16px;font-weight:700;text-align:right;width:100px;">
+        <div><div class="lbl">按键音效</div><div class="desc">点击键盘的咔哒声</div></div>
+        <div class="switch" id="soundSwitch" onclick="toggleSound()"></div>
       </div>
-      <div class="setting-item" style="border:none;">
-        <div><div class="lbl">提醒文案</div><div class="desc">每天看到的提示语</div></div>
-        <input type="text" id="remindText" style="font-size:14px;font-weight:600;text-align:right;width:140px;color:var(--sub);" placeholder="别忘了记账哦～">
+      <div class="setting-item">
+        <div><div class="lbl">超支预警</div><div class="desc">超出本月预算时提醒</div></div>
+        <div class="switch" id="warnSwitch" onclick="toggleWarn()"></div>
       </div>
-      <button class="btn-primary" style="background:var(--primary-soft);color:var(--primary);box-shadow:none;" onclick="testRemind()"><svg class="icon anim-pulse"><use href="#i-bell"></use></svg>立即测试提醒</button>
-    </div>```
-<div class="stats-card">
-  <div class="section-title" style="margin-top:0;"><span>学习/任务提醒</span><button onclick="openAddReminder()"><svg class="icon" style="width:14px;height:14px"><use href="#i-add"></use></svg>新增</button></div>
-  <div id="reminderList"></div>
-</div>
+    </div>
+    <div class="stats-card">
+      <div class="section-title" style="margin-top:0;">数据管理</div>
+      <button class="btn-primary" style="background:var(--primary-soft);color:var(--primary);box-shadow:none;" onclick="exportData()">📤 导出数据备份</button>
+      <button class="btn-primary" style="background:var(--primary-soft);color:var(--primary);box-shadow:none;margin-top:8px;" onclick="importData()">📥 导入数据恢复</button>
+      <button class="btn-primary" style="background:#fff1f0;color:var(--red);box-shadow:none;margin-top:8px;" onclick="clearAllData()">🗑️ 清空所有数据</button>
+    </div>
+  </section>
+</main>
 
-<div class="stats-card">
-  <div class="setting-item">
-    <div><div class="lbl">按键音效</div><div class="desc">点击键盘和保存时的提示音</div></div>
-    <div class="switch" id="soundSwitch" onclick="toggleSound()"></div>
-  </div>
-  <div class="setting-item">
-    <div><div class="lbl">闹钟声音</div><div class="desc">任务提醒时的急促滴滴声</div></div>
-    <div class="switch" id="alarmSwitch" onclick="toggleAlarm()"></div>
-  </div>
-</div>
-```
+<nav class="tabbar" id="tabbar">
+  <button data-page="add" class="active" onclick="switchPage('add')"><span class="ico"><svg class="icon-cute"><use href="#i-wallet"></use></svg></span>记一笔</button>
+  <button data-page="list" onclick="switchPage('list')"><span class="ico"><svg class="icon-cute"><use href="#i-star"></use></svg></span>明细</button>
+  <button data-page="stats" onclick="switchPage('stats')"><span class="ico"><svg class="icon-cute"><use href="#i-chart"></use></svg></span>统计</button>
+  <button data-page="goal" onclick="switchPage('goal')"><span class="ico"><svg class="icon-cute"><use href="#i-target"></use></svg></span>攒钱</button>
+  <button data-page="me" onclick="switchPage('me')"><span class="ico"><svg class="icon-cute"><use href="#i-user"></use></svg></span>我的</button>
+</nav>
 
-</section>
-</main><nav class="tabbar" id="tabbar">
-  <button data-page="add" class="active" onclick="switchPage('add')"><span class="ico"><svg class="icon"><use href="#i-edit"></use></svg></span>记一笔</button>
-  <button data-page="list" onclick="switchPage('list')"><span class="ico"><svg class="icon"><use href="#i-list"></use></svg></span>明细</button>
-  <button data-page="stats" onclick="switchPage('stats')"><span class="ico"><svg class="icon"><use href="#i-chart"></use></svg></span>统计</button>
-  <button data-page="remind" onclick="switchPage('remind')"><span class="ico"><svg class="icon"><use href="#i-bell"></use></svg></span>提醒</button>
-</nav><div class="sheet-overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
+<div class="sheet-overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
 <div class="sheet" id="amountSheet">
   <div class="sheet-handle"></div>
   <div class="sheet-title">输入金额</div>
-  <button class="sheet-close" onclick="closeAmountSheet()"><svg class="icon"><use href="#i-cancel"></use></svg></button>
+  <button class="sheet-close" onclick="closeAmountSheet()">✕</button>
   <div style="text-align:center;font-size:44px;font-weight:800;color:var(--primary);margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div>
   <div class="keypad" id="keypad">
     <button onclick="pressKey('1')">1</button><button onclick="pressKey('2')">2</button><button onclick="pressKey('3')">3</button>
     <button onclick="pressKey('4')">4</button><button onclick="pressKey('5')">5</button><button onclick="pressKey('6')">6</button>
     <button onclick="pressKey('7')">7</button><button onclick="pressKey('8')">8</button><button onclick="pressKey('9')">9</button>
     <button class="special" onclick="pressKey('.')">.</button><button onclick="pressKey('0')">0</button>
-    <button class="special" onclick="pressKey('del')"><svg class="icon"><use href="#i-cancel"></use></svg></button>
-    <button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定</button>
+    <button class="special" onclick="pressKey('del')">⌫</button>
+    <button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定并自动保存</button>
   </div>
-</div><div class="sheet-overlay" id="subCatOverlay" onclick="closeSubCat()"></div>
+</div>
+
+<div class="sheet-overlay" id="subCatOverlay" onclick="closeSubCat()"></div>
 <div class="sheet" id="subCatSheet">
   <div class="sheet-handle"></div>
   <div class="sheet-title" id="subCatTitle">选择详细分类</div>
-  <button class="sheet-close" onclick="closeSubCat()"><svg class="icon"><use href="#i-cancel"></use></svg></button>
+  <button class="sheet-close" onclick="closeSubCat()">✕</button>
   <div class="cat-grid" style="grid-template-columns:repeat(4,1fr);" id="subCatGrid"></div>
-</div><div class="sheet-overlay" id="reminderOverlay" onclick="closeAddReminder()"></div>
-<div class="sheet" id="reminderSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">新增提醒事项</div>
-  <button class="sheet-close" onclick="closeAddReminder()"><svg class="icon"><use href="#i-cancel"></use></svg></button>
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <input type="text" id="newReminderText" placeholder="事项 (如: 背单词 / 喝水)" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
-    <input type="time" id="newReminderTime" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
-    <button class="btn-primary" onclick="saveNewReminder()"><svg class="icon"><use href="#i-add"></use></svg>保存提醒</button>
-  </div>
-</div><div class="sheet-overlay" id="catOverlay" onclick="closeAddCat()"></div>
+</div>
+
+<div class="sheet-overlay" id="catOverlay" onclick="closeAddCat()"></div>
 <div class="sheet" id="catSheet">
   <div class="sheet-handle"></div>
   <div class="sheet-title">添加自定义分类</div>
-  <button class="sheet-close" onclick="closeAddCat()"><svg class="icon"><use href="#i-cancel"></use></svg></button>
+  <button class="sheet-close" onclick="closeAddCat()">✕</button>
   <div style="display:flex;flex-direction:column;gap:12px;">
     <input type="text" id="newCatName" placeholder="分类名称 (如: 追星)" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:8px 0;" id="iconPicker"></div>
-    <button class="btn-primary" onclick="saveNewCat()"><svg class="icon"><use href="#i-add"></use></svg>保存分类</button>
+    <button class="btn-primary" onclick="saveNewCat()">✨ 保存分类</button>
   </div>
-</div><div id="toast"></div><script>
+</div>
+
+<div class="sheet-overlay" id="noteOverlay" onclick="closeAddNote()"></div>
+<div class="sheet" id="noteSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">添加快捷备注</div>
+  <button class="sheet-close" onclick="closeAddNote()">✕</button>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <input type="text" id="newNoteText" placeholder="备注标签 (如: 奶茶, 打车)" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
+    <button class="btn-primary" onclick="saveNewNote()">✨ 保存标签</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
 (function(){
 'use strict';
+
+const THEME_ICONS = {
+  pink: {food:'cat-food', drink:'cat-drink', bus:'cat-bus', shop:'cat-shop', home:'cat-shop', game:'cat-shop', book:'cat-shop', med:'cat-shop', gift:'cat-shop', pet:'cat-food', skin:'cat-shop', star:'cat-shop'},
+  blue: {food:'dog-food', drink:'dog-drink', bus:'dog-bus', shop:'dog-shop', home:'dog-shop', game:'dog-shop', book:'dog-shop', med:'dog-shop', gift:'dog-shop', pet:'dog-food', skin:'dog-shop', star:'dog-shop'},
+  purple: {food:'rabbit-food', drink:'rabbit-drink', bus:'rabbit-bus', shop:'rabbit-shop', home:'rabbit-shop', game:'rabbit-shop', book:'rabbit-shop', med:'rabbit-shop', gift:'rabbit-shop', pet:'rabbit-food', skin:'rabbit-shop', star:'rabbit-shop'},
+  dark: {food:'panda-food', drink:'panda-drink', bus:'panda-bus', shop:'panda-shop', home:'panda-shop', game:'panda-shop', book:'panda-shop', med:'panda-shop', gift:'panda-shop', pet:'panda-food', skin:'panda-shop', star:'panda-shop'}
+};
+
 const EXPENSE_CATS=[
-  {name:'餐饮',icon:'i-food',color:'#FF8A80',subs:['早餐','午餐','晚餐','零食','外卖']},
-  {name:'饮品',icon:'i-drink',color:'#FFB74D',subs:['奶茶','咖啡','果汁','酒水']},
-  {name:'交通',icon:'i-bus',color:'#64B5F6',subs:['公交','打车','加油','停车']},
-  {name:'购物',icon:'i-shop',color:'#4DB6AC',subs:['日用品','服饰','数码','美妆']},
-  {name:'居住',icon:'i-home',color:'#BA68C8',subs:['房租','水电','物业','维修']},
-  {name:'娱乐',icon:'i-game',color:'#81C784',subs:['电影','游戏','旅游','聚会']},
-  {name:'学习',icon:'i-book',color:'#7986CB',subs:['书籍','课程','文具']},
-  {name:'医疗',icon:'i-med',color:'#E57373',subs:['药品','门诊','体检']},
-  {name:'人情',icon:'i-gift',color:'#A1887F',subs:['红包','送礼','请客']},
-  {name:'宠物',icon:'i-pet',color:'#FFD54F',subs:['猫粮','狗粮','玩具','洗澡']},
-  {name:'护肤',icon:'i-skin',color:'#F06292',subs:['水乳','面膜','彩妆']},
-  {name:'其他',icon:'i-star',color:'#A3929A',subs:['其他']}
+  {name:'餐饮', key:'food', color:'#FF8A80', subs:['早餐','午餐','晚餐','零食','外卖']},
+  {name:'饮品', key:'drink', color:'#FFB74D', subs:['奶茶','咖啡','果汁','酒水']},
+  {name:'交通', key:'bus', color:'#64B5F6', subs:['公交','打车','加油','停车']},
+  {name:'购物', key:'shop', color:'#4DB6AC', subs:['日用品','服饰','数码','美妆']},
+  {name:'居住', key:'home', color:'#BA68C8', subs:['房租','水电','物业','维修']},
+  {name:'娱乐', key:'game', color:'#81C784', subs:['电影','游戏','旅游','聚会']},
+  {name:'学习', key:'book', color:'#7986CB', subs:['书籍','课程','文具']},
+  {name:'医疗', key:'med', color:'#E57373', subs:['药品','门诊','体检']},
+  {name:'人情', key:'gift', color:'#A1887F', subs:['红包','送礼','请客']},
+  {name:'宠物', key:'pet', color:'#FFD54F', subs:['猫粮','狗粮','玩具','洗澡']},
+  {name:'护肤', key:'skin', color:'#F06292', subs:['水乳','面膜','彩妆']},
+  {name:'其他', key:'star', color:'#A3929A', subs:['其他']}
 ];
-const DEFAULT_INCOME=[{name:'工资',icon:'i-money',color:'#00B894'},{name:'奖金',icon:'i-gift',color:'#16A34A'},{name:'兼职',icon:'i-money',color:'#22C55E'},{name:'理财',icon:'i-chart',color:'#0891B2'},{name:'红包',icon:'i-gift',color:'#E11D48'},{name:'其他',icon:'i-star',color:'#A3929A'}];
-const ICONS=['i-food','i-drink','i-bus','i-shop','i-home','i-game','i-book','i-med','i-pet','i-skin','i-gift','i-money','i-star','i-note','i-target'];
-const QUICK_NOTES=['早餐','午餐','晚餐','打车','网购','奶茶','咖啡','看病','买书','看电影','送礼','工资'];
-const THEMES=['pink','blue','purple','mint','orange','dark'];
-const RK='cute_book_records_v6',SK='cute_book_settings_v6',CK='cute_book_cats_v6';
-let records=[],settings={},customCats=[],reminders=[],theme='pink',formType='expense',formCat='餐饮',formAmount='0',currentSubCat='';
-let alarmTimer=null,alarmAudioCtx=null,alarmOsc=null;
+const DEFAULT_INCOME=[{name:'工资',key:'wallet',color:'#00B894'},{name:'奖金',key:'star',color:'#16A34A'},{name:'兼职',key:'wallet',color:'#22C55E'},{name:'理财',key:'chart',color:'#0891B2'},{name:'红包',key:'gift',color:'#E11D48'},{name:'其他',key:'star',color:'#A3929A'}];
+
+const DEFAULT_NOTES=['早餐','午餐','晚餐','打车','网购','奶茶','咖啡','看病','买书','看电影','送礼','工资'];
+const THEMES=['pink','blue','purple','dark'];
+const RK='cute_book_records_v11',SK='cute_book_settings_v11',CK='cute_book_cats_v11',NK='cute_book_notes_v11',GK='cute_book_goal_v11';
+let records=[],settings={},customCats=[],quickNotes=[],theme='pink',formType='expense',formCat='餐饮',formAmount='0',currentSubCat='';
+let alarmTimer=null,audioCtx=null,alarmOsc=null;
 
 const $=id=>document.getElementById(id);
 const pad2=n=>String(n).padStart(2,'0');
@@ -276,7 +308,6 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;',
 let toastTimer;
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2000);}
 
-let audioCtx=null;
 function playSound(type){
   if(!settings.soundOn)return;
   try{
@@ -289,246 +320,120 @@ function playSound(type){
     else if(type==='click'){osc.type='sine';osc.frequency.setValueAtTime(800,now);gain.gain.setValueAtTime(.05,now);gain.gain.exponentialRampToValueAtTime(.001,now+.03);osc.start(now);osc.stop(now+.03);}
   }catch(e){}
 }
-function playAlarmSound(){
-  if(!settings.alarmOn)return;
-  try{
-    if(!alarmAudioCtx)alarmAudioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    if(alarmOsc)return;
-    alarmOsc=alarmAudioCtx.createOscillator();
-    const gain=alarmAudioCtx.createGain();
-    alarmOsc.connect(gain);gain.connect(alarmAudioCtx.destination);
-    alarmOsc.type='square';alarmOsc.frequency.value=880;
-    const now=alarmAudioCtx.currentTime;
-    gain.gain.setValueAtTime(.2,now);
-    alarmOsc.start(now);
-    setTimeout(()=>{if(alarmOsc){alarmOsc.stop();alarmOsc=null;}},1500);
-  }catch(e){}
-}
 
 function loadData(){
   try{records=JSON.parse(localStorage.getItem(RK)||'[]');}catch(e){records=[];}
-  try{const s=JSON.parse(localStorage.getItem(SK)||'{}');settings={monthlyBudget:0,remindOn:false,remindTime:'21:00',remindText:'别忘了记账哦～',lastRemindDate:'',soundOn:true,alarmOn:true,...s};}catch(e){settings={monthlyBudget:0,remindOn:false,remindTime:'21:00',remindText:'别忘了记账哦～',lastRemindDate:'',soundOn:true,alarmOn:true};}
+  try{const s=JSON.parse(localStorage.getItem(SK)||'{}');settings={remindOn:false,remindTime:'21:00',remindText:'别忘了记账哦～',lastRemindDate:'',soundOn:true,alarmOn:true,warn80:true,...s};}catch(e){settings={remindOn:false,remindTime:'21:00',remindText:'别忘了记账哦～',lastRemindDate:'',soundOn:true,alarmOn:true,warn80:true};}
   try{customCats=JSON.parse(localStorage.getItem(CK)||'[]');}catch(e){customCats=[];}
-  try{reminders=JSON.parse(localStorage.getItem('cute_book_reminders_v6')||'[]');}catch(e){reminders=[];}
+  try{quickNotes=JSON.parse(localStorage.getItem(NK)||JSON.stringify(DEFAULT_NOTES));}catch(e){quickNotes=[...DEFAULT_NOTES];}
   theme=localStorage.getItem('cute_book_theme')||'pink';
 }
 function saveRecords(){localStorage.setItem(RK,JSON.stringify(records));}
 function saveSettings(){localStorage.setItem(SK,JSON.stringify(settings));}
 function saveCustomCats(){localStorage.setItem(CK,JSON.stringify(customCats));}
-function saveReminders(){localStorage.setItem('cute_book_reminders_v6',JSON.stringify(reminders));}
-function setTheme(t){theme=t;document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cute_book_theme',t);toast('主题已切换');}
+function saveQuickNotes(){localStorage.setItem(NK,JSON.stringify(quickNotes));}
+function setTheme(t){theme=t;document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cute_book_theme',t);renderCatGrid();renderQuickNotes();renderBottomTabs();toast('主题已切换');}
 
+function getIconId(catKey){const map=THEME_ICONS[theme]||THEME_ICONS['pink'];return map[catKey]||map['star'];}
 function getCats(type){return type==='expense'?[...EXPENSE_CATS,...customCats]:DEFAULT_INCOME;}
-function getCatInfo(name){const all=[...EXPENSE_CATS,...DEFAULT_INCOME,...customCats];return all.find(c=>c.name===name)||{icon:'i-star',color:'#A3929A'};}
+function getCatInfo(name){const all=[...EXPENSE_CATS,...DEFAULT_INCOME,...customCats];return all.find(c=>c.name===name)||{key:'star',color:'#A3929A'};}
 function monthRecords(m){return records.filter(r=>r.date.slice(0,7)===m);}
 function sumBy(list,type){return list.filter(r=>r.type===type).reduce((s,r)=>s+Number(r.amount||0),0);}
-function catSum(list,type,cat){return list.filter(r=>r.type===type&&r.category===cat).reduce((s,r)=>s+Number(r.amount||0),0);}
 
 function switchPage(name){
   playSound('click');
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));
   document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
-  const titles={add:'记一笔',list:'明细',stats:'统计',remind:'提醒'};
-  $('pageTitle').textContent=titles[name]||'灵动记账本';
-  if(name==='list')renderList(); if(name==='stats')renderStats(); if(name==='remind')renderRemind();
+  const titles={add:'记一笔',list:'明细',stats:'统计',goal:'攒钱目标',me:'我的'};
+  const titleIcon=getIconId('food');
+  document.querySelector('.hd h1').innerHTML=`<span class="icon-cute anim-bounce" style="color:var(--primary);"><svg><use href="#${titleIcon}"></use></svg></span><span>${titles[name]||'迷你记账本'}</span>`;
+  if(name==='list')renderList();if(name==='stats')renderStats();if(name==='goal')renderGoal();
   window.scrollTo(0,0);
+}
+
+function renderBottomTabs(){
+  const tabs=document.querySelectorAll('.tabbar button');
+  const keys=['walletIcon','starIcon','chartIcon','targetIcon','userIcon'];
+  const fallback={walletIcon:'i-wallet',starIcon:'i-star',chartIcon:'i-chart',targetIcon:'i-target',userIcon:'i-user'};
+  tabs.forEach((btn,idx)=>{
+    const ico=btn.querySelector('.ico');
+    if(ico&&keys[idx]){ico.innerHTML=`<svg class="icon-cute"><use href="#${fallback[keys[idx]]}"></use></svg>`;}
+  });
 }
 
 function openAmountSheet(){playSound('click');$('amountOverlay').classList.add('show');$('amountSheet').classList.add('show');formAmount='0';updateSheetAmount();}
 function closeAmountSheet(){$('amountOverlay').classList.remove('show');$('amountSheet').classList.remove('show');}
 function updateSheetAmount(){$('sheetAmount').textContent='¥ '+formAmount;}
-function pressKey(k){
-  playSound('key');
-  if(k==='del'){formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';}
-  else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}
-  else{if(formAmount==='0')formAmount=k;else formAmount+=k;}
-  if(formAmount.length>10)formAmount=formAmount.slice(0,10);
-  updateSheetAmount();
-}
-function confirmAmount(){
-  const v=parseFloat(formAmount)||0;
-  if(v<=0){toast('请输入正确金额');return;}
-  $('displayAmount').textContent=fmt(v);
-  closeAmountSheet();
-}
+function pressKey(k){playSound('key');if(k==='del'){formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';}else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}else{if(formAmount==='0')formAmount=k;else formAmount+=k;}if(formAmount.length>10)formAmount=formAmount.slice(0,10);updateSheetAmount();}
+function confirmAmount(){const v=parseFloat(formAmount)||0;if(v<=0){toast('请输入正确金额');return;}$('displayAmount').textContent=fmt(v);closeAmountSheet();setTimeout(()=>{saveRecord();},300);}
 
 function renderCatGrid(){
   const currentCatList=getCats(formType);
-  $('catGrid').innerHTML=currentCatList.map(c=>`
-    <div class="cat-item ${c.name===formCat?'active':''}" onclick="selectCat('${esc(c.name)}')">
-      <span class="cat-icon"><svg class="icon" style="color:${c.color}"><use href="#${c.icon}"></use></svg></span>
-      <span class="cat-name">${esc(c.name)}</span>
-    </div>`).join('');
+  $('catGrid').innerHTML=currentCatList.map(c=>{
+    const iconId=getIconId(c.key);const isActive=c.name===formCat;
+    return `<div class="cat-item ${isActive?'active':''}" onclick="selectCat('${esc(c.name)}')"><span class="icon-cute ${isActive?'anim-wiggle':'anim-float'}" style="color:${c.color};"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name">${esc(c.name)}</span></div>`;
+  }).join('');
 }
-function selectCat(name){
-  playSound('click');
-  formCat=name;
-  renderCatGrid();
-  const cat=getCats(formType).find(c=>c.name===name);
-  if(cat&&cat.subs&&cat.subs.length>0){
-    currentSubCat='';
-    $('subCatTitle').textContent=name+' - 详细分类';
-    $('subCatGrid').innerHTML=cat.subs.map(s=>`
-      <div class="cat-item ${s===currentSubCat?'active':''}" onclick="selectSubCat('${esc(s)}')">
-        <span class="cat-icon"><svg class="icon" style="color:${cat.color}"><use href="#${cat.icon}"></use></svg></span>
-        <span class="cat-name">${esc(s)}</span>
-      </div>`).join('');
-    $('subCatOverlay').classList.add('show');$('subCatSheet').classList.add('show');
-  }
-}
+function selectCat(name){playSound('click');formCat=name;renderCatGrid();const cat=getCats(formType).find(c=>c.name===name);if(cat&&cat.subs&&cat.subs.length>0){currentSubCat='';$('subCatTitle').textContent=name+' - 详细分类';$('subCatGrid').innerHTML=cat.subs.map(s=>{const iconId=getIconId(cat.key);return `<div class="cat-item" onclick="selectSubCat('${esc(s)}')"><span class="icon-cute anim-float" style="color:${cat.color};"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name">${esc(s)}</span></div>`;}).join('');$('subCatOverlay').classList.add('show');$('subCatSheet').classList.add('show');}}
 function selectSubCat(subName){playSound('click');currentSubCat=subName;$('subCatTitle').textContent=formCat+' - '+subName;setTimeout(()=>{closeSubCat();toast('已选：'+formCat+' - '+subName);},200);}
 function closeSubCat(){$('subCatOverlay').classList.remove('show');$('subCatSheet').classList.remove('show');}
 
 function openAddCat(){playSound('click');$('catOverlay').classList.add('show');$('catSheet').classList.add('show');}
 function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
-function saveNewCat(){
-  const n=$('newCatName').value.trim();
-  if(!n){toast('请输入分类名称');return;}
-  const active=document.querySelector('#iconPicker .emoji-active');
-  const icon=active?active.dataset.icon:'i-star';
-  customCats.push({name:n,icon,color:'#5b6ef5',subs:['其他']});
-  saveCustomCats();renderCatGrid();closeAddCat();$('newCatName').value='';toast('分类已添加');
-}
-function renderIconPicker(){
-  $('iconPicker').innerHTML=ICONS.map(i=>`<button data-icon="${i}" style="padding:10px 0;background:var(--bg);border-radius:12px;display:flex;align-items:center;justify-content:center;" onclick="pickIcon(this)"><svg class="icon icon-lg" style="color:var(--sub)"><use href="#${i}"></use></svg></button>`).join('');
-}
-function pickIcon(el){document.querySelectorAll('#iconPicker button').forEach(b=>{b.style.background='var(--bg)';b.querySelector('svg').style.color='var(--sub)';});el.style.background='var(--primary-soft)';el.querySelector('svg').style.color='var(--primary)';el.classList.add('emoji-active');}
+function saveNewCat(){const n=$('newCatName').value.trim();if(!n){toast('请输入分类名称');return;}customCats.push({name:n,key:'star',color:'#5b6ef5',subs:['其他']});saveCustomCats();renderCatGrid();closeAddCat();$('newCatName').value='';toast('分类已添加');}
 
-function selectQuickNote(note){
-  playSound('click');
-  const inp=$('noteInput');
-  if(inp.value===note){inp.value='';toast('已取消备注');}else{inp.value=note;toast('已选备注：'+note);}
-  renderQuickNotes();
-}
-function renderQuickNotes(){
-  const noteVal=$('noteInput')?$('noteInput').value:'';
-  $('quickNotes').innerHTML=QUICK_NOTES.map(n=>`
-    <div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;">
-      <span class="cat-icon" style="height:20px;"><svg class="icon" style="width:18px;height:18px;color:var(--primary)"><use href="#i-note"></use></svg></span>
-      <span class="cat-name" style="font-size:10px;">${esc(n)}</span>
-    </div>`).join('');
-}
+function openAddNote(){playSound('click');$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');}
+function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
+function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}if(!quickNotes.includes(t))quickNotes.push(t);saveQuickNotes();renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('标签已添加');}
+function selectQuickNote(note){playSound('click');const inp=$('noteInput');if(inp.value===note){inp.value='';toast('已取消备注');}else{inp.value=note;toast('已选备注：'+note);}renderQuickNotes();}
+function renderQuickNotes(){const noteVal=$('noteInput')?$('noteInput').value:'';const iconId=getIconId('star');$('quickNotes').innerHTML=quickNotes.map(n=>`<div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;"><span class="icon-cute ${n===noteVal?'anim-wiggle':'anim-float'}" style="color:var(--primary);font-size:22px;"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name" style="font-size:10px;">${esc(n)}</span></div>`).join('');}
 
 function saveRecord(){
-  const v=parseFloat(formAmount)||0;
-  if(v<=0){toast('请先输入金额');return;}
-  const date=ymd(new Date());
-  const note=$('noteInput').value.trim();
-  const displayCat=currentSubCat?formCat+'/'+currentSubCat:formCat;
+  const v=parseFloat(formAmount)||0;if(v<=0){toast('请先输入金额');return;}
+  const date=ymd(new Date());const note=$('noteInput').value.trim();const displayCat=currentSubCat?formCat+'/'+currentSubCat:formCat;
   records.push({id:genId(),date,type:formType,category:displayCat,amount:Math.round(v*100)/100,note,createdAt:Date.now()});
-  saveRecords();playSound('save');toast('已记一笔 '+fmt(v));
+  saveRecords();playSound('save');toast('✨ 已记一笔 '+fmt(v));
   formAmount='0';$('displayAmount').textContent='¥ 0.00';$('noteInput').value='';currentSubCat='';
-  renderQuickNotes();renderList();renderStats();renderBalance();
+  renderQuickNotes();renderList();renderStats();renderBalance();renderGoal();
 }
 
-function renderBalance(){
-  const m=ym(new Date());const list=monthRecords(m);
-  $('totalBalance').textContent=fmt(sumBy(list,'income')-sumBy(list,'expense'));
-  const today=ymd(new Date());const tl=records.filter(r=>r.date===today);
-  $('todayExp').textContent=fmt(sumBy(tl,'expense'));$('todayInc').textContent=fmt(sumBy(tl,'income'));
-}
+function renderBalance(){const m=ym(new Date());const list=monthRecords(m);$('totalBalance').textContent=fmt(sumBy(list,'income')-sumBy(list,'expense'));const today=ymd(new Date());const tl=records.filter(r=>r.date===today);$('todayExp').textContent=fmt(sumBy(tl,'expense'));$('todayInc').textContent=fmt(sumBy(tl,'income'));}
 
 function renderList(){
   const list=records.slice().sort((a,b)=>(b.date+b.createdAt).localeCompare(a.date+a.createdAt));
-  if(!list.length){$('recordList').innerHTML='<div class="empty"><svg class="icon" style="width:50px;height:50px;margin-bottom:12px;opacity:.3"><use href="#i-star"></use></svg>还没有记录</div>';return;}
+  if(!list.length){const emptyIcon=getIconId('food');$('recordList').innerHTML=`<div class="empty"><span class="icon-cute anim-bounce" style="font-size:50px;opacity:0.3;color:var(--primary);"><svg><use href="#${emptyIcon}"></use></svg></span><br>还没有记录</div>`;return;}
   const groups={};list.forEach(r=>{(groups[r.date]=groups[r.date]||[]).push(r);});
-  let html='';
-  Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{
-    const items=groups[date];
-    html+=`<div style="font-size:12px;color:var(--sub);font-weight:700;margin:16px 0 8px;padding-left:4px;">${date}</div>`;
-    items.forEach(r=>{
-      const catName = r.category.split('/')[0];
-      const info=getCatInfo(catName);const sign=r.type==='expense'?'-':'+';
-      html+=`<div class="rec-card"><div class="rec-icon" style="background:${info.color}20;color:${info.color}"><svg class="icon"><use href="#${info.icon}"></use></svg></div><div class="rec-info"><div class="name">${esc(r.category)}</div>${r.note?`<div class="note">${esc(r.note)}</div>`:''}</div><div class="rec-amt ${r.type==='expense'?'exp':'inc'}">${sign}${fmt(r.amount)}</div><button onclick="delRecord('${r.id}')" style="color:var(--sub);padding:8px;"><svg class="icon"><use href="#i-cancel"></use></svg></button></div>`;
-    });
-  });
+  let html='';Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{const items=groups[date];html+=`<div style="font-size:12px;color:var(--sub);font-weight:700;margin:16px 0 8px;padding-left:4px;">${date}</div>`;items.forEach(r=>{const catName=r.category.split('/')[0];const info=getCatInfo(catName);const sign=r.type==='expense'?'-':'+';const iconId=getIconId(info.key);html+=`<div class="rec-card"><div class="rec-icon" style="background:${info.color}20;color:${info.color}"><span class="icon-cute" style="width:24px;height:24px;"><svg><use href="#${iconId}"></use></svg></span></div><div class="rec-info"><div class="name">${esc(r.category)}</div>${r.note?`<div class="note">${esc(r.note)}</div>`:''}</div><div class="rec-amt ${r.type==='expense'?'exp':'inc'}">${sign}${fmt(r.amount)}</div><button onclick="delRecord('${r.id}')" style="color:var(--sub);padding:8px;"><span class="icon-cute" style="width:18px;height:18px;opacity:0.5;"><svg><use href="#i-close"></use></svg></span></button></div>`;});});
   $('recordList').innerHTML=html;
 }
-function delRecord(id){if(!confirm('确定删除？'))return;records=records.filter(r=>r.id!==id);saveRecords();renderList();renderStats();renderBalance();}
+function delRecord(id){if(!confirm('确定删除？'))return;records=records.filter(r=>r.id!==id);saveRecords();renderList();renderStats();renderBalance();renderGoal();}
 
 function renderStats(){
-  const m=ym(new Date());const list=monthRecords(m);
-  const inc=sumBy(list,'income'),exp=sumBy(list,'expense'),bal=inc-exp;
+  const m=ym(new Date());const list=monthRecords(m);const inc=sumBy(list,'income'),exp=sumBy(list,'expense'),bal=inc-exp;
   $('stInc').textContent=fmt(inc);$('stExp').textContent=fmt(exp);$('stBal').textContent=fmt(bal);
-  const map={};list.filter(r=>r.type==='expense').forEach(r=>{
-    const mainCat = r.category.split('/')[0];
-    map[mainCat]=(map[mainCat]||0)+Number(r.amount);
-  });
-  const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]);const total=arr.reduce((s,x)=>s+x[1],0);
-  const box=$('rankBox');
-  if(!arr.length){box.innerHTML='<div class="empty" style="padding:20px 0">本月还没有支出</div>';}
-  else{box.innerHTML=arr.map(([cat,amt])=>{const pct=total>0?(amt/total*100):0;const info=getCatInfo(cat);
-    return `<div class="bar-item"><div class="bar-head"><span style="display:flex;align-items:center;gap:6px;"><svg class="icon" style="width:18px;height:18px;color:${info.color}"><use href="#${info.icon}"></use></svg>${esc(cat)}<span style="font-size:11px;color:var(--sub);background:var(--bg);padding:2px 6px;border-radius:6px;">${pct.toFixed(1)}%</span></span><span style="color:var(--red)">${fmt(amt)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${info.color}"></div></div></div>`;}).join('');}
+  const map={};list.filter(r=>r.type==='expense').forEach(r=>{const mainCat=r.category.split('/')[0];map[mainCat]=(map[mainCat]||0)+Number(r.amount);});
+  const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]);const total=arr.reduce((s,x)=>s+x[1],0);const box=$('rankBox');
+  if(!arr.length){box.innerHTML='<div class="empty" style="padding:20px 0">本月还没有支出</div>';}else{box.innerHTML=arr.map(([cat,amt])=>{const pct=total>0?(amt/total*100):0;const info=getCatInfo(cat);const iconId=getIconId(info.key);return `<div class="bar-item"><div class="bar-head"><span style="display:flex;align-items:center;gap:6px;font-size:15px;"><span class="icon-cute" style="width:20px;height:20px;color:${info.color};"><svg><use href="#${iconId}"></use></svg></span>${esc(cat)}<span style="font-size:11px;color:var(--sub);background:var(--bg);padding:2px 6px;border-radius:6px;">${pct.toFixed(1)}%</span></span><span style="color:var(--red)">${fmt(amt)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${info.color}"></div></div></div>`;}).join('');}
 }
 
-function renderRemind(){
-  $('remindSwitch').classList.toggle('on',!!settings.remindOn);
-  $('remindTime').value=settings.remindTime||'21:00';
-  $('remindText').value=settings.remindText||'';
-  $('soundSwitch').classList.toggle('on',!!settings.soundOn);
-  $('alarmSwitch').classList.toggle('on',!!settings.alarmOn);
-  const list=$('reminderList');
-  if(!reminders.length){list.innerHTML='<div class="empty" style="padding:20px 0">暂无学习/任务提醒</div>';return;}
-  list.innerHTML=reminders.map(r=>`
-    <div class="setting-item">
-      <div><div class="lbl">${esc(r.text)}</div><div class="desc">${r.time} ${r.done?'✅ 已完成':'⏳ 待办'}</div></div>
-      <div style="display:flex;gap:8px;">
-        <button onclick="toggleReminderDone('${r.id}')" style="color:var(--primary);padding:4px;"><svg class="icon" style="width:20px;height:20px"><use href="#i-target"></use></svg></button>
-        <button onclick="delReminder('${r.id}')" style="color:var(--sub);padding:4px;"><svg class="icon" style="width:20px;height:20px"><use href="#i-cancel"></use></svg></button>
-      </div>
-    </div>`).join('');
-}
-function openAddReminder(){playSound('click');$('reminderOverlay').classList.add('show');$('reminderSheet').classList.add('show');$('newReminderTime').value='20:00';}
-function closeAddReminder(){$('reminderOverlay').classList.remove('show');$('reminderSheet').classList.remove('show');}
-function saveNewReminder(){
-  const t=$('newReminderText').value.trim();const time=$('newReminderTime').value;
-  if(!t||!time){toast('请填写完整');return;}
-  reminders.push({id:genId(),text:t,time:time,done:false,lastTrigger:''});
-  saveReminders();renderRemind();closeAddReminder();$('newReminderText').value='';toast('提醒已添加');
-}
-function toggleReminderDone(id){const r=reminders.find(x=>x.id===id);if(r){r.done=!r.done;saveReminders();renderRemind();}}
-function delReminder(id){if(!confirm('删除此提醒？'))return;reminders=reminders.filter(r=>r.id!==id);saveReminders();renderRemind();}
+function renderGoal(){const goal=parseFloat(localStorage.getItem(GK))||0;const m=ym(new Date());const bal=sumBy(monthRecords(m),'income')-sumBy(monthRecords(m),'expense');const cur=Math.max(0,bal);$('goalInput').value=goal||'';$('goalCur').textContent=fmt(cur);$('goalTotal').textContent='目标：'+fmt(goal);const pct=goal>0?Math.min(100,(cur/goal*100)):0;$('goalBar').style.width=pct+'%';}
+function saveGoal(){const g=parseFloat($('goalInput').value)||0;localStorage.setItem(GK,g);renderGoal();toast('目标已更新');}
 
-function toggleRemind(){settings.remindOn=!settings.remindOn;if(settings.remindOn)settings.lastRemindDate='';saveSettings();renderRemind();toast(settings.remindOn?'每日记账提醒已开启':'已关闭');}
-function toggleSound(){settings.soundOn=!settings.soundOn;saveSettings();renderRemind();toast(settings.soundOn?'按键音效已开启':'已关闭按键音效');}
-function toggleAlarm(){settings.alarmOn=!settings.alarmOn;saveSettings();renderRemind();toast(settings.alarmOn?'闹钟声音已开启':'已关闭闹钟声音');}
-
-function testRemind(){
-  if(Notification.permission==='granted'){new Notification('📝 测试提醒',{body:'这是一个测试通知！'});playAlarmSound();}
-  else{Notification.requestPermission().then(p=>{if(p==='granted'){new Notification('📝 测试提醒',{body:'这是一个测试通知！'});playAlarmSound();}else toast('未授权通知');});}
-}
-
-function checkReminders(){
-  const now=new Date();const today=ymd(now);const cur=pad2(now.getHours())+':'+pad2(now.getMinutes());
-  if(settings.remindOn&&cur>=settings.remindTime&&settings.lastRemindDate!==today){
-    settings.lastRemindDate=today;saveSettings();
-    if(Notification.permission==='granted')new Notification('📝 记账提醒',{body:settings.remindText||'别忘了记账哦～'});
-    playAlarmSound();
-  }
-  reminders.forEach(r=>{
-    if(!r.done&&r.time===cur&&r.lastTrigger!==today){
-      r.lastTrigger=today;saveReminders();
-      if(Notification.permission==='granted')new Notification('⏰ 任务提醒',{body:r.text});
-      playAlarmSound();
-      toast('⏰ '+r.text);
-    }
-  });
-}
+function exportData(){const data={records,customCats,quickNotes,settings,goal:localStorage.getItem(GK)};const blob=new Blob([JSON.stringify(data)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cute_book_backup.json';a.click();URL.revokeObjectURL(url);toast('备份已导出');}
+function importData(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(!confirm('导入将覆盖当前数据，确定吗？'))return;records=data.records||[];customCats=data.customCats||[];quickNotes=data.quickNotes||[...DEFAULT_NOTES];settings=Object.assign({},settings,data.settings);if(data.goal)localStorage.setItem(GK,data.goal);saveRecords();saveCustomCats();saveQuickNotes();saveSettings();init();toast('导入成功！');}catch(err){toast('文件格式错误');}};reader.readAsText(e.target.files[0]);};inp.click();}
+function clearAllData(){if(!confirm('确定清空所有记录吗？'))return;records=[];saveRecords();renderList();renderStats();renderBalance();renderGoal();toast('数据已清空');}
 
 function init(){
   loadData();document.documentElement.setAttribute('data-theme',theme);
-  renderCatGrid();renderIconPicker();renderQuickNotes();renderBalance();renderList();renderStats();renderRemind();
-  if(alarmTimer)clearInterval(alarmTimer);
-  alarmTimer=setInterval(checkReminders,20000);setTimeout(checkReminders,1500);
+  renderCatGrid();renderQuickNotes();renderBalance();renderList();renderStats();renderGoal();renderBottomTabs();
   $('themeBtn').onclick=()=>{playSound('click');const idx=THEMES.indexOf(theme);setTheme(THEMES[(idx+1)%THEMES.length]);};
-  $('remindTime').addEventListener('change',e=>{settings.remindTime=e.target.value;saveSettings();toast('提醒时间已更新');});
-  $('remindText').addEventListener('input',e=>{settings.remindText=e.target.value;saveSettings();});
   $('noteInput').addEventListener('input',renderQuickNotes);
 }
 
-window.switchPage=switchPage;window.openAmountSheet=openAmountSheet;window.closeAmountSheet=closeAmountSheet;window.pressKey=pressKey;window.confirmAmount=confirmAmount;window.selectCat=selectCat;window.openAddCat=openAddCat;window.closeAddCat=closeAddCat;window.saveNewCat=saveNewCat;window.pickIcon=pickIcon;window.delRecord=delRecord;window.toggleRemind=toggleRemind;window.toggleSound=toggleSound;window.toggleAlarm=toggleAlarm;window.testRemind=testRemind;window.selectQuickNote=selectQuickNote;window.openAddReminder=openAddReminder;window.closeAddReminder=closeAddReminder;window.saveNewReminder=saveNewReminder;window.toggleReminderDone=toggleReminderDone;window.delReminder=delReminder;window.selectSubCat=selectSubCat;window.closeSubCat=closeSubCat;
+window.switchPage=switchPage;window.openAmountSheet=openAmountSheet;window.closeAmountSheet=closeAmountSheet;window.pressKey=pressKey;window.confirmAmount=confirmAmount;window.selectCat=selectCat;window.openAddCat=openAddCat;window.closeAddCat=closeAddCat;window.saveNewCat=saveNewCat;window.delRecord=delRecord;window.selectQuickNote=selectQuickNote;window.openAddNote=openAddNote;window.closeAddNote=closeAddNote;window.saveNewNote=saveNewNote;window.selectSubCat=selectSubCat;window.closeSubCat=closeSubCat;window.saveRecord=saveRecord;window.exportData=exportData;window.importData=importData;window.clearAllData=clearAllData;window.saveGoal=saveGoal;
 
 init();
 })();
-</script></body>
+</script>
+</body>
 </html>
