@@ -5,24 +5,22 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#ffb6c1">
 
-<!-- ========== 防浏览器长期缓存 ========== -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
-<!-- ========== PWA配置 ========== -->
 <meta name="apple-mobile-web-app-title" content="松鼠记账">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
 
 <title>松鼠记账</title>
 <style>
 :root{
   --bg:#fff5f8;
-  --card:#fff;
+  --card:#ffffff;
   --text:#5a3d4a;
-  --sub:#b3929f;
+  --sub:#886e79;
   --line:#ffe4e9;
   --primary:#ff8fab;
   --primary-soft:#fff0f5;
@@ -30,9 +28,9 @@
   --red:#f87171;
   --orange:#fbbf24;
   --pink:#ff7aa2;
-  --radius:26px;
-  --radius-sm:18px;
-  --shadow:0 10px 30px rgba(255,143,171,.15);
+  --radius:24px;
+  --radius-sm:16px;
+  --shadow:0 8px 24px rgba(255,143,171,.12);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
 body{
@@ -40,60 +38,123 @@ body{
   background:var(--bg);
   color:var(--text);
   padding:16px;
-  padding-bottom:100px;
+  padding-bottom:110px;
 }
 .header{
-  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   margin-bottom:20px;
 }
 .header h1{
-  font-size:24px;
-  color:var(--primary);
+  font-size:26px;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
-.card{
+.input-wrap{
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px;
+  padding:16px;
+  margin-bottom:20px;
+}
+.top-input{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--primary-soft);
+  border-radius:16px;
+  padding:14px;
   margin-bottom:16px;
 }
-.item-row{
+.top-input input{
+  flex-grow:1;
+  border:none;
+  background:transparent;
+  font-size:16px;
+  outline:none;
+}
+.type-switch{
+  display:flex;
+  gap:8px;
   margin-bottom:12px;
 }
-label{
-  display:block;
-  margin-bottom:6px;
-  font-size:14px;
+.type-btn{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  border-radius:12px;
+  border:1px solid var(--line);
 }
-input,select{
+.type-btn.selected-out{
+  background:var(--red);
+  color:white;
+  border-color:var(--red);
+}
+.type-btn.selected-in{
+  background:var(--green);
+  color:white;
+  border-color:var(--green);
+}
+.amount-row{
+  margin-bottom:12px;
+}
+.amount-row input{
   width:100%;
   border:1px solid var(--line);
-  border-radius:12px;
-  padding:12px;
-  font-size:16px;
+  border-radius:14px;
+  padding:14px;
+  font-size:18px;
   background:#fff;
 }
-.btn{
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  margin:20px 0 12px;
+  font-size:16px;
+  color:var(--text);
+}
+.grid-cate{
+  display:grid;
+  grid-template-columns: repeat(4,1fr);
+  gap:10px;
+}
+.cate-item{
+  background:#fff;
+  text-align:center;
+  padding:14px 6px;
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow);
+}
+.cate-item.selected{
+  border:2px solid var(--primary);
+  background:var(--primary-soft);
+}
+.cate-item .icon-box{
+  width:48px;
+  height:48px;
+  margin:0 auto 6px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+}
+.cate-item .name{
+  font-size:13px;
+}
+.btn-submit{
   width:100%;
   border:none;
   background:var(--primary);
   color:white;
-  padding:14px;
-  border-radius:14px;
+  padding:15px;
+  border-radius:16px;
   font-size:17px;
-  margin-top:10px;
+  margin-top:20px;
 }
-.record-item{
-  padding:12px 0;
-  border-bottom:1px solid var(--line);
-}
-.money-out{
-  color:var(--red);
-}
-.money-in{
-  color:var(--green);
-}
-.bottom-bar{
+.bottom-tab{
   position:fixed;
   left:0;
   bottom:0;
@@ -101,90 +162,279 @@ input,select{
   background:#fff;
   display:flex;
   justify-content:space-around;
-  padding:12px 0;
+  padding:12px 0 8px;
   border-top:1px solid var(--line);
 }
-.tab{
+.tab-item{
+  text-align:center;
   font-size:14px;
   color:var(--sub);
 }
-.tab.active{
+.tab-item.active{
   color:var(--primary);
   font-weight:bold;
+}
+.tab-item .tab-icon{
+  font-size:22px;
+  display:block;
+  margin-bottom:3px;
+}
+.page{
+  display:none;
+}
+.page.active{
+  display:block;
+}
+.stat-card{
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px;
+  margin-bottom:16px;
+}
+.stat-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
 }
 </style>
 </head>
 <body>
-<div class="header">
-  <h1>🐿️ 松鼠记账</h1>
+
+<div id="pageAdd" class="page active">
+  <div class="header">
+    <h1>🐿️ 松鼠记账</h1>
+    <span>🔊</span>
+  </div>
+
+  <div class="input-wrap">
+    <div class="top-input">
+      <span>✏️</span>
+      <input type="text" id="noteInput" placeholder="备注，例如：火锅、打车">
+    </div>
+
+    <div class="type-switch">
+      <div id="btnOut" class="type-btn selected-out" onclick="setBillType('out')">支出</div>
+      <div id="btnIn" class="type-btn" onclick="setBillType('in')">收入</div>
+    </div>
+
+    <div class="amount-row">
+      <input type="number" id="moneyInput" placeholder="输入金额">
+    </div>
+  </div>
+
+  <div class="section-title">
+    <span>选择分类</span>
+    <span>点选分类</span>
+  </div>
+  <div class="grid-cate" id="cateGrid"></div>
+
+  <div class="section-title">
+    <span>快捷备注</span>
+    <span>点击快速填充备注</span>
+  </div>
+  <div class="grid-cate" id="quickNoteGrid"></div>
+
+  <button class="btn-submit" onclick="saveBill()">保存这笔记录</button>
 </div>
 
-<div class="card">
-  <div class="item-row">
-    <label>类型</label>
-    <select id="typeSel">
-      <option value="out">支出</option>
-      <option value="in">收入</option>
-    </select>
+<div id="pageStat" class="page">
+  <div class="header">
+    <h1>📊 统计明细</h1>
   </div>
-  <div class="item-row">
-    <label>金额</label>
-    <input type="number" id="moneyInput" placeholder="输入金额">
+  <div class="stat-card">
+    <div class="stat-row"><span>总支出</span><span id="totalOut">0</span></div>
+    <div class="stat-row"><span>总收入</span><span id="totalIn">0</span></div>
+    <div class="stat-row"><span>结余</span><span id="balance">0</span></div>
   </div>
-  <div class="item-row">
-    <label>备注</label>
-    <input type="text" id="noteInput" placeholder="例如：买菜、工资">
+  <div class="stat-card">
+    <h3 style="margin-bottom:12px;">各类别消费</h3>
+    <div id="cateStatList"></div>
   </div>
-  <button class="btn" onclick="addRecord()">添加记录</button>
 </div>
 
-<div class="card">
-  <h3>账单列表</h3>
-  <div id="recordList"></div>
+<div id="pageCalendar" class="page">
+  <div class="header"><h1>📅 日历</h1></div>
+  <div class="stat-card">日历记账功能后续开发</div>
 </div>
 
-<div class="bottom-bar">
-  <div class="tab active">记账</div>
-  <div class="tab">统计</div>
-  <div class="tab">设置</div>
+<div id="pageMine" class="page">
+  <div class="header"><h1>👤 我的</h1></div>
+  <div class="stat-card">设置、备份等功能后续开发</div>
+</div>
+
+<div class="bottom-tab">
+  <div class="tab-item active" onclick="switchPage('pageAdd')">
+    <span class="tab-icon">📝</span>
+    <span>记一笔</span>
+  </div>
+  <div class="tab-item" onclick="switchPage('pageCalendar')">
+    <span class="tab-icon">📅</span>
+    <span>日历</span>
+  </div>
+  <div class="tab-item" onclick="switchPage('pageStat')">
+    <span class="tab-icon">📊</span>
+    <span>统计</span>
+  </div>
+  <div class="tab-item" onclick="switchPage('pageMine')">
+    <span class="tab-icon">👤</span>
+    <span>我的</span>
+  </div>
 </div>
 
 <script>
-// 本地存储账单
-let recordList = JSON.parse(localStorage.getItem("squirrelBill")) || [];
+const cateList = [
+  {name:"餐饮", color:"#FFD93D", icon:"🍔"},
+  {name:"饮品", color:"#D98BFF", icon:"🥤"},
+  {name:"交通", color:"#FFD93D", icon:"🚕"},
+  {name:"购物", color:"#8BE57A", icon:"🛍️"},
+  {name:"居住", color:"#FFB1B1", icon:"🏠"},
+  {name:"娱乐", color:"#D98BFF", icon:"🎮"},
+  {name:"学习", color:"#8BE57A", icon:"📖"},
+  {name:"医疗", color:"#FFB1B1", icon:"💊"},
+  {name:"人情", color:"#FFD93D", icon:"🎁"},
+  {name:"宠物", color:"#FFB1B1", icon:"🐾"},
+  {name:"护肤", color:"#D98BFF", icon:"💄"},
+  {name:"其他", color:"#B8B8B8", icon:"•••"}
+];
 
-function render(){
-  const wrap = document.getElementById("recordList");
-  wrap.innerHTML = "";
-  recordList.forEach(item=>{
-    const div = document.createElement("div");
-    div.className = "record-item";
-    const cls = item.type==="in"?"money-in":"money-out";
-    const prefix = item.type==="in"? "+":"-";
-    div.innerHTML = `<div>${item.note}</div><div class="${cls}">${prefix}${item.money}</div>`;
-    wrap.appendChild(div);
-  })
+const quickNoteList = [
+  {name:"早餐", color:"#FFD93D", icon:"🌞"},
+  {name:"午餐", color:"#FFB1B1", icon:"🍱"},
+  {name:"晚餐", color:"#8BB5FF", icon:"🌙"},
+  {name:"火锅", color:"#FF8F8F", icon:"🍲"}
+];
+
+let selectedCateIndex = null;
+let billType = "out";
+let billList = JSON.parse(localStorage.getItem("squirrelBill")) || [];
+
+function setBillType(type){
+  billType = type;
+  document.getElementById("btnOut").classList.remove("selected-out");
+  document.getElementById("btnIn").classList.remove("selected-in");
+  if(type === "out"){
+    document.getElementById("btnOut").classList.add("selected-out");
+  } else {
+    document.getElementById("btnIn").classList.add("selected-in");
+  }
 }
 
-function addRecord(){
-  const type = document.getElementById("typeSel").value;
+function renderCate(){
+  const wrap = document.getElementById("cateGrid");
+  wrap.innerHTML = "";
+  cateList.forEach((item, idx) => {
+    const div = document.createElement("div");
+    div.className = "cate-item";
+    if(selectedCateIndex === idx) div.classList.add("selected");
+    div.innerHTML = `
+      <div class="icon-box" style="background:${item.color}22;">
+        <span style="filter:drop-shadow(0 2px 2px rgba(0,0,0,.08));">${item.icon}</span>
+      </div>
+      <div class="name">${item.name}</div>
+    `;
+    div.onclick = () => {
+      selectedCateIndex = idx;
+      renderCate();
+    };
+    wrap.appendChild(div);
+  });
+}
+
+function renderQuickNote(){
+  const wrap = document.getElementById("quickNoteGrid");
+  wrap.innerHTML = "";
+  quickNoteList.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "cate-item";
+    div.innerHTML = `
+      <div class="icon-box" style="background:${item.color}22;">
+        <span style="filter:drop-shadow(0 2px 2px rgba(0,0,0,.08));">${item.icon}</span>
+      </div>
+      <div class="name">${item.name}</div>
+    `;
+    div.onclick = () => {
+      document.getElementById("noteInput").value = item.name;
+    };
+    wrap.appendChild(div);
+  });
+}
+
+function switchPage(pageId){
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(pageId).classList.add("active");
+  document.querySelectorAll(".tab-item").forEach(t => t.classList.remove("active"));
+  event.currentTarget.classList.add("active");
+  if(pageId === "pageStat") calcStat();
+}
+
+function saveBill(){
+  if(selectedCateIndex === null){
+    alert("请选择一个分类！");
+    return;
+  }
   const money = document.getElementById("moneyInput").value;
   const note = document.getElementById("noteInput").value.trim();
   if(!money){
     alert("请填写金额");
     return;
   }
-  recordList.push({type,money,note});
-  localStorage.setItem("squirrelBill",JSON.stringify(recordList));
-  render();
-  document.getElementById("moneyInput").value="";
-  document.getElementById("noteInput").value="";
+  const cateInfo = cateList[selectedCateIndex];
+  billList.push({
+    cateName: cateInfo.name,
+    color: cateInfo.color,
+    icon: cateInfo.icon,
+    type: billType,
+    money: Number(money),
+    note: note,
+    time: new Date().toLocaleString()
+  });
+  localStorage.setItem("squirrelBill", JSON.stringify(billList));
+  document.getElementById("moneyInput").value = "";
+  document.getElementById("noteInput").value = "";
+  selectedCateIndex = null;
+  renderCate();
+  alert("✅记账保存成功！");
 }
 
-render();
+function calcStat(){
+  let totalOut = 0;
+  let totalIn = 0;
+
+  billList.forEach(bill => {
+    if(bill.type === "in"){
+      totalIn += bill.money;
+    } else {
+      totalOut += bill.money;
+    }
+  });
+
+  const balance = totalIn - totalOut;
+  document.getElementById("totalOut").innerText = totalOut;
+  document.getElementById("totalIn").innerText = totalIn;
+  document.getElementById("balance").innerText = balance;
+
+  const cateSum = {};
+  billList.forEach(bill => {
+    if(bill.type !== "out") return;
+    if(!cateSum[bill.cateName]) cateSum[bill.cateName] = 0;
+    cateSum[bill.cateName] += bill.money;
+  });
+
+  const statWrap = document.getElementById("cateStatList");
+  statWrap.innerHTML = "";
+  Object.keys(cateSum).forEach(k => {
+    const row = document.createElement("div");
+    row.className = "stat-row";
+    row.innerHTML = `<span>${k}</span><span>${cateSum[k]}</span>`;
+    statWrap.appendChild(row);
+  });
+}
+
+renderCate();
+renderQuickNote();
 </script>
 
-<!-- ========== ServiceWorker 注册 & 新版本检测弹窗 ========== -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
@@ -207,7 +457,6 @@ if ('serviceWorker' in navigator) {
         window.location.reload();
       })
 
-      // 每3小时后台自动检测一次更新
       setInterval(()=>{
         registration.update();
       }, 3 * 60 * 60 * 1000);
@@ -218,5 +467,6 @@ if ('serviceWorker' in navigator) {
   })
 }
 </script>
+
 </body>
 </html>
