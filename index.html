@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#ffb6c1">
-<title>迷你萌宠记账本</title>
+<title>萌宠记账本</title>
 <style>
 :root{
   --bg:#fff5f8;
@@ -17,6 +17,7 @@
   --green:#34d399;
   --red:#f87171;
   --orange:#fbbf24;
+  --pink:#ff7aa2;
   --radius:26px;
   --radius-sm:18px;
   --shadow:0 10px 30px rgba(255,143,171,.15);
@@ -82,10 +83,13 @@ img{display:block;max-width:100%;}
   align-items:center;
   justify-content:center;
   box-shadow:var(--shadow);
-  font-size:20px;
   transition:transform .2s;
 }
 .theme-btn:active{transform:scale(0.92);}
+.theme-img{
+  width:24px;
+  height:24px;
+}
 
 /* ===== 主体 ===== */
 .main{padding:0 20px;}
@@ -175,14 +179,6 @@ img{display:block;max-width:100%;}
   align-items:center;
 }
 .section-title .sub{font-size:12px;color:var(--sub);font-weight:600;}
-.section-title button{
-  font-size:12px;
-  color:var(--primary);
-  font-weight:800;
-  background:var(--primary-soft);
-  padding:6px 12px;
-  border-radius:20px;
-}
 
 /* ===== 分类网格 / 快捷标签 ===== */
 .cat-grid{
@@ -256,6 +252,7 @@ img{display:block;max-width:100%;}
 }
 .rec-amt{font-size:17px;font-weight:800;white-space:nowrap;}
 .rec-amt.exp{color:var(--red);}
+.rec-amt.inc{color:var(--green);}
 .rec-date{font-size:11px;color:var(--sub);margin-top:4px;}
 
 /* ===== 底部导航 ===== */
@@ -367,7 +364,7 @@ img{display:block;max-width:100%;}
 }
 .btn-primary:active{transform:scale(0.98);}
 
-/* ===== 我的页面 / 提醒页面 ===== */
+/* ===== 卡片通用 ===== */
 .me-card{
   background:var(--card);
   border-radius:24px;
@@ -375,7 +372,6 @@ img{display:block;max-width:100%;}
   margin-bottom:14px;
   box-shadow:var(--shadow);
 }
-.me-list{display:flex;flex-direction:column;gap:4px;}
 .me-item{
   display:flex;
   justify-content:space-between;
@@ -394,8 +390,8 @@ img{display:block;max-width:100%;}
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
 }
+.me-item .icon-box img{width:22px;height:22px;}
 .me-item .title{font-size:15px;font-weight:800;}
 .me-item .desc{font-size:12px;color:var(--sub);margin-top:2px;}
 
@@ -423,30 +419,96 @@ img{display:block;max-width:100%;}
 }
 .switch.active .switch-dot{left:24px;}
 
-/* 提醒详情页 */
-.remind-card{
+/* ===== 日历页 ===== */
+.calendar-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.calendar-head h3{font-size:18px;font-weight:800;}
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  margin-bottom:10px;
+}
+.calendar-cell{
+  aspect-ratio:1;
+  border-radius:14px;
+  background:var(--card);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:6px;
+  box-shadow:var(--shadow);
+  position:relative;
+  cursor:pointer;
+}
+.calendar-cell.today{border:2px solid var(--primary);}
+.calendar-cell.empty{background:transparent;box-shadow:none;}
+.calendar-cell .day{font-weight:800;font-size:14px;}
+.calendar-cell .dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--primary);
+  margin-top:4px;
+}
+.weekday{
+  text-align:center;
+  font-size:12px;
+  color:var(--sub);
+  font-weight:700;
+  padding:6px 0;
+}
+
+/* ===== 备忘录页 ===== */
+.memo-item{
+  background:var(--card);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+.memo-item .mt{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.memo-item .title{font-weight:800;font-size:15px;}
+.memo-item .time{font-size:12px;color:var(--sub);margin-top:4px;}
+.memo-item .content{font-size:13px;color:var(--text);margin-top:8px;line-height:1.5;}
+
+/* ===== 姨妈页 ===== */
+.period-card{
   background:var(--card);
   border-radius:24px;
   padding:20px;
   box-shadow:var(--shadow);
 }
-.remind-row{
+.period-row{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:14px 0;
   border-bottom:1px dashed var(--line);
 }
-.remind-row:last-child{border-bottom:none;}
-.remind-row .label{font-weight:800;font-size:15px;}
-.remind-row .value{color:var(--sub);font-size:14px;}
-.time-picker{
+.period-row:last-child{border-bottom:none;}
+.period-row .label{font-weight:800;font-size:15px;}
+.period-row .value{color:var(--sub);font-size:14px;}
+.tag-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.tag{
+  padding:8px 12px;
+  border-radius:20px;
   background:var(--primary-soft);
   color:var(--text);
-  font-weight:800;
-  padding:8px 14px;
-  border-radius:12px;
+  font-size:12px;
+  font-weight:700;
 }
+.tag.pink{background:#ffe4f0;color:#d6336c;}
 
 /* Toast */
 #toast{
@@ -472,11 +534,12 @@ img{display:block;max-width:100%;}
 <header class="hd">
   <h1>
     <img class="logo-img anim-bounce" id="headerLogo" src="https://img.icons8.com/color/96/cat--v1.png" alt="logo">
-    <span>萌宠记账本</span>
+    <span id="pageTitle">萌宠记账本</span>
   </h1>
   <div style="display:flex;gap:8px;">
-    <button class="theme-btn" id="soundToggleBtn" onclick="toggleSound()">🔊</button>
-    <button class="theme-btn" onclick="alert('皮肤切换已加载')">🎨</button>
+    <button class="theme-btn" id="soundToggleBtn" onclick="toggleSound()">
+      <img class="theme-img" id="soundIconImg" src="https://img.icons8.com/color/96/medium-volume.png" alt="sound">
+    </button>
   </div>
 </header>
 
@@ -517,32 +580,42 @@ img{display:block;max-width:100%;}
     <div class="cat-grid" id="quickNotes"></div>
   </section>
 
-  <!-- 明细 -->
-  <section class="page" id="page-list">
-    <div class="balance-card" style="padding:20px;margin-bottom:16px;">
-      <div class="balance-label">累计结余</div>
-      <div class="balance-amount" style="font-size:30px;" id="totalBalance">¥0.00</div>
+  <!-- 日历/明细 -->
+  <section class="page" id="page-calendar">
+    <div class="me-card">
+      <div class="calendar-head">
+        <button onclick="changeMonth(-1)" style="font-size:22px;font-weight:800;color:var(--primary);">‹</button>
+        <h3 id="calTitle">2025年10月</h3>
+        <button onclick="changeMonth(1)" style="font-size:22px;font-weight:800;color:var(--primary);">›</button>
+      </div>
+      <div class="calendar-grid">
+        <div class="weekday">日</div>
+        <div class="weekday">一</div>
+        <div class="weekday">二</div>
+        <div class="weekday">三</div>
+        <div class="weekday">四</div>
+        <div class="weekday">五</div>
+        <div class="weekday">六</div>
+      </div>
+      <div class="calendar-grid" id="calBody"></div>
     </div>
-    <div id="recordList"></div>
+
+    <div class="section-title">
+      <span id="dayListTitle">当日明细</span>
+      <span class="sub" id="selectedDate"></span>
+    </div>
+    <div id="dayList"></div>
   </section>
 
-  <!-- 统计 -->
-  <section class="page" id="page-stats">
+  <!-- 备忘录 -->
+  <section class="page" id="page-memo">
     <div class="me-card">
-      <div class="section-title"><span>本月统计</span></div>
-      <div class="remind-row">
-        <span class="label">本月收入</span>
-        <span class="value" id="stInc">¥0.00</span>
-      </div>
-      <div class="remind-row">
-        <span class="label">本月支出</span>
-        <span class="value" id="stExp">¥0.00</span>
-      </div>
-      <div class="remind-row">
-        <span class="label">本月结余</span>
-        <span class="value" id="stBal">¥0.00</span>
+      <div class="section-title">
+        <span>📝 我的备忘录</span>
+        <button class="btn-primary" style="width:auto;margin-top:0;" onclick="openMemoEditor()">+ 写备忘</button>
       </div>
     </div>
+    <div id="memoList"></div>
   </section>
 
   <!-- 我的 -->
@@ -551,7 +624,9 @@ img{display:block;max-width:100%;}
       <div class="section-title"><span>我的设置</span></div>
       <div class="me-item">
         <div class="left">
-          <div class="icon-box">🔊</div>
+          <div class="icon-box">
+            <img id="soundMeIcon" src="https://img.icons8.com/color/96/medium-volume.png">
+          </div>
           <div>
             <div class="title">音效开关</div>
             <div class="desc">按键音、确认音、提醒音</div>
@@ -562,7 +637,7 @@ img{display:block;max-width:100%;}
         </div>
       </div>
 
-      <div class="me-item" onclick="openRemindPage()">
+      <div class="me-item" onclick="switchPage('remind')">
         <div class="left">
           <div class="icon-box">⏰</div>
           <div>
@@ -572,44 +647,97 @@ img{display:block;max-width:100%;}
         </div>
         <span style="color:var(--primary);font-weight:800;">›</span>
       </div>
+
+      <div class="me-item" onclick="switchPage('period')">
+        <div class="left">
+          <div class="icon-box">🩷</div>
+          <div>
+            <div class="title">姨妈提醒</div>
+            <div class="desc" id="periodDesc">记录经期，预测下次时间</div>
+          </div>
+        </div>
+        <span style="color:var(--primary);font-weight:800;">›</span>
+      </div>
     </div>
   </section>
 
   <!-- 每日提醒详情页 -->
   <section class="page" id="page-remind">
-    <div class="remind-card">
-      <div class="section-title">
-        <span>⏰ 每日提醒</span>
-      </div>
-
-      <div class="remind-row">
-        <span class="label">开启提醒</span>
+    <div class="me-card">
+      <div class="section-title"><span>⏰ 每日提醒</span></div>
+      <div class="me-item">
+        <div class="left">
+          <div class="icon-box">🔔</div>
+          <div>
+            <div class="title">开启提醒</div>
+            <div class="desc">到点提醒你记账</div>
+          </div>
+        </div>
         <div class="switch" id="remindSwitch" onclick="toggleRemind()">
           <div class="switch-dot"></div>
         </div>
       </div>
 
-      <div class="remind-row">
-        <span class="label">提醒时间</span>
-        <input type="time" class="time-picker" id="remindTime" value="20:00">
+      <div class="me-item">
+        <div class="left">
+          <div class="icon-box">🕘</div>
+          <div>
+            <div class="title">提醒时间</div>
+            <div class="desc">设置每天提醒的时间</div>
+          </div>
+        </div>
+        <input type="time" id="remindTime" value="20:00" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;">
       </div>
 
-      <div class="remind-row">
-        <span class="label">提醒内容</span>
-        <input type="text" class="time-picker" id="remindText" placeholder="写一句提醒自己" value="该记账啦，今天花了多少？">
+      <div class="me-item">
+        <div class="left">
+          <div class="icon-box">💬</div>
+          <div>
+            <div class="title">提醒文字</div>
+            <div class="desc">写一句提醒自己</div>
+          </div>
+        </div>
+        <input type="text" id="remindText" placeholder="提醒内容" value="该记账啦，今天花了多少？" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;width:160px;">
       </div>
 
-      <div class="remind-row">
-        <span class="label">重复</span>
-        <span class="value">每天</span>
-      </div>
-
-      <div class="remind-row">
-        <span class="label">提前预览音效</span>
-        <button class="time-picker" onclick="playAlarmSound()">🔔 播放闹钟声</button>
+      <div class="me-item">
+        <div class="left">
+          <div class="icon-box">🔊</div>
+          <div>
+            <div class="title">预览提醒音</div>
+            <div class="desc">先听听闹钟声音</div>
+          </div>
+        </div>
+        <button class="time-picker" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;" onclick="playAlarmSound()">播放</button>
       </div>
 
       <button class="btn-primary" onclick="saveRemind()">保存提醒设置</button>
+    </div>
+  </section>
+
+  <!-- 姨妈提醒详情页 -->
+  <section class="page" id="page-period">
+    <div class="period-card">
+      <div class="section-title"><span>🩷 姨妈提醒</span></div>
+
+      <div class="period-row">
+        <span class="label">最近一次开始</span>
+        <input type="date" id="lastPeriod" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;">
+      </div>
+
+      <div class="period-row">
+        <span class="label">周期天数</span>
+        <input type="number" id="cycleDays" value="28" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;width:140px;">
+      </div>
+
+      <div class="period-row">
+        <span class="label">经期天数</span>
+        <input type="number" id="periodDays" value="5" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;width:140px;">
+      </div>
+
+      <button class="btn-primary" onclick="savePeriod()">保存并预测</button>
+
+      <div id="periodResult" style="margin-top:16px;"></div>
     </div>
   </section>
 
@@ -621,13 +749,13 @@ img{display:block;max-width:100%;}
     <img class="ico" src="https://img.icons8.com/color/96/pencil--v1.png">
     <span>记一笔</span>
   </button>
-  <button data-page="list" onclick="switchPage('list')">
-    <img class="ico" src="https://img.icons8.com/color/96/notes.png">
-    <span>明细</span>
+  <button data-page="calendar" onclick="switchPage('calendar')">
+    <img class="ico" src="https://img.icons8.com/color/96/calendar--v1.png">
+    <span>日历</span>
   </button>
-  <button data-page="stats" onclick="switchPage('stats')">
-    <img class="ico" src="https://img.icons8.com/color/96/combo-chart.png">
-    <span>统计</span>
+  <button data-page="memo" onclick="switchPage('memo')">
+    <img class="ico" src="https://img.icons8.com/color/96/create-new.png">
+    <span>备忘录</span>
   </button>
   <button data-page="me" onclick="switchPage('me')">
     <img class="ico" src="https://img.icons8.com/color/96/user-male-circle.png">
@@ -656,6 +784,16 @@ img{display:block;max-width:100%;}
     <button onclick="pressKey('del');playKeypadSound()">⌫</button>
     <button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定保存</button>
   </div>
+</div>
+
+<!-- 备忘录编辑弹窗 -->
+<div class="overlay" id="memoOverlay" onclick="closeMemoEditor()"></div>
+<div class="sheet" id="memoSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">写备忘录</div>
+  <input type="text" id="memoTitle" placeholder="标题" style="background:var(--bg);padding:14px;border-radius:14px;width:100%;margin-bottom:12px;font-weight:800;">
+  <textarea id="memoContent" rows="6" placeholder="写点内容……" style="background:var(--bg);padding:14px;border-radius:14px;width:100%;"></textarea>
+  <button class="btn-primary" onclick="saveMemo()">保存备忘录</button>
 </div>
 
 <div id="toast"></div>
@@ -762,10 +900,11 @@ const quickNoteList = [
 ];
 
 let records = JSON.parse(localStorage.getItem('records') || '[]');
-let customCats = [];
+let memos = JSON.parse(localStorage.getItem('memos') || '[]');
 let selectedCatIndex = 0;
 let formAmount = '0';
 let soundOn = localStorage.getItem('soundOn') !== 'off';
+let calDate = new Date();
 
 function $(id){return document.getElementById(id);}
 function fmt(n){return '¥'+Number(n||0).toFixed(2);}
@@ -787,11 +926,19 @@ function switchPage(name){
   document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
   document.querySelector('.tabbar button[data-page="'+name+'"]').classList.add('active');
 
-  const titles = {add:'记一笔',list:'明细',stats:'统计',me:'我的',remind:'每日提醒'};
-  document.querySelector('.hd h1 span').textContent = titles[name] || '萌宠记账本';
+  const titles = {
+    add:'记一笔',
+    calendar:'日历',
+    memo:'备忘录',
+    me:'我的',
+    remind:'每日提醒',
+    period:'姨妈提醒'
+  };
+  $('pageTitle').textContent = titles[name] || '萌宠记账本';
 
-  if(name==='list') renderList();
-  if(name==='stats') renderStats();
+  if(name==='calendar') renderCalendar();
+  if(name==='memo') renderMemo();
+  if(name==='period') loadPeriod();
 }
 
 // ===================== 音效开关 =====================
@@ -803,15 +950,12 @@ function toggleSound(){
   toast(soundOn ? '音效已开启' : '音效已关闭');
 }
 function renderSoundIcon(){
-  const btn = $('soundToggleBtn');
-  const sw = $('soundSwitch');
-  if(soundOn){
-    btn.textContent = '🔊';
-    sw.classList.add('active');
-  }else{
-    btn.textContent = '🔇';
-    sw.classList.remove('active');
-  }
+  const onImg = 'https://img.icons8.com/color/96/medium-volume.png';
+  const offImg = 'https://img.icons8.com/color/96/mute.png';
+  const img = soundOn ? onImg : offImg;
+  $('soundIconImg').src = img;
+  $('soundMeIcon').src = img;
+  $('soundSwitch').classList.toggle('active', soundOn);
 }
 
 // ===================== 金额输入 =====================
@@ -865,8 +1009,6 @@ function saveRecord(v){
 
   $('noteInput').value = '';
   calcToday();
-  renderList();
-  renderStats();
   $('displayAmount').textContent = '¥ 0.00';
 }
 
@@ -886,8 +1028,7 @@ function calcToday(){
 
 // ===================== 渲染分类 =====================
 function renderCatGrid(){
-  const box = $('catGrid');
-  box.innerHTML = catList.map((c,i)=>`
+  $('catGrid').innerHTML = catList.map((c,i)=>`
     <div class="cat-item ${i===selectedCatIndex?'active':''}" onclick="selectCat(${i})">
       <img class="mini-img" src="${c.img}" alt="${c.name}">
       <span class="cat-name">${c.name}</span>
@@ -921,59 +1062,108 @@ function fillQuickNote(name){
   toast('已添加：'+name);
 }
 
-// ===================== 明细列表 =====================
-function renderList(){
-  const box = $('recordList');
-  if(!records.length){
-    box.innerHTML = '<div style="text-align:center;padding:40px;color:var(--sub);">还没有记录哦 🐣</div>';
-    $('totalBalance').textContent = '¥0.00';
-    return;
-  }
+// ===================== 日历 =====================
+function renderCalendar(){
+  const y = calDate.getFullYear();
+  const m = calDate.getMonth();
+  $('calTitle').textContent = y+'年'+(m+1)+'月';
+
+  const firstDay = new Date(y,m,1).getDay();
+  const daysInMonth = new Date(y,m+1,0).getDate();
+  const today = new Date().toLocaleDateString('zh-CN');
 
   let html = '';
-  let total = 0;
-  records.slice().reverse().forEach(r=>{
-    total += r.type==='expense' ? -Number(r.amount) : Number(r.amount);
+  for(let i=0;i<firstDay;i++){
+    html += '<div class="calendar-cell empty"></div>';
+  }
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr = new Date(y,m,d).toLocaleDateString('zh-CN');
+    const hasRecord = records.some(r=>r.date===dateStr);
+    const isToday = dateStr === today;
     html += `
-      <div class="rec-card">
-        <div class="rec-icon">
-          <img src="${r.catImg}" alt="${r.category}">
-        </div>
-        <div class="rec-info">
-          <div class="row1">
-            <span class="name">${r.category}</span>
-            <span class="rec-amt ${r.type==='expense'?'exp':'inc'}">${r.type==='expense'?'-':'+'}${fmt(r.amount)}</span>
-          </div>
-          <div class="note">${r.note}</div>
-          <div class="rec-date">${r.date} ${r.time||''}</div>
-        </div>
+      <div class="calendar-cell ${isToday?'today':''}" onclick="selectDate('${dateStr}')">
+        <span class="day">${d}</span>
+        ${hasRecord?'<span class="dot"></span>':''}
       </div>
     `;
+  }
+  $('calBody').innerHTML = html;
+}
+function changeMonth(delta){
+  calDate.setMonth(calDate.getMonth()+delta);
+  renderCalendar();
+}
+function selectDate(dateStr){
+  $('selectedDate').textContent = dateStr;
+  $('dayListTitle').textContent = dateStr+' 明细';
+  const list = records.filter(r=>r.date===dateStr);
+  if(!list.length){
+    $('dayList').innerHTML = '<div style="text-align:center;padding:30px;color:var(--sub);">当天没有记录</div>';
+    return;
+  }
+  $('dayList').innerHTML = list.map(r=>`
+    <div class="rec-card">
+      <div class="rec-icon"><img src="${r.catImg}" alt="${r.category}"></div>
+      <div class="rec-info">
+        <div class="row1"><span class="name">${r.category}</span><span class="rec-amt exp">-${fmt(r.amount)}</span></div>
+        <div class="note">${r.note}</div>
+        <div class="rec-date">${r.time||''}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===================== 备忘录 =====================
+function openMemoEditor(){
+  $('memoOverlay').classList.add('show');
+  $('memoSheet').classList.add('show');
+  $('memoTitle').value = '';
+  $('memoContent').value = '';
+}
+function closeMemoEditor(){
+  $('memoOverlay').classList.remove('show');
+  $('memoSheet').classList.remove('show');
+}
+function saveMemo(){
+  const title = $('memoTitle').value.trim();
+  const content = $('memoContent').value.trim();
+  if(!title){toast('请写标题');return;}
+  memos.unshift({
+    id:Date.now(),
+    title,
+    content,
+    time:new Date().toLocaleString('zh-CN')
   });
-
-  box.innerHTML = html;
-  $('totalBalance').textContent = fmt(total);
+  localStorage.setItem('memos',JSON.stringify(memos));
+  closeMemoEditor();
+  renderMemo();
+  toast('已保存备忘录');
+}
+function renderMemo(){
+  if(!memos.length){
+    $('memoList').innerHTML = '<div style="text-align:center;padding:30px;color:var(--sub);">还没有备忘录</div>';
+    return;
+  }
+  $('memoList').innerHTML = memos.map(m=>`
+    <div class="memo-item">
+      <div class="mt">
+        <span class="title">${m.title}</span>
+        <button onclick="deleteMemo(${m.id})" style="color:var(--red);font-weight:800;">删除</button>
+      </div>
+      <div class="time">${m.time}</div>
+      <div class="content">${m.content || '（无内容）'}</div>
+    </div>
+  `).join('');
+}
+function deleteMemo(id){
+  if(!confirm('删除这条备忘？')) return;
+  memos = memos.filter(m=>m.id!==id);
+  localStorage.setItem('memos',JSON.stringify(memos));
+  renderMemo();
+  toast('已删除');
 }
 
-// ===================== 统计 =====================
-function renderStats(){
-  const now = new Date().toLocaleDateString('zh-CN');
-  let exp=0, inc=0;
-  records.forEach(r=>{
-    if(r.date===now){
-      if(r.type==='expense') exp += Number(r.amount);
-      else inc += Number(r.amount);
-    }
-  });
-  $('stExp').textContent = fmt(exp);
-  $('stInc').textContent = fmt(inc);
-  $('stBal').textContent = fmt(inc - exp);
-}
-
-// ===================== 每日提醒页 =====================
-function openRemindPage(){
-  switchPage('remind');
-}
+// ===================== 每日提醒 =====================
 function toggleRemind(){
   playSwitchSound();
   const sw = $('remindSwitch');
@@ -1004,11 +1194,66 @@ function saveRemind(){
   toast('提醒设置已保存');
 }
 
+// ===================== 姨妈提醒 =====================
+function loadPeriod(){
+  const last = localStorage.getItem('lastPeriod') || '';
+  const cycle = localStorage.getItem('cycleDays') || 28;
+  const period = localStorage.getItem('periodDays') || 5;
+  $('lastPeriod').value = last;
+  $('cycleDays').value = cycle;
+  $('periodDays').value = period;
+  predictPeriod();
+}
+function savePeriod(){
+  const last = $('lastPeriod').value;
+  const cycle = $('cycleDays').value || 28;
+  const period = $('periodDays').value || 5;
+  if(!last){toast('请选择最近一次日期');return;}
+  localStorage.setItem('lastPeriod',last);
+  localStorage.setItem('cycleDays',cycle);
+  localStorage.setItem('periodDays',period);
+  predictPeriod();
+  toast('已保存');
+}
+function predictPeriod(){
+  const last = localStorage.getItem('lastPeriod');
+  if(!last){
+    $('periodResult').innerHTML = '<div style="color:var(--sub);text-align:center;">请先记录最近一次姨妈日期</div>';
+    return;
+  }
+  const cycle = Number(localStorage.getItem('cycleDays')) || 28;
+  const periodDays = Number(localStorage.getItem('periodDays')) || 5;
+
+  const next = new Date(last);
+  next.setDate(next.getDate()+cycle);
+
+  const ovulationStart = new Date(last);
+  ovulationStart.setDate(ovulationStart.getDate()+cycle/2-4);
+  const ovulationEnd = new Date(last);
+  ovulationEnd.setDate(ovulationEnd.getDate()+cycle/2+4);
+
+  const fmtDate = d=>d.toLocaleDateString('zh-CN');
+
+  $('periodResult').innerHTML = `
+    <div class="period-row">
+      <span class="label">预计下次姨妈</span>
+      <span class="value" style="color:var(--pink);font-weight:800;">${fmtDate(next)}</span>
+    </div>
+    <div class="period-row">
+      <span class="label">经期建议</span>
+      <span class="value">前${periodDays}天注意休息</span>
+    </div>
+    <div class="tag-row">
+      <span class="tag pink">姨妈期</span>
+      <span class="tag">易孕期 ${fmtDate(ovulationStart)}-${fmtDate(ovulationEnd)}</span>
+      <span class="tag">预计下次 ${fmtDate(next)}</span>
+    </div>
+  `;
+}
+
 // ===================== 初始化 =====================
 renderCatGrid();
 renderQuickNotes();
-renderList();
-renderStats();
 calcToday();
 renderSoundIcon();
 updateRemindDesc();
