@@ -14,14 +14,15 @@
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;padding-bottom:calc(80px + env(safe-area-inset-bottom));transition:background .3s,color .3s;overflow-x:hidden;}
 button{border:none;background:none;font-family:inherit;color:inherit;cursor:pointer;outline:none;}
 input{font-family:inherit;outline:none;border:none;background:transparent;color:inherit;}
-.icon-cute{width:36px;height:36px;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
-.icon-cute svg{width:100%;height:100%;fill:currentColor;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.icon-cute{font-size:28px;line-height:1;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+
 @keyframes floatCute{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-5px) rotate(4deg);}}
 @keyframes wiggleCute{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-8deg);}75%{transform:rotate(8deg);}}
 @keyframes bounceCute{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .anim-float{animation:floatCute 2.5s ease-in-out infinite;}
 .anim-wiggle{animation:wiggleCute 0.5s ease-in-out infinite;}
 .anim-bounce{animation:bounceCute 1.8s ease-in-out infinite;}
+
 .hd{position:sticky;top:0;z-index:40;background:var(--bg);padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center;}
 .hd h1{font-size:22px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;}
 .theme-btn{width:40px;height:40px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);color:var(--sub);font-size:20px;}
@@ -99,34 +100,8 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 </head>
 <body>
 
-<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-  <symbol id="cat-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffb6c1"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/><path d="M12 16l-1.5 1h3l-1.5-1z" fill="#fff"/><path d="M6 8l2-3 3 2" stroke="#fff" stroke-width="1.5" fill="none"/><path d="M18 8l-2-3-3 2" stroke="#fff" stroke-width="1.5" fill="none"/></symbol>
-  <symbol id="cat-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffb6c1"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
-  <symbol id="cat-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#ffb6c1"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
-  <symbol id="cat-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#ffb6c1"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
-  <symbol id="dog-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#93c5fd"/><path d="M7 13s1.5 2.5 5 2.5 5-2.5 5-2.5" stroke="#fff" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/><path d="M8 16h8" stroke="#fff" stroke-width="1.5"/><path d="M5 8l3-3 4 2" stroke="#fff" stroke-width="2" fill="none"/><path d="M19 8l-3-3-4 2" stroke="#fff" stroke-width="2" fill="none"/></symbol>
-  <symbol id="dog-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#93c5fd"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
-  <symbol id="dog-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#93c5fd"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
-  <symbol id="dog-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#93c5fd"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
-  <symbol id="rabbit-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="2" fill="none"/><circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/><path d="M6 8l2-4 3 3" stroke="#fff" stroke-width="1.5" fill="none"/><path d="M18 8l-2-4-3 3" stroke="#fff" stroke-width="1.5" fill="none"/></symbol>
-  <symbol id="rabbit-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
-  <symbol id="rabbit-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#d8b4fe"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
-  <symbol id="rabbit-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
-  <symbol id="panda-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><circle cx="9" cy="12" r="3" fill="#1f2937"/><circle cx="15" cy="12" r="3" fill="#1f2937"/><circle cx="9" cy="12" r="1" fill="#fff"/><circle cx="15" cy="12" r="1" fill="#fff"/><path d="M10 16h4" stroke="#1f2937" stroke-width="1.5"/><path d="M6 6l3 3M18 6l-3 3" stroke="#1f2937" stroke-width="2"/></symbol>
-  <symbol id="panda-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><path d="M12 8v8" stroke="#1f2937" stroke-width="2"/><path d="M8 12h8" stroke="#1f2937" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#1f2937"/></symbol>
-  <symbol id="panda-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#e5e7eb"/><circle cx="8" cy="16" r="2" fill="#1f2937"/><circle cx="16" cy="16" r="2" fill="#1f2937"/><path d="M4 12h16" stroke="#1f2937" stroke-width="2"/></symbol>
-  <symbol id="panda-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><path d="M8 12l4 4 4-4" stroke="#1f2937" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#1f2937"/></symbol>
-  <symbol id="i-add" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-  <symbol id="i-close" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></symbol>
-  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3" fill="currentColor" opacity="0.2"/><path d="M2 10h20M6 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24"><rect x="4" y="12" width="4" height="8" rx="1" fill="currentColor"/><rect x="10" y="8" width="4" height="12" rx="1" fill="currentColor"/><rect x="16" y="4" width="4" height="16" rx="1" fill="currentColor"/></symbol>
-  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.2"/><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5" fill="currentColor"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="currentColor" opacity="0.5"/></symbol>
-</svg>
-
 <header class="hd">
-  <h1><span class="icon-cute anim-bounce" id="headerIcon"><svg><use href="#cat-food"></use></svg></span><span id="pageTitle">记一笔</span></h1>
+  <h1><span class="icon-cute anim-bounce" id="headerIcon">🐱</span><span id="pageTitle">记一笔</span></h1>
   <button class="theme-btn" id="themeBtn">🎨</button>
 </header>
 
@@ -173,7 +148,7 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 
   <section class="page" id="page-goal">
     <div class="stats-card" style="text-align:center;padding:30px 20px;">
-      <div class="icon-cute anim-float" style="font-size:60px;margin-bottom:10px;color:var(--primary);"><svg><use href="#i-target"></use></svg></div>
+      <div class="icon-cute anim-float" style="font-size:60px;margin-bottom:10px;">🎯</div>
       <div style="font-size:18px;font-weight:800;margin-bottom:8px;">我的储蓄目标</div>
       <div style="color:var(--sub);font-size:13px;margin-bottom:16px;">为了心爱的小物件，加油攒钱吧！</div>
       <div class="bar-track" style="height:12px;"><div class="bar-fill" id="goalBar" style="width:0%;background:linear-gradient(90deg,var(--primary),#ffb6c1);"></div></div>
@@ -214,11 +189,11 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 </main>
 
 <nav class="tabbar" id="tabbar">
-  <button data-page="add" class="active" onclick="switchPage('add')"><span class="ico"><svg class="icon-cute"><use href="#i-wallet"></use></svg></span>记一笔</button>
-  <button data-page="list" onclick="switchPage('list')"><span class="ico"><svg class="icon-cute"><use href="#i-star"></use></svg></span>明细</button>
-  <button data-page="stats" onclick="switchPage('stats')"><span class="ico"><svg class="icon-cute"><use href="#i-chart"></use></svg></span>统计</button>
-  <button data-page="goal" onclick="switchPage('goal')"><span class="ico"><svg class="icon-cute"><use href="#i-target"></use></svg></span>攒钱</button>
-  <button data-page="me" onclick="switchPage('me')"><span class="ico"><svg class="icon-cute"><use href="#i-user"></use></svg></span>我的</button>
+  <button data-page="add" class="active" onclick="switchPage('add')"><span class="ico">✏️</span>记一笔</button>
+  <button data-page="list" onclick="switchPage('list')"><span class="ico">📋</span>明细</button>
+  <button data-page="stats" onclick="switchPage('stats')"><span class="ico">📊</span>统计</button>
+  <button data-page="goal" onclick="switchPage('goal')"><span class="ico">🎯</span>攒钱</button>
+  <button data-page="me" onclick="switchPage('me')"><span class="ico">👤</span>我的</button>
 </nav>
 
 <div class="sheet-overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
@@ -252,6 +227,8 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
   <button class="sheet-close" onclick="closeAddCat()">✕</button>
   <div style="display:flex;flex-direction:column;gap:12px;">
     <input type="text" id="newCatName" placeholder="分类名称 (如: 追星)" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
+    <div style="font-size:13px;color:var(--sub);font-weight:700;margin-top:4px;">👇 选择一个图标：</div>
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:4px 0;max-height:120px;overflow-y:auto;" id="emojiPicker"></div>
     <button class="btn-primary" onclick="saveNewCat()">✨ 保存分类</button>
   </div>
 </div>
@@ -273,34 +250,46 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 (function(){
 'use strict';
 
-const THEME_ICONS = {
-  pink: {food:'cat-food', drink:'cat-drink', bus:'cat-bus', shop:'cat-shop', home:'cat-shop', game:'cat-shop', book:'cat-shop', med:'cat-shop', gift:'cat-shop', pet:'cat-food', skin:'cat-shop', star:'cat-shop'},
-  blue: {food:'dog-food', drink:'dog-drink', bus:'dog-bus', shop:'dog-shop', home:'dog-shop', game:'dog-shop', book:'dog-shop', med:'dog-shop', gift:'dog-shop', pet:'dog-food', skin:'dog-shop', star:'dog-shop'},
-  purple: {food:'rabbit-food', drink:'rabbit-drink', bus:'rabbit-bus', shop:'rabbit-shop', home:'rabbit-shop', game:'rabbit-shop', book:'rabbit-shop', med:'rabbit-shop', gift:'rabbit-shop', pet:'rabbit-food', skin:'rabbit-shop', star:'rabbit-shop'},
-  dark: {food:'panda-food', drink:'panda-drink', bus:'panda-bus', shop:'panda-shop', home:'panda-shop', game:'panda-shop', book:'panda-shop', med:'panda-shop', gift:'panda-shop', pet:'panda-food', skin:'panda-shop', star:'panda-shop'}
-};
+// 丰富的图标库
+const EMOJI_LIBRARY = [
+  '🍔','🍜','🍕','🍰','🍦','🍎','🍉','🥤','🧋','☕','🍺','🍣','🍞','🧁',
+  '🚗','🚌','🚲','✈️','🚇','🚕','🛵','🚁','⛽','🅿️',
+  '🛍️','👗','👟','💄','💍','🎒','👓','🧸','💻','📱',
+  '🏠','💡','🧹','🛋️','🚿','🛏️','🪴','🔑','🧺',
+  '🎮','🎬','🎵','⚽','🎨','🎤','📷','🎳','🎲',
+  '📚','📝','🎓','📖','✏️','📐','💼','🏥','💊','💉','🏃',
+  '🐱','🐶','🐼','🐰','🦁','🐘','🐵','🐯','🐻','🐭','🐸',
+  '💰','🧧','🎁','💎','⭐','🌟','✨','🔥','🌈','🌸'
+];
 
 const EXPENSE_CATS=[
-  {name:'餐饮', key:'food', color:'#FF8A80', subs:['早餐','午餐','晚餐','零食','外卖']},
-  {name:'饮品', key:'drink', color:'#FFB74D', subs:['奶茶','咖啡','果汁','酒水']},
-  {name:'交通', key:'bus', color:'#64B5F6', subs:['公交','打车','加油','停车']},
-  {name:'购物', key:'shop', color:'#4DB6AC', subs:['日用品','服饰','数码','美妆']},
-  {name:'居住', key:'home', color:'#BA68C8', subs:['房租','水电','物业','维修']},
-  {name:'娱乐', key:'game', color:'#81C784', subs:['电影','游戏','旅游','聚会']},
-  {name:'学习', key:'book', color:'#7986CB', subs:['书籍','课程','文具']},
-  {name:'医疗', key:'med', color:'#E57373', subs:['药品','门诊','体检']},
-  {name:'人情', key:'gift', color:'#A1887F', subs:['红包','送礼','请客']},
-  {name:'宠物', key:'pet', color:'#FFD54F', subs:['猫粮','狗粮','玩具','洗澡']},
-  {name:'护肤', key:'skin', color:'#F06292', subs:['水乳','面膜','彩妆']},
-  {name:'其他', key:'star', color:'#A3929A', subs:['其他']}
+  {name:'餐饮', icon:'🍔', color:'#FF8A80', subs:['早餐','午餐','晚餐','零食','外卖']},
+  {name:'饮品', icon:'🧋', color:'#FFB74D', subs:['奶茶','咖啡','果汁','酒水']},
+  {name:'交通', icon:'🚗', color:'#64B5F6', subs:['公交','打车','加油','停车']},
+  {name:'购物', icon:'🛍️', color:'#4DB6AC', subs:['日用品','服饰','数码','美妆']},
+  {name:'居住', icon:'🏠', color:'#BA68C8', subs:['房租','水电','物业','维修']},
+  {name:'娱乐', icon:'🎮', color:'#81C784', subs:['电影','游戏','旅游','聚会']},
+  {name:'学习', icon:'📚', color:'#7986CB', subs:['书籍','课程','文具']},
+  {name:'医疗', icon:'💊', color:'#E57373', subs:['药品','门诊','体检']},
+  {name:'人情', icon:'🧧', color:'#A1887F', subs:['红包','送礼','请客']},
+  {name:'宠物', icon:'🐱', color:'#FFD54F', subs:['猫粮','狗粮','玩具','洗澡']},
+  {name:'护肤', icon:'🧴', color:'#F06292', subs:['水乳','面膜','彩妆']},
+  {name:'其他', icon:'🌟', color:'#A3929A', subs:['其他']}
 ];
-const DEFAULT_INCOME=[{name:'工资',key:'wallet',color:'#00B894'},{name:'奖金',key:'star',color:'#16A34A'},{name:'兼职',key:'wallet',color:'#22C55E'},{name:'理财',key:'chart',color:'#0891B2'},{name:'红包',key:'gift',color:'#E11D48'},{name:'其他',key:'star',color:'#A3929A'}];
+const DEFAULT_INCOME=[
+  {name:'工资', icon:'💼', color:'#00B894'},
+  {name:'奖金', icon:'🏆', color:'#16A34A'},
+  {name:'兼职', icon:'💪', color:'#22C55E'},
+  {name:'理财', icon:'📈', color:'#0891B2'},
+  {name:'红包', icon:'🧧', color:'#E11D48'},
+  {name:'其他', icon:'✨', color:'#A3929A'}
+];
 
 const DEFAULT_NOTES=['早餐','午餐','晚餐','打车','网购','奶茶','咖啡','看病','买书','看电影','送礼','工资'];
 const THEMES=['pink','blue','purple','dark'];
-const RK='cute_book_records_v12',SK='cute_book_settings_v12',CK='cute_book_cats_v12',NK='cute_book_notes_v12',GK='cute_book_goal_v12';
+const RK='cute_book_records_v13',SK='cute_book_settings_v13',CK='cute_book_cats_v13',NK='cute_book_notes_v13',GK='cute_book_goal_v13';
 let records=[],settings={},customCats=[],quickNotes=[],theme='pink',formType='expense',formCat='餐饮',formAmount='0',currentSubCat='';
-let alarmTimer=null,audioCtx=null,alarmOsc=null;
+let selectedEmoji = '🍔'; // 添加分类时默认选中的图标
 
 const $=id=>document.getElementById(id);
 const pad2=n=>String(n).padStart(2,'0');
@@ -315,10 +304,11 @@ function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show')
 function playSound(type){
   if(!settings.soundOn)return;
   try{
-    if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-    osc.connect(gain);gain.connect(audioCtx.destination);
-    const now=audioCtx.currentTime;
+    if(!window.audioCtx)window.audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    const ctx = window.audioCtx;
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    const now=ctx.currentTime;
     if(type==='key'){osc.type='sine';osc.frequency.setValueAtTime(600,now);osc.frequency.exponentialRampToValueAtTime(300,now+.05);gain.gain.setValueAtTime(.08,now);gain.gain.exponentialRampToValueAtTime(.001,now+.05);osc.start(now);osc.stop(now+.05);}
     else if(type==='save'){osc.type='triangle';osc.frequency.setValueAtTime(523.25,now);osc.frequency.setValueAtTime(659.25,now+.1);osc.frequency.setValueAtTime(783.99,now+.2);gain.gain.setValueAtTime(.12,now);gain.gain.exponentialRampToValueAtTime(.01,now+.4);osc.start(now);osc.stop(now+.4);}
     else if(type==='click'){osc.type='sine';osc.frequency.setValueAtTime(800,now);gain.gain.setValueAtTime(.05,now);gain.gain.exponentialRampToValueAtTime(.001,now+.03);osc.start(now);osc.stop(now+.03);}
@@ -336,11 +326,14 @@ function saveRecords(){localStorage.setItem(RK,JSON.stringify(records));}
 function saveSettings(){localStorage.setItem(SK,JSON.stringify(settings));}
 function saveCustomCats(){localStorage.setItem(CK,JSON.stringify(customCats));}
 function saveQuickNotes(){localStorage.setItem(NK,JSON.stringify(quickNotes));}
-function setTheme(t){theme=t;document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cute_book_theme',t);renderCatGrid();renderQuickNotes();renderBottomTabs();toast('主题已切换');}
+function setTheme(t){theme=t;document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cute_book_theme',t);toast('主题已切换');}
 
-function getIconId(catKey){const map=THEME_ICONS[theme]||THEME_ICONS['pink'];return map[catKey]||map['star'];}
 function getCats(type){return type==='expense'?[...EXPENSE_CATS,...customCats]:DEFAULT_INCOME;}
-function getCatInfo(name){const all=[...EXPENSE_CATS,...DEFAULT_INCOME,...customCats];return all.find(c=>c.name===name)||{key:'star',color:'#A3929A'};}
+function getCatInfo(name){
+  const all=[...EXPENSE_CATS,...DEFAULT_INCOME,...customCats];
+  const found = all.find(c=>c.name===name);
+  return found || {icon:'🌟',color:'#A3929A'};
+}
 function monthRecords(m){return records.filter(r=>r.date.slice(0,7)===m);}
 function sumBy(list,type){return list.filter(r=>r.type===type).reduce((s,r)=>s+Number(r.amount||0),0);}
 
@@ -349,20 +342,11 @@ function switchPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));
   document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
   const titles={add:'记一笔',list:'明细',stats:'统计',goal:'攒钱目标',me:'我的'};
-  const titleIcon=getIconId('food');
-  document.querySelector('.hd h1').innerHTML=`<span class="icon-cute anim-bounce" style="color:var(--primary);"><svg><use href="#${titleIcon}"></use></svg></span><span>${titles[name]||'迷你记账本'}</span>`;
+  const icons={add:'🐱',list:'📋',stats:'📊',goal:'🎯',me:'👤'};
+  $('headerIcon').textContent = icons[name] || '🐱';
+  $('pageTitle').textContent = titles[name] || '迷你记账本';
   if(name==='list')renderList();if(name==='stats')renderStats();if(name==='goal')renderGoal();
   window.scrollTo(0,0);
-}
-
-function renderBottomTabs(){
-  const tabs=document.querySelectorAll('.tabbar button');
-  const keys=['walletIcon','starIcon','chartIcon','targetIcon','userIcon'];
-  const fallback={walletIcon:'i-wallet',starIcon:'i-star',chartIcon:'i-chart',targetIcon:'i-target',userIcon:'i-user'};
-  tabs.forEach((btn,idx)=>{
-    const ico=btn.querySelector('.ico');
-    if(ico&&keys[idx]){ico.innerHTML=`<svg class="icon-cute"><use href="#${fallback[keys[idx]]}"></use></svg>`;}
-  });
 }
 
 function openAmountSheet(){playSound('click');$('amountOverlay').classList.add('show');$('amountSheet').classList.add('show');formAmount='0';updateSheetAmount();}
@@ -381,23 +365,66 @@ function confirmAmount(){
 function renderCatGrid(){
   const currentCatList=getCats(formType);
   $('catGrid').innerHTML=currentCatList.map(c=>{
-    const iconId=getIconId(c.key);const isActive=c.name===formCat;
-    return `<div class="cat-item ${isActive?'active':''}" onclick="selectCat('${esc(c.name)}')"><span class="icon-cute ${isActive?'anim-wiggle':'anim-float'}" style="color:${c.color};"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name">${esc(c.name)}</span></div>`;
+    const isActive=c.name===formCat;
+    return `<div class="cat-item ${isActive?'active':''}" onclick="selectCat('${esc(c.name)}')">
+      <span class="icon-cute ${isActive?'anim-wiggle':'anim-float'}">${c.icon}</span>
+      <span class="cat-name">${esc(c.name)}</span>
+    </div>`;
   }).join('');
 }
-function selectCat(name){playSound('click');formCat=name;renderCatGrid();const cat=getCats(formType).find(c=>c.name===name);if(cat&&cat.subs&&cat.subs.length>0){currentSubCat='';$('subCatTitle').textContent=name+' - 详细分类';$('subCatGrid').innerHTML=cat.subs.map(s=>{const iconId=getIconId(cat.key);return `<div class="cat-item" onclick="selectSubCat('${esc(s)}')"><span class="icon-cute anim-float" style="color:${cat.color};"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name">${esc(s)}</span></div>`;}).join('');$('subCatOverlay').classList.add('show');$('subCatSheet').classList.add('show');}}
+function selectCat(name){playSound('click');formCat=name;renderCatGrid();const cat=getCats(formType).find(c=>c.name===name);if(cat&&cat.subs&&cat.subs.length>0){currentSubCat='';$('subCatTitle').textContent=name+' - 详细分类';$('subCatGrid').innerHTML=cat.subs.map(s=>`<div class="cat-item" onclick="selectSubCat('${esc(s)}')"><span class="icon-cute anim-float">${cat.icon}</span><span class="cat-name">${esc(s)}</span></div>`).join('');$('subCatOverlay').classList.add('show');$('subCatSheet').classList.add('show');}}
 function selectSubCat(subName){playSound('click');currentSubCat=subName;$('subCatTitle').textContent=formCat+' - '+subName;setTimeout(()=>{closeSubCat();toast('已选：'+formCat+' - '+subName);},200);}
 function closeSubCat(){$('subCatOverlay').classList.remove('show');$('subCatSheet').classList.remove('show');}
 
-function openAddCat(){playSound('click');$('catOverlay').classList.add('show');$('catSheet').classList.add('show');}
+// ====== 分类与图标选择 ======
+function openAddCat(){
+  playSound('click');
+  $('catOverlay').classList.add('show');
+  $('catSheet').classList.add('show');
+  // 初始化图标选择器
+  $('emojiPicker').innerHTML = EMOJI_LIBRARY.map(e => 
+    `<div style="font-size:26px;text-align:center;padding:6px;border-radius:10px;cursor:pointer;transition:.2s;" onclick="selectEmoji('${e}', this)">${e}</div>`
+  ).join('');
+  selectEmoji('🍔', $('emojiPicker').firstElementChild); // 默认选中第一个
+}
 function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
-function saveNewCat(){const n=$('newCatName').value.trim();if(!n){toast('请输入分类名称');return;}customCats.push({name:n,key:'star',color:'#5b6ef5',subs:['其他']});saveCustomCats();renderCatGrid();closeAddCat();$('newCatName').value='';toast('分类已添加');}
+function selectEmoji(emoji, el) {
+  selectedEmoji = emoji;
+  // 清除所有高亮
+  Array.from($('emojiPicker').children).forEach(child => {
+    child.style.background = 'transparent';
+    child.style.transform = 'scale(1)';
+  });
+  // 高亮当前选中的
+  if(el) {
+    el.style.background = 'var(--primary-soft)';
+    el.style.transform = 'scale(1.2)';
+  }
+}
+function saveNewCat(){
+  const n=$('newCatName').value.trim();
+  if(!n){toast('请输入分类名称');return;}
+  customCats.push({name:n, icon:selectedEmoji, color:'#5b6ef5', subs:['其他']});
+  saveCustomCats();
+  renderCatGrid();
+  closeAddCat();
+  $('newCatName').value='';
+  toast('分类「'+n+'」已添加');
+}
+// ==========================
 
 function openAddNote(){playSound('click');$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');}
 function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
 function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}if(!quickNotes.includes(t))quickNotes.push(t);saveQuickNotes();renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('标签已添加');}
 function selectQuickNote(note){playSound('click');const inp=$('noteInput');if(inp.value===note){inp.value='';toast('已取消备注');}else{inp.value=note;toast('已选备注：'+note);}renderQuickNotes();}
-function renderQuickNotes(){const noteVal=$('noteInput')?$('noteInput').value:'';const iconId=getIconId('star');$('quickNotes').innerHTML=quickNotes.map(n=>`<div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;"><span class="icon-cute ${n===noteVal?'anim-wiggle':'anim-float'}" style="color:var(--primary);font-size:22px;"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name" style="font-size:10px;">${esc(n)}</span></div>`).join('');}
+function renderQuickNotes(){
+  const noteVal=$('noteInput') ? $('noteInput').value : '';
+  $('quickNotes').innerHTML=quickNotes.map(n=>`
+    <div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;">
+      <span class="icon-cute ${n===noteVal?'anim-wiggle':'anim-float'}" style="font-size:22px;">📝</span>
+      <span class="cat-name" style="font-size:10px;">${esc(n)}</span>
+    </div>`).join('');
+}
 
 function saveRecord(amountParam){
   const v = amountParam || parseFloat(formAmount) || 0;
@@ -413,9 +440,9 @@ function renderBalance(){const m=ym(new Date());const list=monthRecords(m);$('to
 
 function renderList(){
   const list=records.slice().sort((a,b)=>(b.date+b.createdAt).localeCompare(a.date+a.createdAt));
-  if(!list.length){const emptyIcon=getIconId('food');$('recordList').innerHTML=`<div class="empty"><span class="icon-cute anim-bounce" style="font-size:50px;opacity:0.3;color:var(--primary);"><svg><use href="#${emptyIcon}"></use></svg></span><br>还没有记录</div>`;return;}
+  if(!list.length){$('recordList').innerHTML='<div class="empty"><div class="icon-cute anim-bounce" style="font-size:50px;opacity:0.3;display:inline-block;">🐣</div><br>还没有记录</div>';return;}
   const groups={};list.forEach(r=>{(groups[r.date]=groups[r.date]||[]).push(r);});
-  let html='';Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{const items=groups[date];html+=`<div style="font-size:12px;color:var(--sub);font-weight:700;margin:16px 0 8px;padding-left:4px;">${date}</div>`;items.forEach(r=>{const catName=r.category.split('/')[0];const info=getCatInfo(catName);const sign=r.type==='expense'?'-':'+';const iconId=getIconId(info.key);html+=`<div class="rec-card"><div class="rec-icon" style="background:${info.color}20;color:${info.color}"><span class="icon-cute" style="width:24px;height:24px;"><svg><use href="#${iconId}"></use></svg></span></div><div class="rec-info"><div class="name">${esc(r.category)}</div>${r.note?`<div class="note">${esc(r.note)}</div>`:''}</div><div class="rec-amt ${r.type==='expense'?'exp':'inc'}">${sign}${fmt(r.amount)}</div><button onclick="delRecord('${r.id}')" style="color:var(--sub);padding:8px;"><span class="icon-cute" style="width:18px;height:18px;opacity:0.5;"><svg><use href="#i-close"></use></svg></span></button></div>`;});});
+  let html='';Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{const items=groups[date];html+=`<div style="font-size:12px;color:var(--sub);font-weight:700;margin:16px 0 8px;padding-left:4px;">${date}</div>`;items.forEach(r=>{const catName=r.category.split('/')[0];const info=getCatInfo(catName);const sign=r.type==='expense'?'-':'+';html+=`<div class="rec-card"><div class="rec-icon" style="background:${info.color}20;color:${info.color}">${info.icon}</div><div class="rec-info"><div class="name">${esc(r.category)}</div>${r.note?`<div class="note">${esc(r.note)}</div>`:''}</div><div class="rec-amt ${r.type==='expense'?'exp':'inc'}">${sign}${fmt(r.amount)}</div><button onclick="delRecord('${r.id}')" style="color:var(--sub);padding:8px;font-size:18px;">🗑️</button></div>`;});});
   $('recordList').innerHTML=html;
 }
 function delRecord(id){if(!confirm('确定删除？'))return;records=records.filter(r=>r.id!==id);saveRecords();renderList();renderStats();renderBalance();renderGoal();}
@@ -425,7 +452,7 @@ function renderStats(){
   $('stInc').textContent=fmt(inc);$('stExp').textContent=fmt(exp);$('stBal').textContent=fmt(bal);
   const map={};list.filter(r=>r.type==='expense').forEach(r=>{const mainCat=r.category.split('/')[0];map[mainCat]=(map[mainCat]||0)+Number(r.amount);});
   const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]);const total=arr.reduce((s,x)=>s+x[1],0);const box=$('rankBox');
-  if(!arr.length){box.innerHTML='<div class="empty" style="padding:20px 0">本月还没有支出</div>';}else{box.innerHTML=arr.map(([cat,amt])=>{const pct=total>0?(amt/total*100):0;const info=getCatInfo(cat);const iconId=getIconId(info.key);return `<div class="bar-item"><div class="bar-head"><span style="display:flex;align-items:center;gap:6px;font-size:15px;"><span class="icon-cute" style="width:20px;height:20px;color:${info.color};"><svg><use href="#${iconId}"></use></svg></span>${esc(cat)}<span style="font-size:11px;color:var(--sub);background:var(--bg);padding:2px 6px;border-radius:6px;">${pct.toFixed(1)}%</span></span><span style="color:var(--red)">${fmt(amt)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${info.color}"></div></div></div>`;}).join('');}
+  if(!arr.length){box.innerHTML='<div class="empty" style="padding:20px 0">本月还没有支出</div>';}else{box.innerHTML=arr.map(([cat,amt])=>{const pct=total>0?(amt/total*100):0;const info=getCatInfo(cat);return `<div class="bar-item"><div class="bar-head"><span style="display:flex;align-items:center;gap:6px;font-size:15px;"><span>${info.icon}</span>${esc(cat)}<span style="font-size:11px;color:var(--sub);background:var(--bg);padding:2px 6px;border-radius:6px;">${pct.toFixed(1)}%</span></span><span style="color:var(--red)">${fmt(amt)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${info.color}"></div></div></div>`;}).join('');}
 }
 
 function renderGoal(){const goal=parseFloat(localStorage.getItem(GK))||0;const m=ym(new Date());const bal=sumBy(monthRecords(m),'income')-sumBy(monthRecords(m),'expense');const cur=Math.max(0,bal);$('goalInput').value=goal||'';$('goalCur').textContent=fmt(cur);$('goalTotal').textContent='目标：'+fmt(goal);const pct=goal>0?Math.min(100,(cur/goal*100)):0;$('goalBar').style.width=pct+'%';}
@@ -437,12 +464,12 @@ function clearAllData(){if(!confirm('确定清空所有记录吗？'))return;rec
 
 function init(){
   loadData();document.documentElement.setAttribute('data-theme',theme);
-  renderCatGrid();renderQuickNotes();renderBalance();renderList();renderStats();renderGoal();renderBottomTabs();
+  renderCatGrid();renderQuickNotes();renderBalance();renderList();renderStats();renderGoal();
   $('themeBtn').onclick=()=>{playSound('click');const idx=THEMES.indexOf(theme);setTheme(THEMES[(idx+1)%THEMES.length]);};
   $('noteInput').addEventListener('input',renderQuickNotes);
 }
 
-window.switchPage=switchPage;window.openAmountSheet=openAmountSheet;window.closeAmountSheet=closeAmountSheet;window.pressKey=pressKey;window.confirmAmount=confirmAmount;window.selectCat=selectCat;window.openAddCat=openAddCat;window.closeAddCat=closeAddCat;window.saveNewCat=saveNewCat;window.delRecord=delRecord;window.selectQuickNote=selectQuickNote;window.openAddNote=openAddNote;window.closeAddNote=closeAddNote;window.saveNewNote=saveNewNote;window.selectSubCat=selectSubCat;window.closeSubCat=closeSubCat;window.saveRecord=saveRecord;window.exportData=exportData;window.importData=importData;window.clearAllData=clearAllData;window.saveGoal=saveGoal;
+window.switchPage=switchPage;window.openAmountSheet=openAmountSheet;window.closeAmountSheet=closeAmountSheet;window.pressKey=pressKey;window.confirmAmount=confirmAmount;window.selectCat=selectCat;window.openAddCat=openAddCat;window.closeAddCat=closeAddCat;window.saveNewCat=saveNewCat;window.selectEmoji=selectEmoji;window.delRecord=delRecord;window.selectQuickNote=selectQuickNote;window.openAddNote=openAddNote;window.closeAddNote=closeAddNote;window.saveNewNote=saveNewNote;window.selectSubCat=selectSubCat;window.closeSubCat=closeSubCat;window.saveRecord=saveRecord;window.exportData=exportData;window.importData=importData;window.clearAllData=clearAllData;window.saveGoal=saveGoal;
 
 init();
 })();
