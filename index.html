@@ -27,11 +27,44 @@
         .item-row { margin-bottom:16px; }
         .row-title { font-size:15px; margin-bottom:10px; font-weight:bold;}
         .remark-input { width:100%; border:1px solid #eee; border-radius:8px; padding:12px; outline:none; background: #fafafa;}
+
+        /* 分类头部 + 添加自定义按钮 */
+        .category-head{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+        .add-cate-btn{
+            color:#4080ff;
+            font-size:14px;
+            cursor:pointer;
+        }
+
         .cate-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:10px; }
         .cate-item { display:flex; flex-direction:column; align-items:center; padding:8px 4px; border-radius:10px; background:#f8f9fa; cursor:pointer; border: 2px solid transparent;}
         .cate-item.selected { border-color: #ff6b6b; background: #fff0f0; }
-        .cate-icon-box { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:4px; font-size: 20px;}
+        .cate-icon-box { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:4px; overflow:hidden;}
+        .cate-icon-box img{
+            width:22px;
+            height:22px;
+            object-fit:contain;
+        }
         .cate-name { font-size:12px; color:#444; font-weight: bold;}
+
+        /* 快速记账模板区域 */
+        .template-grid{
+            display:grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap:10px;
+            margin-top:10px;
+        }
+        .template-item{
+            padding:12px;
+            background:#f0f5ff;
+            border-radius:10px;
+            font-size:14px;
+            cursor:pointer;
+        }
         
         /* 保存按钮 */
         .save-btn { margin: 20px; width: calc(100% - 40px); padding: 16px; background: #ff6b6b; color: white; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
@@ -50,6 +83,67 @@
         .tab { flex:1; text-align:center; padding:10px 0; font-size:12px; cursor:pointer; color: #888; font-weight: bold; }
         .tab.active { color: #ff6b6b; }
         .tab-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+
+        /* 新增分类弹窗 */
+        .mask{
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,0.4);
+            display:flex;
+            align-items:flex-end;
+            z-index:99;
+            display:none;
+        }
+        .popup{
+            width:100%;
+            background:white;
+            border-radius:16px 16px 0 0;
+            padding:24px;
+        }
+        .popup-title{
+            text-align:center;
+            font-size:16px;
+            font-weight:600;
+            margin-bottom:20px;
+        }
+        .popup-input{
+            width:100%;
+            border:1px solid #eee;
+            border-radius:8px;
+            padding:10px;
+            margin-bottom:16px;
+            outline:none;
+        }
+        .upload-icon-btn{
+            border:1px dashed #ccc;
+            border-radius:8px;
+            text-align:center;
+            padding:16px;
+            color:#777;
+            cursor:pointer;
+        }
+        .btn-group{
+            display:flex;
+            gap:12px;
+            margin-top:20px;
+        }
+        .btn-cancel{
+            flex:1;
+            padding:12px;
+            border-radius:8px;
+            background:#f2f3f5;
+            text-align:center;
+            cursor:pointer;
+        }
+        .btn-sure{
+            flex:1;
+            padding:12px;
+            border-radius:8px;
+            background:#4080ff;
+            color:white;
+            text-align:center;
+            cursor:pointer;
+        }
     </style>
 </head>
 <body>
@@ -73,8 +167,15 @@
                 <input class="remark-input" id="noteInput" placeholder="填写备注信息，如：午餐">
             </div>
             <div class="item-row">
-                <div class="row-title">分类</div>
+                <div class="category-head">
+                    <div class="row-title">分类</div>
+                    <div class="add-cate-btn" onclick="openAddCate()">+自定义分类</div>
+                </div>
                 <div class="cate-grid" id="cateContainer"></div>
+            </div>
+            <div class="item-row">
+                <div class="row-title">快速记账模板</div>
+                <div class="template-grid" id="templateContainer"></div>
             </div>
         </div>
         <button class="save-btn" onclick="saveRecord()">保存这笔记录</button>
@@ -106,16 +207,66 @@
         <div class="tab" onclick="switchPage('stats', this)"><span class="tab-icon">📊</span>统计</div>
     </div>
 
+    <!--新增分类弹窗-->
+    <div class="mask" id="mask">
+        <div class="popup">
+            <div class="popup-title">新增自定义分类</div>
+            <input class="popup-input" id="cateNameInput" placeholder="输入分类名称">
+            <div class="upload-icon-btn" onclick="document.getElementById('iconUpload').click()">点击上传图标（上传你自己的图标）</div>
+            <input type="file" id="iconUpload" accept="image/*" style="display:none" onchange="uploadIcon(this)">
+            <div class="btn-group">
+                <div class="btn-cancel" onclick="closeAddCate()">取消</div>
+                <div class="btn-sure" onclick="saveCategory()">保存</div>
+            </div>
+        </div>
+    </div>
+
 <script>
     // 核心数据存储
     let records = JSON.parse(localStorage.getItem('myRecords')) || [];
     let currentType = 'exp'; // exp 或 inc
     let currentCate = '餐饮';
+    let tempUploadIconUrl = "";
 
-    const CATS = [
-        {name:'餐饮', icon:'🍔'}, {name:'交通', icon:'🚗'}, {name:'购物', icon:'🛍️'}, 
-        {name:'医疗', icon:'💊'}, {name:'居住', icon:'🏠'}, {name:'娱乐', icon:'🎮'}, 
-        {name:'学习', icon:'📚'}, {name:'工资', icon:'💰'}, {name:'其他', icon:'🌟'}
+    // 【扩充基础分类】支出基础分类
+    const expBaseCate = [
+        {name:'餐饮',bg:"#ff8866",img:""},
+        {name:'交通',bg:"#48a0ff",img:""},
+        {name:'购物',bg:"#ffb347",img:""},
+        {name:'医疗',bg:"#36c988",img:""},
+        {name:'居住',bg:"#9b6bff",img:""},
+        {name:'娱乐',bg:"#ff6bcb",img:""},
+        {name:'学习',bg:"#3498db",img:""},
+        {name:'育儿',bg:"#ff7878",img:""},
+        {name:'宠物',bg:"#72c472",img:""},
+        {name:'美妆护肤',bg:"#e889b8",img:""},
+        {name:'通讯',bg:"#637394",img:""},
+        {name:'其他',bg:"#8690ff",img:""},
+    ];
+    //收入基础分类
+    const incBaseCate = [
+        {name:'工资',bg:"#28b968",img:""},
+        {name:'副业',bg:"#4080ff",img:""},
+        {name:'红包',bg:"#ff6b6b",img:""},
+        {name:'奖金',bg:"#ffb347",img:""},
+        {name:'理财收益',bg:"#22a884",img:""},
+        {name:'其他收入',bg:"#8690ff",img:""},
+    ];
+
+    //用户自定义分类本地存储
+    let userExpCate = JSON.parse(localStorage.getItem("userExpCate")) || [];
+    let userIncCate = JSON.parse(localStorage.getItem("userIncCate")) || [];
+
+    //快速记账模板
+    const templateList = [
+        {name:"三餐开销",cate:"餐饮",remark:"一日三餐"},
+        {name:"通勤出行",cate:"交通",remark:"通勤打车/公交"},
+        {name:"超市采购",cate:"购物",remark:"超市生活用品采购"},
+        {name:"网上购物",cate:"购物",remark:"网购"},
+        {name:"育儿支出",cate:"育儿",remark:"宝宝用品开销"},
+        {name:"宠物消费",cate:"宠物",remark:"猫咪口粮/用品"},
+        {name:"医药看病",cate:"医疗",remark:"买药/就医"},
+        {name:"护肤美妆",cate:"美妆护肤",remark:"护肤品采购"},
     ];
 
     function $(id) { return document.getElementById(id); }
@@ -130,13 +281,20 @@
             $('typeInc').classList.add('active', 'inc');
             $('typeExp').classList.remove('active', 'exp');
         }
+        renderCats();
     }
 
     // 渲染分类
     function renderCats() {
-        $('cateContainer').innerHTML = CATS.map(c => `
+        let baseList = currentType === "exp" ? expBaseCate : incBaseCate;
+        let userList = currentType === "exp" ? userExpCate : userIncCate;
+        let allCate = [...baseList,...userList];
+
+        $('cateContainer').innerHTML = allCate.map(c => `
             <div class="cate-item ${c.name === currentCate ? 'selected' : ''}" onclick="selectCate('${c.name}')">
-                <div class="cate-icon-box">${c.icon}</div>
+                <div class="cate-icon-box" style="background:${c.bg}">
+                    ${c.img ? `<img src="${c.img}">` : ''}
+                </div>
                 <div class="cate-name">${c.name}</div>
             </div>
         `).join('');
@@ -144,6 +302,62 @@
 
     function selectCate(name) {
         currentCate = name;
+        renderCats();
+    }
+
+    //渲染记账模板
+    function renderTemplate(){
+        $('templateContainer').innerHTML = templateList.map(t=>`
+            <div class="template-item" onclick="applyTemplate('${t.cate}','${t.remark}')">${t.name}</div>
+        `).join('');
+    }
+
+    //套用模板：自动选中分类+填充备注
+    function applyTemplate(cateName,remarkText){
+        currentCate = cateName;
+        $('noteInput').value = remarkText;
+        renderCats();
+    }
+
+    //弹窗新增分类
+    function openAddCate(){
+        $('mask').style.display="flex";
+        tempUploadIconUrl = "";
+        $('cateNameInput').value="";
+    }
+    function closeAddCate(){
+        $('mask').style.display="none";
+    }
+    //上传图标
+    function uploadIcon(input){
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = e=>{
+            tempUploadIconUrl = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+    //保存自定义分类
+    function saveCategory(){
+        const name = $('cateNameInput').value.trim();
+        if(!name){
+            alert("请输入分类名称");
+            return;
+        }
+        const newCate = {
+            name:name,
+            bg:"#8690ff",
+            img:tempUploadIconUrl
+        }
+        if(currentType === "exp"){
+            userExpCate.push(newCate);
+            localStorage.setItem("userExpCate",JSON.stringify(userExpCate));
+        }else{
+            userIncCate.push(newCate);
+            localStorage.setItem("userIncCate",JSON.stringify(userIncCate));
+        }
+        closeAddCate();
         renderCats();
     }
 
@@ -220,6 +434,7 @@
 
     // 初始化
     renderCats();
+    renderTemplate();
     renderList();
     renderStats();
 </script>
