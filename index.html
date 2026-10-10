@@ -18,7 +18,9 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 .anim-bounce{animation:bounceCute 1.8s ease-in-out infinite;}
 .hd{position:sticky;top:0;z-index:40;background:var(--bg);padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center;}
 .hd h1{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;}
-.theme-btn{width:40px;height:40px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);color:var(--sub);font-size:20px;}
+/* ==========全新音效开关样式========== */
+.theme-btn{width:44px;height:44px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);color:var(--sub);font-size:20px;cursor:pointer;transition:transform 0.2s ease;}
+.theme-btn:active{transform:scale(0.92);}
 .main{padding:0 20px;}
 .page{display:none;}
 .page.active{display:block;}
@@ -30,11 +32,13 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 .section-title button{font-size:12px;color:var(--primary);font-weight:700;background:var(--primary-soft);padding:6px 12px;border-radius:20px;}
 .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .cat-item{background:var(--card);border-radius:var(--radius-sm);padding:14px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);border:2px solid transparent;cursor:pointer;}
+.cat-item:active{transform:scale(0.96);}
 .cat-item.active{border-color:var(--primary);background:var(--primary-soft);}
-.cat-item.active .icon-cute{animation:wiggleCute 0.6s ease-in-out infinite;}
+.cat-item-img{width:40px;height:40px;border-radius:12px;object-fit:cover;}
 .cat-name{font-size:11px;color:var(--sub);font-weight:700;}
 .rec-card{background:var(--card);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;}
-.rec-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.rec-icon{width:46px;height:46px;border-radius:14px;overflow:hidden;}
+.rec-icon img{width:100%;height:100%;object-fit:cover;}
 .rec-info{flex:1;min-width:0;}
 .rec-info .name{font-size:15px;font-weight:700;}
 .rec-info .note{font-size:12px;color:var(--sub);margin-top:2px;}
@@ -51,18 +55,22 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 .sheet-handle{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 16px;}
 .sheet-title{font-size:18px;font-weight:800;margin-bottom:16px;text-align:center;}
 .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
-.keypad button{padding:18px 0;background:var(--bg);border-radius:12px;font-size:24px;font-weight:800;}
+.keypad button{padding:18px 0;background:var(--bg);border-radius:12px;font-size:24px;font-weight:800;cursor:pointer;}
+.keypad button:active{transform:scale(0.95);}
 .keypad .confirm{background:var(--primary);color:#fff;font-size:18px;}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;}
 .overlay.show{opacity:1;pointer-events:auto;}
 .btn-primary{width:100%;padding:14px;border-radius:14px;background:var(--primary);color:#fff;font-size:16px;font-weight:800;margin-top:12px;}
+.switch{width:50px;height:28px;border-radius:14px;background:#ffe4e9;position:relative;cursor:pointer;transition:0.3s;}
+.switch:active{transform:scale(0.95);}
+.switch-dot{width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:0.3s;box-shadow:0 2px 6px #00000020;}
 </style>
 </head>
 <body>
 <header class="hd">
   <h1><span class="icon-cute anim-bounce" id="headerIcon">🐱</span><span id="pageTitle">记一笔</span></h1>
   <div style="display:flex;gap:8px;">
-    <button class="theme-btn" onclick="toggleSound()">🔊</button>
+    <button class="theme-btn" id="soundToggleBtn" onclick="toggleSound()">🔊</button>
     <button class="theme-btn" onclick="alert('皮肤切换功能已加载')">🎨</button>
   </div>
 </header>
@@ -80,7 +88,7 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
     <div class="cat-grid" style="grid-template-columns:repeat(4,1fr);" id="quickNotes"></div>
   </section>
   <section class="page" id="page-list"><div class="balance-card" style="padding:20px;margin-bottom:16px;"><div class="balance-label">总资产结余</div><div class="balance-amount" style="font-size:30px;" id="totalBalance">¥0.00</div></div><div id="recordList"></div></section>
-  <section class="page" id="page-stats"><div class="stats-card"><div class="stats-row"><div class="stats-item"><div class="label">本月收入</div><div class="val" id="stInc">¥0.00</div></div><div class="stats-item"><div class="label">本月支出</div><div class="val" id="stExp">¥0.00</div></div><div class="stats-item"><div class="label">本月结余</div><div class="val" id="stBal">¥0.00</div></div></div></div></section>
+  <section class="page" id="page-stats"><div class="stats-card"><div class="stats-row"><div class="stats-item"><div class="label">本月收入</div><div class="val" id="stInc">¥0.00</div></div><div class="stats-item"><div class="stats-item"><div class="label">本月支出</div><div class="val" id="stExp">¥0.00</div></div><div class="stats-item"><div class="label">本月结余</div><div class="val" id="stBal">¥0.00</div></div></div></div></section>
   <section class="page" id="page-goal"><div class="stats-card" style="text-align:center;padding:30px 20px;"><div class="icon-cute anim-float" style="font-size:60px;margin-bottom:10px;">🎯</div><div style="font-size:18px;font-weight:800;margin-bottom:8px;">我的储蓄目标</div><div style="color:#b3929f;font-size:13px;margin-bottom:16px;">为了心爱的小物件，加油攒钱吧！</div><div style="height:12px;background:#fff5f8;border-radius:6px;overflow:hidden;"><div id="goalBar" style="width:0%;height:100%;background:linear-gradient(90deg,#ff8fab,#ffb6c1);"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-size:13px;font-weight:700;"><span id="goalCur">¥0</span><span id="goalTotal">目标：¥0</span></div><input type="number" id="goalInput" placeholder="设定目标金额" style="background:var(--card);padding:14px;border-radius:12px;width:100%;margin-top:16px;text-align:center;"><button class="btn-primary" onclick="saveGoal()">保存目标</button></div></section>
   <section class="page" id="page-me">
     <div style="background:#fff;border-radius:24px;padding:20px;">
@@ -89,8 +97,8 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
           <div class="lbl" style="font-size:16px;font-weight:700;color:#5a3d4a;">每日提醒</div>
           <div class="desc" style="font-size:13px;color:#b3929f;margin-top:4px;">到点提醒你记账</div>
         </div>
-        <div id="remindSwitch" class="switch" onclick="toggleRemind()" style="width:50px;height:28px;border-radius:14px;background:#ffe4e9;position:relative;cursor:pointer;transition:0.3s;">
-          <div id="switchDot" style="width:24px;height:24px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:0.3s;"></div>
+        <div id="remindSwitch" class="switch" onclick="toggleRemind()">
+          <div id="switchDot" class="switch-dot"></div>
         </div>
       </div>
     </div>
@@ -104,16 +112,103 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
   <button data-page="me" onclick="switchPage('me')"><span class="ico">👤</span>我的</button>
 </nav>
 <div class="overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
-<div class="sheet" id="amountSheet"><div class="sheet-handle"></div><div class="sheet-title">输入金额</div><button class="sheet-close" onclick="closeAmountSheet()">✕</button><div style="text-align:center;font-size:44px;font-weight:800;color:#ff8fab;margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div><div class="keypad"><button onclick="pressKey('1')">1</button><button onclick="pressKey('2')">2</button><button onclick="pressKey('3')">3</button><button onclick="pressKey('4')">4</button><button onclick="pressKey('5')">5</button><button onclick="pressKey('6')">6</button><button onclick="pressKey('7')">7</button><button onclick="pressKey('8')">8</button><button onclick="pressKey('9')">9</button><button onclick="pressKey('.')">.</button><button onclick="pressKey('0')">0</button><button onclick="pressKey('del')">⌫</button><button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定并自动保存</button></div></div>
+<div class="sheet" id="amountSheet"><div class="sheet-handle"></div><div class="sheet-title">输入金额</div><button class="sheet-close" onclick="closeAmountSheet()">✕</button><div style="text-align:center;font-size:44px;font-weight:800;color:#ff8fab;margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div><div class="keypad"><button onclick="pressKey('1');playKeypadSound()">1</button><button onclick="pressKey('2');playKeypadSound()">2</button><button onclick="pressKey('3');playKeypadSound()">3</button><button onclick="pressKey('4');playKeypadSound()">4</button><button onclick="pressKey('5');playKeypadSound()">5</button><button onclick="pressKey('6');playKeypadSound()">6</button><button onclick="pressKey('7');playKeypadSound()">7</button><button onclick="pressKey('8');playKeypadSound()">8</button><button onclick="pressKey('9');playKeypadSound()">9</button><button onclick="pressKey('.');playKeypadSound()">.</button><button onclick="pressKey('0');playKeypadSound()">0</button><button onclick="pressKey('del');playKeypadSound()">⌫</button><button class="confirm" style="grid-column:span 3;" onclick="confirmAmount();playConfirmSound()">确定并自动保存</button></div></div>
 <div class="overlay" id="catOverlay" onclick="closeAddCat()"></div>
-<div class="sheet" id="catSheet"><div class="sheet-handle"></div><div class="sheet-title">添加自定义分类</div><button class="sheet-close" onclick="closeAddCat()">✕</button><input type="text" id="newCatName" placeholder="分类名称" style="background:#fff5f8;padding:14px;border-radius:12px;width:100%;margin-bottom:12px;"><div style="font-size:13px;color:#b3929f;margin-bottom:8px;">👇 选择一个图标：</div><div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:160px;overflow-y:auto;" id="emojiPicker"></div><button class="btn-primary" onclick="saveNewCat()">保存分类</button></div>
+<div class="sheet" id="catSheet"><div class="sheet-handle"></div><div class="sheet-title">添加自定义分类</div><button class="sheet-close" onclick="closeAddCat()">✕</button><input type="text" id="newCatName" placeholder="分类名称" style="background:#fff5f8;padding:14px;border-radius:12px;width:100%;margin-bottom:12px;"><div style="font-size:13px;color:#b3929f;margin-bottom:8px;">👇 选择图片地址：</div><input type="text" id="newCatImgUrl" placeholder="粘贴图片链接" style="background:#fff5f8;padding:12px;border-radius:12px;width:100%;margin-bottom:12px;"><button class="btn-primary" onclick="saveNewCat()">保存分类</button></div>
 <div class="overlay" id="noteOverlay" onclick="closeAddNote()"></div>
-<div class="sheet" id="noteSheet"><div class="sheet-handle"></div><div class="sheet-title">添加快捷备注</div><button class="sheet-close" onclick="closeAddNote()">✕</button><input type="text" id="newNoteText" placeholder="备注标签" style="background:#fff5f8;padding:14px;border-radius:12px;width:100%;margin-bottom:12px;"><div style="font-size:13px;color:#b3929f;margin-bottom:8px;">👇 选择一个图标：</div><div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:160px;overflow-y:auto;" id="noteEmojiPicker"></div><button class="btn-primary" onclick="saveNewNote()">保存标签</button></div>
+<div class="sheet" id="noteSheet"><div class="sheet-handle"></div><div class="sheet-title">添加快捷备注</div><button class="sheet-close" onclick="closeAddNote()">✕</button><input type="text" id="newNoteText" placeholder="备注标签" style="background:#fff5f8;padding:14px;border-radius:12px;width:100%;margin-bottom:12px;"><button class="btn-primary" onclick="saveNewNote()">保存标签</button></div>
 <div id="toast" style="position:fixed;left:50%;bottom:110px;transform:translate(-50%,12px);background:#5a3d4a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:.3s;z-index:999;white-space:nowrap;"></div>
 <script>
-const EMOJI_LIB = ['🍔','🍜','🍕','🍰','🍦','🍎','🍉','🥤','🧋','☕','🍺','🍣','🍞','🧁','🚗','🚌','🚲','✈️','🚇','🚕','🛍️','👗','👟','💄','💍','🎒','🧸','💻','🏠','💡','🧹','🛋️','🚿','🛏️','🎮','🎬','🎵','⚽','🎨','📚','📝','🎓','📖','🏥','💊','💉','🐱','🐶','🐼','🐰','🦁','🐘','🐵','🐯','🐻','🐭','🐸','💰','🧧','🎁','💎','⭐','🌟','✨','🔥','🌈','🌸','💖','❓'];
+// ===================== WebAudio音效引擎 =====================
+let audioCtx = null;
+function initAudio(){
+    if(!audioCtx){
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+}
+//按键打字音效，低柔
+function playKeypadSound(){
+    if(!soundOn) return;
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(680, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.08);
+}
+//确认记账完成音
+function playConfirmSound(){
+    if(!soundOn) return;
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(720, audioCtx.currentTime + 0.12);
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.22);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.22);
+}
+//开关切换音效
+function playSwitchSound(){
+    if(!soundOn) return;
+    initAudio();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.1);
+}
+//闹钟提醒音效（预留，后面定时功能直接调用 playAlarmSound()）
+function playAlarmSound(){
+    if(!soundOn) return;
+    initAudio();
+    let t = audioCtx.currentTime;
+    for(let i=0;i<6;i++){
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, t + i*0.25);
+        gain.gain.setValueAtTime(0.04, t + i*0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + i*0.25 + 0.18);
+        osc.start(t + i*0.25);
+        osc.stop(t + i*0.25 + 0.18);
+    }
+}
+
+// ===================== 分类全部改成萌宠图片，移除旧emoji =====================
+const catList = [
+    {name:'餐饮',img:'https://picsum.photos/id/40/120/120'},
+    {name:'饮品',img:'https://picsum.photos/id/96/120/120'},
+    {name:'交通',img:'https://picsum.photos/id/1071/120/120'},
+    {name:'购物',img:'https://picsum.photos/id/26/120/120'},
+    {name:'居住',img:'https://picsum.photos/id/42/120/120'},
+    {name:'娱乐',img:'https://picsum.photos/id/9/120/120'},
+    {name:'学习',img:'https://picsum.photos/id/24/120/120'},
+    {name:'医疗',img:'https://picsum.photos/id/237/120/120'},
+    {name:'人情',img:'https://picsum.photos/id/180/120/120'},
+    {name:'宠物',img:'https://picsum.photos/id/40/120/120'},
+    {name:'护肤',img:'https://picsum.photos/id/64/120/120'},
+    {name:'其他',img:'https://picsum.photos/id/1025/120/120'},
+];
 let records=[],customCats=[],quickNotes=[],theme='pink',formAmount='0';
 let soundOn = localStorage.getItem("soundOn") !== "off";
+let selectedCatIndex = 0;
 
 function $(id){return document.getElementById(id);}
 function fmt(n){return '¥'+Number(n||0).toFixed(2);}
@@ -121,13 +216,14 @@ function toast(msg){const t=$('toast');t.textContent=msg;t.style.opacity='1';t.s
 
 // 🔊 音效开关
 function toggleSound(){
+    playSwitchSound();
     soundOn = !soundOn;
     localStorage.setItem("soundOn", soundOn?"on":"off");
     toast(soundOn ? "音效已开启" : "音效已关闭");
     renderSoundIcon();
 }
 function renderSoundIcon(){
-    const soundBtn = document.querySelector(".hd button:first-of-type");
+    const soundBtn = $('soundToggleBtn');
     soundBtn.innerText = soundOn ? "🔊" : "🔇";
 }
 
@@ -145,27 +241,29 @@ function confirmAmount(){
   setTimeout(()=>saveRecord(v),200);
 }
 
-// ✅ 保存记账记录 +【核心：更新今日收支】
+// ✅ 保存记账记录，绑定选中分类图片
 function saveRecord(v){
   if(v<=0)return;
+  const nowCat = catList[selectedCatIndex];
   records.push({
     id:Date.now(),
     date:new Date().toLocaleDateString('zh-CN'),
     type:'expense',
     amount:v,
-    category:'餐饮',
+    category:nowCat.name,
+    catImg:nowCat.img,
     note:$('noteInput').value.trim(),
     createdAt:Date.now()
   });
   toast('已记一笔 '+fmt(v));
   $('noteInput').value='';
-  calcToday();  // 记账立刻刷新今日支出！
+  calcToday();
   renderList();
   renderStats();
   $('displayAmount').textContent='¥ 0.00';
 }
 
-// ✅ 新增：计算今日支出今日收入
+// ✅ 计算今日支出今日收入
 function calcToday(){
   const todayStr = new Date().toLocaleDateString('zh-CN');
   let todayExpVal = 0;
@@ -180,9 +278,23 @@ function calcToday(){
   $('todayInc').innerText = fmt(todayIncVal);
 }
 
+// ✅明细列表渲染，加载对应分类图片
 function renderList(){
   if(!records.length){$('recordList').innerHTML='<div style="text-align:center;padding:40px;color:#b3929f;">还没有记录哦 🐣</div>';return;}
-  let html='';records.slice().reverse().forEach(r=>{html+='<div class="rec-card"><div class="rec-icon" style="background:#fff0f5;">🍔</div><div class="rec-info"><div class="name">'+r.category+'</div>'+(r.note?'<div class="note">📝 '+r.note+'</div>':'')+'</div><div class="rec-amt exp">-'+fmt(r.amount)+'</div></div>';});
+  let html='';records.slice().reverse().forEach(r=>{
+    html+=`
+    <div class="rec-card">
+        <div class="rec-icon">
+            <img src="${r.catImg}" alt="${r.category}">
+        </div>
+        <div class="rec-info">
+            <div class="name">${r.category}</div>
+            ${r.note?'<div class="note">📝 '+r.note+'</div>':''}
+        </div>
+        <div class="rec-amt exp">-${fmt(r.amount)}</div>
+    </div>
+    `;
+  });
   $('recordList').innerHTML=html;
 }
 
@@ -193,26 +305,48 @@ function renderStats(){
 function renderGoal(){const goal=parseFloat(localStorage.getItem('goal'))||0;$('goalInput').value=goal||'';$('goalTotal').textContent='目标：'+fmt(goal);$('goalCur').textContent='¥0';$('goalBar').style.width='0%';}
 function saveGoal(){const g=parseFloat($('goalInput').value)||0;localStorage.setItem('goal',g);renderGoal();toast('目标已保存');}
 
-function openAddCat(){$('catOverlay').classList.add('show');$('catSheet').classList.add('show');$('emojiPicker').innerHTML=EMOJI_LIB.map(e=>'<div style="font-size:24px;text-align:center;padding:6px;border-radius:10px;cursor:pointer;" onclick="selectEmoji(\''+e+'\',this)">'+e+'</div>').join('');}
+function openAddCat(){$('catOverlay').classList.add('show');$('catSheet').classList.add('show');}
 function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
-function selectEmoji(e,el){window.selectedEmoji=e;document.querySelectorAll('#emojiPicker div').forEach(c=>c.style.background='transparent');el.style.background='#fff0f5';}
-function saveNewCat(){const n=$('newCatName').value.trim();if(!n){toast('请输入名称');return;}customCats.push({name:n,icon:window.selectedEmoji||'🍔'});renderCatGrid();closeAddCat();$('newCatName').value='';toast('分类已添加');}
-
-function renderCatGrid(){
-  const cats=[{name:'餐饮',icon:'🍔'},{name:'饮品',icon:'🧋'},{name:'交通',icon:'🚗'},{name:'购物',icon:'🛍️'},{name:'居住',icon:'🏠'},{name:'娱乐',icon:'🎮'},{name:'学习',icon:'📚'},{name:'医疗',icon:'💊'},{name:'人情',icon:'🧧'},{name:'宠物',icon:'🐱'},{name:'护肤',icon:'🧴'},{name:'其他',icon:'🌟'},...customCats];
-  $('catGrid').innerHTML=cats.map(c=>'<div class="cat-item" onclick="selectCat(this)"><span class="icon-cute">'+c.icon+'</span><span class="cat-name">'+c.name+'</span></div>').join('');
+function saveNewCat(){
+  const n=$('newCatName').value.trim();
+  const img = $('newCatImgUrl').value.trim();
+  if(!n){toast('请输入名称');return;}
+  customCats.push({name:n,img:img||'https://picsum.photos/id/1025/120/120'});
+  renderCatGrid();
+  closeAddCat();
+  $('newCatName').value='';
+  $('newCatImgUrl').value='';
+  toast('分类已添加');
 }
-function selectCat(el){document.querySelectorAll('#catGrid .cat-item').forEach(c=>c.classList.remove('active'));el.classList.add('active');}
 
-function openAddNote(){$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');$('noteEmojiPicker').innerHTML=EMOJI_LIB.map(e=>'<div style="font-size:24px;text-align:center;padding:6px;border-radius:10px;cursor:pointer;" onclick="selectNoteEmoji(\''+e+'\',this)">'+e+'</div>').join('');}
+// ✅渲染分类网格，全部图片展示
+function renderCatGrid(){
+  const allCats = [...catList,...customCats];
+  let html = '';
+  allCats.forEach((c,idx)=>{
+    html += `
+    <div class="cat-item ${idx===selectedCatIndex?'active':''}" onclick="selectCat(${idx})">
+        <img class="cat-item-img" src="${c.img}" alt="${c.name}">
+        <span class="cat-name">${c.name}</span>
+    </div>
+    `
+  })
+  $('catGrid').innerHTML = html;
+}
+function selectCat(idx){
+    playSwitchSound();
+    selectedCatIndex = idx;
+    renderCatGrid();
+}
+
+function openAddNote(){$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');}
 function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
-function selectNoteEmoji(e,el){window.selectedNoteEmoji=e;document.querySelectorAll('#noteEmojiPicker div').forEach(c=>c.style.background='transparent');el.style.background='#fff0f5';}
-function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}quickNotes.push({text:t,icon:window.selectedNoteEmoji||'📝'});renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('备注已添加');}
+function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}quickNotes.push({text:t});renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('备注已添加');}
 
 function renderQuickNotes(){
-  const defaultNotes=[{text:'早餐',icon:'🍳'},{text:'午餐',icon:'🍱'},{text:'晚餐',icon:'🍜'},{text:'打车',icon:'🚕'},{text:'网购',icon:'📦'},{text:'奶茶',icon:'🧋'},{text:'咖啡',icon:'☕'},{text:'看病',icon:'🏥'},{text:'买书',icon:'📖'},{text:'看电影',icon:'🎬'},{text:'送礼',icon:'🎁'},{text:'工资',icon:'💰'}];
+  const defaultNotes=[{text:'早餐'},{text:'午餐'},{text:'晚餐'},{text:'打车'},{text:'网购'},{text:'奶茶'},{text:'咖啡'},{text:'看病'},{text:'买书'},{text:'看电影'},{text:'送礼'},{text:'工资'}];
   const allNotes=[...defaultNotes,...quickNotes];
-  $('quickNotes').innerHTML=allNotes.map(n=>'<div class="cat-item" onclick="selectQuickNote(\''+n.text+'\')"><span class="icon-cute" style="font-size:22px;">'+n.icon+'</span><span class="cat-name" style="font-size:10px;">'+n.text+'</span></div>').join('');
+  $('quickNotes').innerHTML=allNotes.map(n=>`<div class="cat-item" onclick="selectQuickNote('${n.text}')"><span class="icon-cute" style="font-size:22px;">📝</span><span class="cat-name" style="font-size:10px;">${n.text}</span></div>`).join('');
 }
 function selectQuickNote(t){$('noteInput').value=t;toast('已选备注：'+t);}
 
@@ -233,6 +367,7 @@ function setSwitchUI(isOn){
   }
 }
 function toggleRemind(){
+  playSwitchSound();
   const isOn = localStorage.getItem('remindSwitch') === 'on';
   if(isOn){
     localStorage.setItem('remindSwitch','off');
