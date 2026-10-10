@@ -112,7 +112,7 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
   <symbol id="rabbit-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M12 8v8" stroke="#fff" stroke-width="2"/><path d="M8 12h8" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#fff"/></symbol>
   <symbol id="rabbit-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#d8b4fe"/><circle cx="8" cy="16" r="2" fill="#fff"/><circle cx="16" cy="16" r="2" fill="#fff"/><path d="M4 12h16" stroke="#fff" stroke-width="2"/></symbol>
   <symbol id="rabbit-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#d8b4fe"/><path d="M8 12l4 4 4-4" stroke="#fff" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#fff"/></symbol>
-  <symbol id="panda-food" viewBox="0 0 24 24"><circle cx="9" cy="12" r="3" fill="#1f2937"/><circle cx="15" cy="12" r="3" fill="#1f2937"/><circle cx="9" cy="12" r="1" fill="#fff"/><circle cx="15" cy="12" r="1" fill="#fff"/><path d="M10 16h4" stroke="#1f2937" stroke-width="1.5"/><path d="M6 6l3 3M18 6l-3 3" stroke="#1f2937" stroke-width="2"/></symbol>
+  <symbol id="panda-food" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><circle cx="9" cy="12" r="3" fill="#1f2937"/><circle cx="15" cy="12" r="3" fill="#1f2937"/><circle cx="9" cy="12" r="1" fill="#fff"/><circle cx="15" cy="12" r="1" fill="#fff"/><path d="M10 16h4" stroke="#1f2937" stroke-width="1.5"/><path d="M6 6l3 3M18 6l-3 3" stroke="#1f2937" stroke-width="2"/></symbol>
   <symbol id="panda-drink" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><path d="M12 8v8" stroke="#1f2937" stroke-width="2"/><path d="M8 12h8" stroke="#1f2937" stroke-width="2"/><circle cx="12" cy="12" r="2" fill="#1f2937"/></symbol>
   <symbol id="panda-bus" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3" fill="#e5e7eb"/><circle cx="8" cy="16" r="2" fill="#1f2937"/><circle cx="16" cy="16" r="2" fill="#1f2937"/><path d="M4 12h16" stroke="#1f2937" stroke-width="2"/></symbol>
   <symbol id="panda-shop" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#e5e7eb"/><path d="M8 12l4 4 4-4" stroke="#1f2937" stroke-width="2" fill="none"/><circle cx="12" cy="9" r="1.5" fill="#1f2937"/></symbol>
@@ -140,7 +140,6 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
         <span>📈 今日收入 <b id="todayInc">¥0.00</b></span>
       </div>
     </div>
-    <!-- ✅【修复】增加备注输入框 noteInput -->
     <div style="margin-bottom:16px;background:var(--card);padding:14px;border-radius:var(--radius-sm);box-shadow:var(--shadow);">
       <input type="text" id="noteInput" placeholder="输入备注（也可以直接点下方快捷备注）" style="width:100%;font-size:15px;">
     </div>
@@ -372,4 +371,81 @@ function updateSheetAmount(){$('sheetAmount').textContent='¥ '+formAmount;}
 function pressKey(k){playSound('key');if(k==='del'){formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';}else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}else{if(formAmount==='0')formAmount=k;else formAmount+=k;}if(formAmount.length>10)formAmount=formAmount.slice(0,10);updateSheetAmount();}
 
 function confirmAmount(){
-  const v=parseFloat(formAmount
+  const v=parseFloat(formAmount)||0;
+  if(v<=0){toast('请输入正确金额');return;}
+  $('displayAmount').textContent=fmt(v);
+  closeAmountSheet();
+  saveRecord(v);
+}
+
+function renderCatGrid(){
+  const currentCatList=getCats(formType);
+  $('catGrid').innerHTML=currentCatList.map(c=>{
+    const iconId=getIconId(c.key);const isActive=c.name===formCat;
+    return `<div class="cat-item ${isActive?'active':''}" onclick="selectCat('${esc(c.name)}')"><span class="icon-cute ${isActive?'anim-wiggle':'anim-float'}" style="color:${c.color};"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name">${esc(c.name)}</span></div>`;
+  }).join('');
+}
+function selectCat(name){playSound('click');formCat=name;renderCatGrid();const cat=getCats(formType).find(c=>c.name===name);if(cat&&cat.subs&&cat.subs.length>0){currentSubCat='';$('subCatTitle').textContent=name+' - 详细分类';$('subCatGrid').innerHTML=cat.subs.map(s=>{const iconId=getIconId(cat.key);return `<div class="cat-item" onclick="selectSubCat('${esc(s)}')"><span class="icon-cute anim-float" style="color:${cat.color};"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name">${esc(s)}</span></div>`;}).join('');$('subCatOverlay').classList.add('show');$('subCatSheet').classList.add('show');}}
+function selectSubCat(subName){playSound('click');currentSubCat=subName;$('subCatTitle').textContent=formCat+' - '+subName;setTimeout(()=>{closeSubCat();toast('已选：'+formCat+' - '+subName);},200);}
+function closeSubCat(){$('subCatOverlay').classList.remove('show');$('subCatSheet').classList.remove('show');}
+
+function openAddCat(){playSound('click');$('catOverlay').classList.add('show');$('catSheet').classList.add('show');}
+function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
+function saveNewCat(){const n=$('newCatName').value.trim();if(!n){toast('请输入分类名称');return;}customCats.push({name:n,key:'star',color:'#5b6ef5',subs:['其他']});saveCustomCats();renderCatGrid();closeAddCat();$('newCatName').value='';toast('分类已添加');}
+
+function openAddNote(){playSound('click');$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');}
+function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
+function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}if(!quickNotes.includes(t))quickNotes.push(t);saveQuickNotes();renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('标签已添加');}
+function selectQuickNote(note){playSound('click');const inp=$('noteInput');if(inp.value===note){inp.value='';toast('已取消备注');}else{inp.value=note;toast('已选备注：'+note);}renderQuickNotes();}
+function renderQuickNotes(){const noteVal=$('noteInput')?$('noteInput').value:'';const iconId=getIconId('star');$('quickNotes').innerHTML=quickNotes.map(n=>`<div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;"><span class="icon-cute ${n===noteVal?'anim-wiggle':'anim-float'}" style="color:var(--primary);font-size:22px;"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name" style="font-size:10px;">${esc(n)}</span></div>`).join('');}
+
+function saveRecord(amountParam){
+  const v = amountParam || parseFloat(formAmount) || 0;
+  if(v<=0){toast('请先输入金额');return;}
+  const date=ymd(new Date());const note=$('noteInput').value.trim();const displayCat=currentSubCat?formCat+'/'+currentSubCat:formCat;
+  records.push({id:genId(),date,type:formType,category:displayCat,amount:Math.round(v*100)/100,note,createdAt:Date.now()});
+  saveRecords();playSound('save');toast('✨ 已记一笔 '+fmt(v));
+  formAmount='0';$('displayAmount').textContent='¥ 0.00';$('noteInput').value='';currentSubCat='';
+  renderQuickNotes();renderList();renderStats();renderBalance();renderGoal();
+}
+
+function renderBalance(){const m=ym(new Date());const list=monthRecords(m);$('totalBalance').textContent=fmt(sumBy(list,'income')-sumBy(list,'expense'));const today=ymd(new Date());const tl=records.filter(r=>r.date===today);$('todayExp').textContent=fmt(sumBy(tl,'expense'));$('todayInc').textContent=fmt(sumBy(tl,'income'));}
+
+function renderList(){
+  const list=records.slice().sort((a,b)=>(b.date+b.createdAt).localeCompare(a.date+a.createdAt));
+  if(!list.length){const emptyIcon=getIconId('food');$('recordList').innerHTML=`<div class="empty"><span class="icon-cute anim-bounce" style="font-size:50px;opacity:0.3;color:var(--primary);"><svg><use href="#${emptyIcon}"></use></svg></span><br>还没有记录</div>`;return;}
+  const groups={};list.forEach(r=>{(groups[r.date]=groups[r.date]||[]).push(r);});
+  let html='';Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{const items=groups[date];html+=`<div style="font-size:12px;color:var(--sub);font-weight:700;margin:16px 0 8px;padding-left:4px;">${date}</div>`;items.forEach(r=>{const catName=r.category.split('/')[0];const info=getCatInfo(catName);const sign=r.type==='expense'?'-':'+';const iconId=getIconId(info.key);html+=`<div class="rec-card"><div class="rec-icon" style="background:${info.color}20;color:${info.color}"><span class="icon-cute" style="width:24px;height:24px;"><svg><use href="#${iconId}"></use></svg></span></div><div class="rec-info"><div class="name">${esc(r.category)}</div>${r.note?`<div class="note">${esc(r.note)}</div>`:''}</div><div class="rec-amt ${r.type==='expense'?'exp':'inc'}">${sign}${fmt(r.amount)}</div><button onclick="delRecord('${r.id}')" style="color:var(--sub);padding:8px;"><span class="icon-cute" style="width:18px;height:18px;opacity:0.5;"><svg><use href="#i-close"></use></svg></span></button></div>`;});});
+  $('recordList').innerHTML=html;
+}
+function delRecord(id){if(!confirm('确定删除？'))return;records=records.filter(r=>r.id!==id);saveRecords();renderList();renderStats();renderBalance();renderGoal();}
+
+function renderStats(){
+  const m=ym(new Date());const list=monthRecords(m);const inc=sumBy(list,'income'),exp=sumBy(list,'expense'),bal=inc-exp;
+  $('stInc').textContent=fmt(inc);$('stExp').textContent=fmt(exp);$('stBal').textContent=fmt(bal);
+  const map={};list.filter(r=>r.type==='expense').forEach(r=>{const mainCat=r.category.split('/')[0];map[mainCat]=(map[mainCat]||0)+Number(r.amount);});
+  const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]);const total=arr.reduce((s,x)=>s+x[1],0);const box=$('rankBox');
+  if(!arr.length){box.innerHTML='<div class="empty" style="padding:20px 0">本月还没有支出</div>';}else{box.innerHTML=arr.map(([cat,amt])=>{const pct=total>0?(amt/total*100):0;const info=getCatInfo(cat);const iconId=getIconId(info.key);return `<div class="bar-item"><div class="bar-head"><span style="display:flex;align-items:center;gap:6px;font-size:15px;"><span class="icon-cute" style="width:20px;height:20px;color:${info.color};"><svg><use href="#${iconId}"></use></svg></span>${esc(cat)}<span style="font-size:11px;color:var(--sub);background:var(--bg);padding:2px 6px;border-radius:6px;">${pct.toFixed(1)}%</span></span><span style="color:var(--red)">${fmt(amt)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${info.color}"></div></div></div>`;}).join('');}
+}
+
+function renderGoal(){const goal=parseFloat(localStorage.getItem(GK))||0;const m=ym(new Date());const bal=sumBy(monthRecords(m),'income')-sumBy(monthRecords(m),'expense');const cur=Math.max(0,bal);$('goalInput').value=goal||'';$('goalCur').textContent=fmt(cur);$('goalTotal').textContent='目标：'+fmt(goal);const pct=goal>0?Math.min(100,(cur/goal*100)):0;$('goalBar').style.width=pct+'%';}
+function saveGoal(){const g=parseFloat($('goalInput').value)||0;localStorage.setItem(GK,g);renderGoal();toast('目标已更新');}
+
+function exportData(){const data={records,customCats,quickNotes,settings,goal:localStorage.getItem(GK)};const blob=new Blob([JSON.stringify(data)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cute_book_backup.json';a.click();URL.revokeObjectURL(url);toast('备份已导出');}
+function importData(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(!confirm('导入将覆盖当前数据，确定吗？'))return;records=data.records||[];customCats=data.customCats||[];quickNotes=data.quickNotes||[...DEFAULT_NOTES];settings=Object.assign({},settings,data.settings);if(data.goal)localStorage.setItem(GK,data.goal);saveRecords();saveCustomCats();saveQuickNotes();saveSettings();init();toast('导入成功！');}catch(err){toast('文件格式错误');}};reader.readAsText(e.target.files[0]);};inp.click();}
+function clearAllData(){if(!confirm('确定清空所有记录吗？'))return;records=[];saveRecords();renderList();renderStats();renderBalance();renderGoal();toast('数据已清空');}
+
+function init(){
+  loadData();document.documentElement.setAttribute('data-theme',theme);
+  renderCatGrid();renderQuickNotes();renderBalance();renderList();renderStats();renderGoal();renderBottomTabs();
+  $('themeBtn').onclick=()=>{playSound('click');const idx=THEMES.indexOf(theme);setTheme(THEMES[(idx+1)%THEMES.length]);};
+  $('noteInput').addEventListener('input',renderQuickNotes);
+}
+
+window.switchPage=switchPage;window.openAmountSheet=openAmountSheet;window.closeAmountSheet=closeAmountSheet;window.pressKey=pressKey;window.confirmAmount=confirmAmount;window.selectCat=selectCat;window.openAddCat=openAddCat;window.closeAddCat=closeAddCat;window.saveNewCat=saveNewCat;window.delRecord=delRecord;window.selectQuickNote=selectQuickNote;window.openAddNote=openAddNote;window.closeAddNote=closeAddNote;window.saveNewNote=saveNewNote;window.selectSubCat=selectSubCat;window.closeSubCat=closeSubCat;window.saveRecord=saveRecord;window.exportData=exportData;window.importData=importData;window.clearAllData=clearAllData;window.saveGoal=saveGoal;
+
+init();
+})();
+</script>
+</body>
+</html>
