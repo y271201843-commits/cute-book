@@ -1,442 +1,447 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>喵喵记账</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #f7f8fa; padding-bottom: 80px; color: #333; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #fff; }
-        .header-title { font-size: 18px; font-weight: 600; }
-        .avatar { width: 36px; height: 36px; border-radius: 50%; background-color: #e8edf5; display:flex; align-items:center; justify-content:center; font-size:18px; }
-        
-        /* 页面显示控制 */
-        .page { display: none; }
-        .page.active { display: block; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>喵喵记账</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "PingFang SC", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
 
-        /* 记一笔页面 */
-        .amount-card { margin:16px 20px; background:#ffffff; border-radius:16px; padding:24px 20px; }
-        .amount-label { color:#888; font-size:14px; }
-        .amount-input { font-size:36px; font-weight:bold; margin-top:8px; border:none; outline:none; width:100%; }
-        .type-switch { display:flex; margin:0 20px 16px; background:#fff; border-radius:12px; overflow:hidden; }
-        .type-item { flex:1; text-align:center; padding:12px; cursor:pointer; font-weight:bold; color:#666;}
-        .type-item.active.exp { background:#ff6b6b; color:white; }
-        .type-item.active.inc { background:#28b968; color:white; }
-        .container { margin:0 20px; background:#fff; border-radius:16px; padding:16px; }
-        .item-row { margin-bottom:16px; }
-        .row-title { font-size:15px; margin-bottom:10px; font-weight:bold;}
-        .remark-input { width:100%; border:1px solid #eee; border-radius:8px; padding:12px; outline:none; background: #fafafa;}
+body {
+  background-color: #fff5f8;
+  padding-bottom: 90px;
+  color: #333;
+}
 
-        /* 分类头部 + 添加自定义按钮 */
-        .category-head{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-        }
-        .add-cate-btn{
-            color:#4080ff;
-            font-size:14px;
-            cursor:pointer;
-        }
+/* 顶部栏 */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: #fff5f8;
+  padding: 18px 20px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-        .cate-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; margin-top:10px; }
-        .cate-item { display:flex; flex-direction:column; align-items:center; padding:8px 4px; border-radius:10px; background:#f8f9fa; cursor:pointer; border: 2px solid transparent;}
-        .cate-item.selected { border-color: #ff6b6b; background: #fff0f0; }
-        .cate-icon-box { width:36px; height:36px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:4px; overflow:hidden;}
-        .cate-icon-box img{
-            width:22px;
-            height:22px;
-            object-fit:contain;
-        }
-        .cate-name { font-size:12px; color:#444; font-weight: bold;}
+.topbar-title {
+  display: flex;
+  align-items: center;
+  gap:8px;
+  font-size:20px;
+  font-weight:800;
+  color:#442233;
+}
+.topbar-title svg{
+  width:28px;
+  height:28px;
+}
+.voice-icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#ffffff;
+  box-shadow:0 3px 10px #00000015;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-        /* 快速记账模板区域 */
-        .template-grid{
-            display:grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap:10px;
-            margin-top:10px;
-        }
-        .template-item{
-            padding:12px;
-            background:#f0f5ff;
-            border-radius:10px;
-            font-size:14px;
-            cursor:pointer;
-        }
-        
-        /* 保存按钮 */
-        .save-btn { margin: 20px; width: calc(100% - 40px); padding: 16px; background: #ff6b6b; color: white; font-size: 16px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; }
+/* 备注输入框 */
+.remark-input-wrap{
+  margin:12px 20px 20px;
+  background:#ffffff;
+  border-radius:16px;
+  padding:14px 16px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:0 4px 14px #0000000c;
+}
+.remark-input-wrap svg{
+  width:20px;
+  height:20px;
+}
+#topRemark{
+  flex:1;
+  border:none;
+  outline:none;
+  font-size:16px;
+  background:transparent;
+}
 
-        /* 明细与统计页面 */
-        .list-card { margin:16px 20px; background:#fff; border-radius:16px; padding:16px; }
-        .rec-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
-        .rec-item:last-child { border-bottom: none; }
-        .rec-title { font-weight: bold; }
-        .rec-sub { font-size: 12px; color: #999; margin-top: 4px; }
-        .rec-amt-out { color: #ff6b6b; font-weight: bold; }
-        .rec-amt-in { color: #28b968; font-weight: bold; }
+.section-title{
+  padding:0 20px 10px;
+  display:flex;
+  justify-content:space-between;
+  color:#442233;
+  font-weight:700;
+  font-size:16px;
+}
+.section-title .tip{
+  color:#999;
+  font-weight:normal;
+  font-size:14px;
+}
 
-        /* 底部导航 */
-        .tab-bar { position:fixed; bottom:0; width:100%; display:flex; background:#fff; border-top:1px solid #eee; padding-bottom: env(safe-area-inset-bottom); }
-        .tab { flex:1; text-align:center; padding:10px 0; font-size:12px; cursor:pointer; color: #888; font-weight: bold; }
-        .tab.active { color: #ff6b6b; }
-        .tab-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+/* 分类网格，和截图一模一样布局：4列卡片图标 */
+.cate-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:14px;
+  padding:0 20px 24px;
+}
+.cate-item{
+  background:#ffffff;
+  border-radius:18px;
+  padding:16px 8px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  box-shadow:0 3px 10px #00000008;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition:0.2s;
+}
+.cate-item.selected{
+  border-color:#ff94b8;
+  background:#fff0f4;
+}
+.cate-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cate-icon svg{
+  width:26px;
+  height:26px;
+}
+.cate-name{
+  font-size:13px;
+  color:#444;
+}
 
-        /* 新增分类弹窗 */
-        .mask{
-            position:fixed;
-            inset:0;
-            background:rgba(0,0,0,0.4);
-            display:flex;
-            align-items:flex-end;
-            z-index:99;
-            display:none;
-        }
-        .popup{
-            width:100%;
-            background:white;
-            border-radius:16px 16px 0 0;
-            padding:24px;
-        }
-        .popup-title{
-            text-align:center;
-            font-size:16px;
-            font-weight:600;
-            margin-bottom:20px;
-        }
-        .popup-input{
-            width:100%;
-            border:1px solid #eee;
-            border-radius:8px;
-            padding:10px;
-            margin-bottom:16px;
-            outline:none;
-        }
-        .upload-icon-btn{
-            border:1px dashed #ccc;
-            border-radius:8px;
-            text-align:center;
-            padding:16px;
-            color:#777;
-            cursor:pointer;
-        }
-        .btn-group{
-            display:flex;
-            gap:12px;
-            margin-top:20px;
-        }
-        .btn-cancel{
-            flex:1;
-            padding:12px;
-            border-radius:8px;
-            background:#f2f3f5;
-            text-align:center;
-            cursor:pointer;
-        }
-        .btn-sure{
-            flex:1;
-            padding:12px;
-            border-radius:8px;
-            background:#4080ff;
-            color:white;
-            text-align:center;
-            cursor:pointer;
-        }
-    </style>
+/* 快捷备注区 */
+.fast-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:14px;
+  padding:0 20px 24px;
+}
+.fast-item{
+  background:#ffffff;
+  border-radius:18px;
+  padding:14px 6px 8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  box-shadow:0 3px 10px #00000008;
+  cursor:pointer;
+}
+.fast-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+}
+.fast-name{
+  font-size:13px;
+}
+
+/* 页面切换 */
+.page { display: none; }
+.page.active { display: block; }
+
+/* 明细页面 */
+.list-page-wrap{
+  padding:16px 20px;
+}
+.export-btn{
+  width:100%;
+  padding:14px;
+  background:#ff8fab;
+  color:white;
+  border-radius:14px;
+  text-align:center;
+  font-weight:700;
+  margin-bottom:16px;
+  cursor:pointer;
+}
+.rec-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.rec-item:last-child { border-bottom: none; }
+.rec-title { font-weight: 700; }
+.rec-sub { font-size: 12px; color: #999; margin-top: 4px; }
+.rec-amt-out { color: #ff6b6b; font-weight: 800; }
+.rec-amt-in { color: #28b968; font-weight: 800; }
+
+/* 底部tab导航，和截图一致 */
+.tab-bar {
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  background:#ffffff;
+  border-top:1px solid #eee;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tab {
+  flex:1;
+  text-align:center;
+  padding:10px 0;
+  font-size:12px;
+  cursor:pointer;
+  color:#888;
+}
+.tab.active{
+  color:#ff6b6b;
+}
+.tab-icon{
+  font-size:22px;
+  display:block;
+  margin-bottom:3px;
+}
+
+/* Toast反馈，去掉记账成功老文字 */
+#toast {
+  position:fixed;
+  left:50%;
+  bottom:120px;
+  transform:translate(-50%, 20px);
+  background:rgba(45,42,50,.92);
+  color:#fff;
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:200;
+}
+#toast.show { opacity:1; transform:translate(-50%, 0); }
+</style>
 </head>
 <body>
-    <!-- 页面1：记一笔 -->
-    <div id="page-add" class="page active">
-        <div class="header">
-            <div class="header-title">记一笔</div>
-            <div class="avatar">🐱</div>
-        </div>
-        <div class="amount-card">
-            <div class="amount-label">金额</div>
-            <input class="amount-input" id="amountInput" type="number" placeholder="0.00">
-        </div>
-        <div class="type-switch">
-            <div class="type-item active exp" id="typeExp" onclick="switchType('exp')">支出</div>
-            <div class="type-item" id="typeInc" onclick="switchType('inc')">收入</div>
-        </div>
-        <div class="container">
-            <div class="item-row">
-                <div class="row-title">备注</div>
-                <input class="remark-input" id="noteInput" placeholder="填写备注信息，如：午餐">
-            </div>
-            <div class="item-row">
-                <div class="category-head">
-                    <div class="row-title">分类</div>
-                    <div class="add-cate-btn" onclick="openAddCate()">+自定义分类</div>
-                </div>
-                <div class="cate-grid" id="cateContainer"></div>
-            </div>
-            <div class="item-row">
-                <div class="row-title">快速记账模板</div>
-                <div class="template-grid" id="templateContainer"></div>
-            </div>
-        </div>
-        <button class="save-btn" onclick="saveRecord()">保存这笔记录</button>
-    </div>
 
-    <!-- 页面2：明细 -->
-    <div id="page-list" class="page">
-        <div class="header"><div class="header-title">账单明细</div></div>
-        <div class="list-card" id="recordList"></div>
+<!-- 记一笔页面 -->
+<div id="page-add" class="page active">
+  <div class="topbar">
+    <div class="topbar-title">
+      <svg viewBox="0 0 24 24" fill="#442233"><path d="M8 5c0-1.7 1.3-3 3-3s3 1.3 3 3c0 .4-.1.8-.2 1.1L16 11h-1l-1.5-3h-3L9 11H8l2.2-4.9C9.1 5.7 8 5.4 8 5z"/><path d="M6 13c-1.1 0-2 .9-2 2v4c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-4c0-1.1-.9-2-2-2H6z"/></svg>
+      记一笔
     </div>
+    <div class="voice-icon">🔊</div>
+  </div>
 
-    <!-- 页面3：统计 -->
-    <div id="page-stats" class="page">
-        <div class="header"><div class="header-title">数据统计</div></div>
-        <div class="list-card">
-            <div style="font-size: 14px; color: #888; margin-bottom: 8px;">累计支出</div>
-            <div style="font-size: 32px; font-weight: bold; color: #ff6b6b;" id="statExp">¥0.00</div>
-        </div>
-        <div class="list-card">
-            <div style="font-size: 14px; color: #888; margin-bottom: 8px;">累计收入</div>
-            <div style="font-size: 32px; font-weight: bold; color: #28b968;" id="statInc">¥0.00</div>
-        </div>
-    </div>
+  <div class="remark-input-wrap">
+    <svg viewBox="0 0 24 24" fill="#ff94b8"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+    <input id="topRemark" placeholder="火锅，打车">
+  </div>
 
-    <!-- 底部导航 -->
-    <div class="tab-bar">
-        <div class="tab active" onclick="switchPage('add', this)"><span class="tab-icon">✏️</span>记一笔</div>
-        <div class="tab" onclick="switchPage('list', this)"><span class="tab-icon">📋</span>明细</div>
-        <div class="tab" onclick="switchPage('stats', this)"><span class="tab-icon">📊</span>统计</div>
-    </div>
+  <div class="section-title">
+    <span>选择分类</span>
+    <span class="tip">点一个对应萌宠</span>
+  </div>
+  <div class="cate-grid" id="cateContainer"></div>
 
-    <!--新增分类弹窗-->
-    <div class="mask" id="mask">
-        <div class="popup">
-            <div class="popup-title">新增自定义分类</div>
-            <input class="popup-input" id="cateNameInput" placeholder="输入分类名称">
-            <div class="upload-icon-btn" onclick="document.getElementById('iconUpload').click()">点击上传图标（上传你自己的图标）</div>
-            <input type="file" id="iconUpload" accept="image/*" style="display:none" onchange="uploadIcon(this)">
-            <div class="btn-group">
-                <div class="btn-cancel" onclick="closeAddCate()">取消</div>
-                <div class="btn-sure" onclick="saveCategory()">保存</div>
-            </div>
-        </div>
+  <div class="section-title">
+    <span>快捷备注</span>
+    <span class="tip">点了也能继续改文字</span>
+  </div>
+  <div class="fast-grid" id="fastContainer"></div>
+
+</div>
+
+<!-- 账单明细页面（新增导出按钮） -->
+<div id="page-list" class="page">
+  <div class="topbar">
+    <div class="topbar-title">账单明细</div>
+  </div>
+  <div class="list-page-wrap">
+    <div class="export-btn" onclick="exportBill()">📄 导出全部账单</div>
+    <div id="recordList"></div>
+  </div>
+</div>
+
+<!-- 统计页面 -->
+<div id="page-stats" class="page">
+  <div class="topbar">
+    <div class="topbar-title">数据统计</div>
+  </div>
+  <div class="list-page-wrap">
+    <div style="background:#fff;border-radius:16px;padding:20px;margin-bottom:16px;">
+      <div style="font-size:14px;color:#888;margin-bottom:8px;">累计支出</div>
+      <div style="font-size:32px;font-weight:800;color:#ff6b6b;" id="statExp">¥0.00</div>
     </div>
+    <div style="background:#fff;border-radius:16px;padding:20px;">
+      <div style="font-size:14px;color:#888;margin-bottom:8px;">累计收入</div>
+      <div style="font-size:32px;font-weight:800;color:#28b968;" id="statInc">¥0.00</div>
+    </div>
+  </div>
+</div>
+
+<!-- 底部导航 -->
+<div class="tab-bar">
+  <div class="tab active" onclick="switchPage('add', this)">
+    <span class="tab-icon">🖊️</span>记一笔
+  </div>
+  <div class="tab" onclick="switchPage('list', this)">
+    <span class="tab-icon">🗓️</span>日历
+  </div>
+  <div class="tab" onclick="switchPage('stats', this)">
+    <span class="tab-icon">📝</span>备忘录
+  </div>
+  <div class="tab">
+    <span class="tab-icon">👤</span>我的
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
-    // 核心数据存储
-    let records = JSON.parse(localStorage.getItem('myRecords')) || [];
-    let currentType = 'exp'; // exp 或 inc
-    let currentCate = '餐饮';
-    let tempUploadIconUrl = "";
+let records = JSON.parse(localStorage.getItem('myRecords')) || [];
+let currentCate = "饮品";
 
-    // 【扩充基础分类】支出基础分类
-    const expBaseCate = [
-        {name:'餐饮',bg:"#ff8866",img:""},
-        {name:'交通',bg:"#48a0ff",img:""},
-        {name:'购物',bg:"#ffb347",img:""},
-        {name:'医疗',bg:"#36c988",img:""},
-        {name:'居住',bg:"#9b6bff",img:""},
-        {name:'娱乐',bg:"#ff6bcb",img:""},
-        {name:'学习',bg:"#3498db",img:""},
-        {name:'育儿',bg:"#ff7878",img:""},
-        {name:'宠物',bg:"#72c472",img:""},
-        {name:'美妆护肤',bg:"#e889b8",img:""},
-        {name:'通讯',bg:"#637394",img:""},
-        {name:'其他',bg:"#8690ff",img:""},
-    ];
-    //收入基础分类
-    const incBaseCate = [
-        {name:'工资',bg:"#28b968",img:""},
-        {name:'副业',bg:"#4080ff",img:""},
-        {name:'红包',bg:"#ff6b6b",img:""},
-        {name:'奖金',bg:"#ffb347",img:""},
-        {name:'理财收益',bg:"#22a884",img:""},
-        {name:'其他收入',bg:"#8690ff",img:""},
-    ];
+// 分类图标库
+const cateList = [
+  {name:"餐饮",bg:"#ffb74d",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M8 2h8l-1 9h-6L8 2z"/><path d="M7 13h10v3a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3v-3z"/></svg>`},
+  {name:"饮品",bg:"#b06fe3",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M7 3h10l-1 13a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3L7 3z"/></svg>`},
+  {name:"交通",bg:"#42a5f5",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M3 12l2-5a2 2 0 0 1 2-1h10a2 2 0 0 1 2 1l2 5v4H3v-4z"/></svg>`},
+  {name:"购物",bg:"#66bb6a",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M4 6h16l-1 12H5L4 6z"/></svg>`},
+  {name:"居住",bg:"#ef5350",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3L4 10v9h16v-9l-8-7z"/></svg>`},
+  {name:"娱乐",bg:"#7e57c2",svg:`<svg viewBox="0 0 24 24" fill="#fff"><rect x="4" y="7" width="16" height="10" rx="2"/></svg>`},
+  {name:"学习",bg:"#26a69a",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M5 4h10a3 3 0 0 1 3 3v11H8a3 3 0 0 1-3-3V4z"/></svg>`},
+  {name:"医疗",bg:"#78909c",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M4 11h16v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6z"/></svg>`},
+  {name:"人情",bg:"#ef5350",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M4 9h16v11H4V9z"/></svg>`},
+  {name:"宠物",bg:"#424242",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M6 10c0-2 2-4 4-4h4c2 0 4 2 4 4v7H6v-7z"/></svg>`},
+  {name:"护肤",bg:"#ec407a",svg:`<svg viewBox="0 0 24 24" fill="#fff"><path d="M9 3h6l-1 6h-4L9 3z"/></svg>`},
+  {name:"其他",bg:"#b0bec5",svg:`<svg viewBox="0 0 24 24" fill="#fff"><circle cx="7" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="17" cy="12" r="1.8"/></svg>`}
+];
 
-    //用户自定义分类本地存储
-    let userExpCate = JSON.parse(localStorage.getItem("userExpCate")) || [];
-    let userIncCate = JSON.parse(localStorage.getItem("userIncCate")) || [];
+const fastList = [
+  {name:"早餐",bg:"#ffcc80"},
+  {name:"午餐",bg:"#81d4fa"},
+  {name:"晚餐",bg:"#7986cb"},
+  {name:"火锅",bg:"#ef9a9a"}
+];
 
-    //快速记账模板
-    const templateList = [
-        {name:"三餐开销",cate:"餐饮",remark:"一日三餐"},
-        {name:"通勤出行",cate:"交通",remark:"通勤打车/公交"},
-        {name:"超市采购",cate:"购物",remark:"超市生活用品采购"},
-        {name:"网上购物",cate:"购物",remark:"网购"},
-        {name:"育儿支出",cate:"育儿",remark:"宝宝用品开销"},
-        {name:"宠物消费",cate:"宠物",remark:"猫咪口粮/用品"},
-        {name:"医药看病",cate:"医疗",remark:"买药/就医"},
-        {name:"护肤美妆",cate:"美妆护肤",remark:"护肤品采购"},
-    ];
+function $(id){return document.getElementById(id);}
 
-    function $(id) { return document.getElementById(id); }
+//渲染分类
+function renderCate(){
+  $('cateContainer').innerHTML = cateList.map(item=>`
+    <div class="cate-item ${item.name===currentCate?'selected':''}" onclick="selectCate('${item.name}')">
+      <div class="cate-icon" style="background:${item.bg}">${item.svg}</div>
+      <div class="cate-name">${item.name}</div>
+    </div>
+  `).join('');
+}
+function selectCate(name){
+  currentCate = name;
+  renderCate();
+}
 
-    // 切换收入/支出
-    function switchType(type) {
-        currentType = type;
-        if(type === 'exp') {
-            $('typeExp').classList.add('active', 'exp');
-            $('typeInc').classList.remove('active', 'inc');
-        } else {
-            $('typeInc').classList.add('active', 'inc');
-            $('typeExp').classList.remove('active', 'exp');
-        }
-        renderCats();
-    }
+//快捷备注渲染
+function renderFast(){
+  $('fastContainer').innerHTML = fastList.map(item=>`
+    <div class="fast-item" onclick="applyFastNote('${item.name}')">
+      <div class="fast-icon" style="background:${item.bg}"></div>
+      <div class="fast-name">${item.name}</div>
+    </div>
+  `).join('');
+}
+function applyFastNote(text){
+  $('topRemark').value = text;
+}
 
-    // 渲染分类
-    function renderCats() {
-        let baseList = currentType === "exp" ? expBaseCate : incBaseCate;
-        let userList = currentType === "exp" ? userExpCate : userIncCate;
-        let allCate = [...baseList,...userList];
+//页面切换
+function switchPage(pageName,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $('page-'+pageName).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(pageName==='list') renderList();
+  if(pageName==='stats') renderStats();
+}
 
-        $('cateContainer').innerHTML = allCate.map(c => `
-            <div class="cate-item ${c.name === currentCate ? 'selected' : ''}" onclick="selectCate('${c.name}')">
-                <div class="cate-icon-box" style="background:${c.bg}">
-                    ${c.img ? `<img src="${c.img}">` : ''}
-                </div>
-                <div class="cate-name">${c.name}</div>
-            </div>
-        `).join('');
-    }
+//账单渲染
+function renderList(){
+  if(records.length ===0){
+    $('recordList').innerHTML = '<div style="text-align:center;color:#999;padding:20px;">暂无账单记录</div>';
+    return;
+  }
+  $('recordList').innerHTML = records.slice().reverse().map(r=>`
+    <div class="rec-item">
+      <div>
+        <div class="rec-title">${r.category}</div>
+        <div class="rec-sub">${r.date} ${r.note ? '· ' + r.note : ''}</div>
+      </div>
+      <div class="${r.type==='exp'?'rec-amt-out':'rec-amt-in'}">${r.type==='exp'?'-':'+'}¥${r.amount.toFixed(2)}</div>
+    </div>
+  `).join('');
+}
 
-    function selectCate(name) {
-        currentCate = name;
-        renderCats();
-    }
+//统计页面
+function renderStats(){
+  const totalExp = records.filter(r=>r.type==='exp').reduce((s,r)=>s+r.amount,0);
+  const totalInc = records.filter(r=>r.type==='inc').reduce((s,r)=>s+r.amount,0);
+  $('statExp').textContent = '¥' + totalExp.toFixed(2);
+  $('statInc').textContent = '¥' + totalInc.toFixed(2);
+}
 
-    //渲染记账模板
-    function renderTemplate(){
-        $('templateContainer').innerHTML = templateList.map(t=>`
-            <div class="template-item" onclick="applyTemplate('${t.cate}','${t.remark}')">${t.name}</div>
-        `).join('');
-    }
+// ==========【重点】导出账单CSV功能 ==========
+function exportBill(){
+  if(records.length === 0){
+    showToast('暂无账单可以导出');
+    return;
+  }
+  //表头
+  const header = ["日期","收支类型","分类","金额","备注"];
+  const rows = records.map(r=>{
+    const typeText = r.type === 'exp' ? '支出' : '收入';
+    return [r.date, typeText, r.category, r.amount, r.note];
+  })
+  let csvContent = "\uFEFF"; //BOM解决Excel中文乱码
+  csvContent += header.join(",") + "\n";
+  rows.forEach(row=>{
+    csvContent += row.join(",") + "\n";
+  })
+  const blob = new Blob([csvContent], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `喵喵记账账单_${new Date().toLocaleDateString()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('账单文件已下载');
+}
 
-    //套用模板：自动选中分类+填充备注
-    function applyTemplate(cateName,remarkText){
-        currentCate = cateName;
-        $('noteInput').value = remarkText;
-        renderCats();
-    }
+function showToast(msg){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1600);
+}
 
-    //弹窗新增分类
-    function openAddCate(){
-        $('mask').style.display="flex";
-        tempUploadIconUrl = "";
-        $('cateNameInput').value="";
-    }
-    function closeAddCate(){
-        $('mask').style.display="none";
-    }
-    //上传图标
-    function uploadIcon(input){
-        const file = input.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = e=>{
-            tempUploadIconUrl = e.target.result;
-        }
-        reader.readAsDataURL(file);
-    }
-    //保存自定义分类
-    function saveCategory(){
-        const name = $('cateNameInput').value.trim();
-        if(!name){
-            alert("请输入分类名称");
-            return;
-        }
-        const newCate = {
-            name:name,
-            bg:"#8690ff",
-            img:tempUploadIconUrl
-        }
-        if(currentType === "exp"){
-            userExpCate.push(newCate);
-            localStorage.setItem("userExpCate",JSON.stringify(userExpCate));
-        }else{
-            userIncCate.push(newCate);
-            localStorage.setItem("userIncCate",JSON.stringify(userIncCate));
-        }
-        closeAddCate();
-        renderCats();
-    }
-
-    // 保存记录（核心功能）
-    function saveRecord() {
-        const amount = parseFloat($('amountInput').value);
-        const note = $('noteInput').value.trim();
-        
-        if (!amount || amount <= 0) {
-            alert('请输入正确的金额');
-            return;
-        }
-
-        const newRecord = {
-            id: Date.now(),
-            type: currentType,
-            amount: amount,
-            category: currentCate,
-            note: note,
-            date: new Date().toLocaleDateString('zh-CN')
-        };
-
-        records.push(newRecord);
-        localStorage.setItem('myRecords', JSON.stringify(records));
-        
-        // 清空输入框
-        $('amountInput').value = '';
-        $('noteInput').value = '';
-        
-        alert('✅ 记账成功！');
-        renderList();
-        renderStats();
-    }
-
-    // 渲染明细
-    function renderList() {
-        if (records.length === 0) {
-            $('recordList').innerHTML = '<div style="text-align:center;color:#999;padding:20px;">还没有记录哦</div>';
-            return;
-        }
-        $('recordList').innerHTML = records.slice().reverse().map(r => `
-            <div class="rec-item">
-                <div>
-                    <div class="rec-title">${r.category}</div>
-                    <div class="rec-sub">${r.date} ${r.note ? '· ' + r.note : ''}</div>
-                </div>
-                <div class="${r.type === 'exp' ? 'rec-amt-out' : 'rec-amt-in'}">
-                    ${r.type === 'exp' ? '-' : '+'}¥${r.amount.toFixed(2)}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // 渲染统计
-    function renderStats() {
-        const totalExp = records.filter(r => r.type === 'exp').reduce((s, r) => s + r.amount, 0);
-        const totalInc = records.filter(r => r.type === 'inc').reduce((s, r) => s + r.amount, 0);
-        $('statExp').textContent = '¥' + totalExp.toFixed(2);
-        $('statInc').textContent = '¥' + totalInc.toFixed(2);
-    }
-
-    // 页面切换
-    function switchPage(pageName, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        $('page-' + pageName).classList.add('active');
-        
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-
-        if (pageName === 'list') renderList();
-        if (pageName === 'stats') renderStats();
-        window.scrollTo(0,0);
-    }
-
-    // 初始化
-    renderCats();
-    renderTemplate();
-    renderList();
-    renderStats();
+//初始化
+renderCate();
+renderFast();
 </script>
 </body>
 </html>
