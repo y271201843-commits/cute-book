@@ -4,7 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#ffb6c1">
-<title>萌宠记账本</title>
+
+<!-- ========== 防浏览器长期缓存 ========== -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+<!-- ========== PWA配置 ========== -->
+<meta name="apple-mobile-web-app-title" content="松鼠记账">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+
+<title>松鼠记账</title>
 <style>
 :root{
   --bg:#fff5f8;
@@ -27,1243 +39,184 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC",sans-serif;
   background:var(--bg);
   color:var(--text);
-  font-size:15px;
-  line-height:1.5;
-  padding-bottom:calc(90px + env(safe-area-inset-bottom));
+  padding:16px;
+  padding-bottom:100px;
 }
-button{border:none;background:none;font-family:inherit;color:inherit;cursor:pointer;outline:none;}
-input,textarea{font-family:inherit;outline:none;border:none;background:transparent;color:inherit;}
-img{display:block;max-width:100%;}
-
-/* ===== 通用动画 ===== */
-@keyframes floatCute{
-  0%,100%{transform:translateY(0) rotate(0deg);}
-  50%{transform:translateY(-6px) rotate(4deg);}
-}
-@keyframes bounceCute{
-  0%,100%{transform:translateY(0);}
-  50%{transform:translateY(-8px);}
-}
-@keyframes wiggleCute{
-  0%,100%{transform:rotate(-3deg);}
-  50%{transform:rotate(3deg);}
-}
-.anim-float{animation:floatCute 2.5s ease-in-out infinite;}
-.anim-bounce{animation:bounceCute 1.8s ease-in-out infinite;}
-
-/* ===== 顶部栏 ===== */
-.hd{
-  position:sticky;
-  top:0;
-  z-index:40;
-  background:var(--bg);
-  padding:16px 20px 10px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.hd h1{
-  font-size:22px;
-  font-weight:800;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.hd .logo-img{
-  width:34px;
-  height:34px;
-  border-radius:12px;
-}
-.theme-btn{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  background:var(--card);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:var(--shadow);
-  transition:transform .2s;
-}
-.theme-btn:active{transform:scale(0.92);}
-.theme-img{
-  width:24px;
-  height:24px;
-}
-
-/* ===== 主体 ===== */
-.main{padding:0 20px;}
-.page{display:none;}
-.page.active{display:block;}
-
-/* ===== 金额卡片 ===== */
-.balance-card{
-  background:linear-gradient(135deg,#ff8fab,#ffb6c1);
-  color:#fff;
-  border-radius:var(--radius);
-  padding:24px;
-  margin-bottom:16px;
-  box-shadow:0 10px 30px rgba(255,143,171,.18);
-  position:relative;
-  overflow:hidden;
-}
-.balance-card::before{
-  content:"";
-  position:absolute;
-  right:-40px;
-  top:-40px;
-  width:140px;
-  height:140px;
-  background:rgba(255,255,255,.18);
-  border-radius:50%;
-}
-.balance-label{font-size:14px;opacity:.9;font-weight:600;margin-bottom:6px;}
-.balance-amount{font-size:40px;font-weight:800;margin-bottom:14px;}
-.balance-footer{
-  display:flex;
-  gap:14px;
-  font-size:13px;
-  font-weight:700;
-  background:rgba(255,255,255,.22);
-  border-radius:14px;
-  padding:10px 12px;
-}
-.balance-footer .item{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-.balance-footer .label{opacity:.9;font-size:12px;}
-.balance-footer .val{font-size:18px;}
-
-/* ===== 自由输入区 ===== */
-.note-input-card{
-  background:var(--card);
-  border-radius:var(--radius-sm);
-  padding:14px;
-  margin-bottom:16px;
-  box-shadow:var(--shadow);
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.note-input-card .pencil{
-  width:34px;
-  height:34px;
-  border-radius:12px;
-  background:var(--primary-soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  flex-shrink:0;
-}
-.note-input-card textarea{
-  flex:1;
-  font-size:15px;
-  color:var(--text);
-  resize:none;
-  line-height:1.4;
-  max-height:80px;
-}
-.note-input-card textarea::placeholder{color:var(--sub);}
-
-/* ===== 区块标题 ===== */
-.section-title{
-  font-size:15px;
-  font-weight:800;
-  margin:18px 0 12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.section-title .sub{font-size:12px;color:var(--sub);font-weight:600;}
-
-/* ===== 分类网格 / 快捷标签 ===== */
-.cat-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-}
-.cat-item{
-  background:var(--card);
-  border-radius:var(--radius-sm);
-  padding:12px 6px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-  box-shadow:var(--shadow);
-  border:2px solid transparent;
-  cursor:pointer;
-  transition:transform .15s, border-color .2s, background .2s;
-}
-.cat-item:active{transform:scale(0.94);}
-.cat-item.active{
-  border-color:var(--primary);
-  background:var(--primary-soft);
-}
-.cat-item.active .mini-img{animation:wiggleCute .6s ease-in-out infinite;}
-.mini-img{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  object-fit:cover;
-  background:var(--primary-soft);
-}
-.cat-name{font-size:11px;color:var(--sub);font-weight:700;}
-
-/* ===== 明细记录卡片 ===== */
-.rec-card{
-  background:var(--card);
-  border-radius:var(--radius-sm);
-  padding:14px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow);
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.rec-icon{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  overflow:hidden;
-  background:var(--primary-soft);
-  flex-shrink:0;
-}
-.rec-icon img{width:100%;height:100%;object-fit:cover;}
-.rec-info{flex:1;min-width:0;}
-.rec-info .row1{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-.rec-info .name{font-size:15px;font-weight:800;}
-.rec-info .note{
-  font-size:12px;
-  color:var(--sub);
-  margin-top:4px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.rec-amt{font-size:17px;font-weight:800;white-space:nowrap;}
-.rec-amt.exp{color:var(--red);}
-.rec-amt.inc{color:var(--green);}
-.rec-date{font-size:11px;color:var(--sub);margin-top:4px;}
-
-/* ===== 底部导航 ===== */
-.tabbar{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:60;
-  display:flex;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(20px);
-  border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom);
-}
-.tabbar button{
-  flex:1;
-  padding:10px 0 8px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:3px;
-  font-size:11px;
-  color:var(--sub);
-  font-weight:800;
-  transition:.2s;
-}
-.tabbar button .ico{
-  width:28px;
-  height:28px;
-  opacity:.5;
-  transition:.2s;
-}
-.tabbar button.active{color:var(--primary);}
-.tabbar button.active .ico{opacity:1;transform:scale(1.15);}
-
-/* ===== 弹窗 ===== */
-.sheet{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:101;
-  background:var(--card);
-  border-radius:28px 28px 0 0;
-  transform:translateY(100%);
-  transition:transform .35s cubic-bezier(.25,.8,.25,1);
-  padding:20px 20px calc(20px + env(safe-area-inset-bottom));
-  max-height:80vh;
-  overflow-y:auto;
-}
-.sheet.show{transform:translateY(0);}
-.sheet-handle{
-  width:40px;
-  height:5px;
-  border-radius:3px;
-  background:var(--line);
-  margin:0 auto 16px;
-}
-.sheet-title{
-  font-size:18px;
-  font-weight:800;
-  margin-bottom:16px;
+.header{
   text-align:center;
+  margin-bottom:20px;
 }
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.4);
-  z-index:100;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .3s;
-}
-.overlay.show{opacity:1;pointer-events:auto;}
-
-/* ===== 数字键盘 ===== */
-.keypad{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:16px;
-}
-.keypad button{
-  padding:18px 0;
-  background:var(--bg);
-  border-radius:14px;
+.header h1{
   font-size:24px;
-  font-weight:800;
-  transition:transform .15s;
+  color:var(--primary);
 }
-.keypad button:active{transform:scale(0.94);}
-.keypad .confirm{
-  background:var(--primary);
-  color:#fff;
-  font-size:17px;
-}
-
-/* ===== 按钮 ===== */
-.btn-primary{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  background:var(--primary);
-  color:#fff;
-  font-size:16px;
-  font-weight:800;
-  margin-top:12px;
-}
-.btn-primary:active{transform:scale(0.98);}
-
-/* ===== 卡片通用 ===== */
-.me-card{
+.card{
   background:var(--card);
-  border-radius:24px;
-  padding:18px;
-  margin-bottom:14px;
+  border-radius:var(--radius);
   box-shadow:var(--shadow);
-}
-.me-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 12px;
-  border-radius:16px;
-  background:var(--bg);
-  margin-bottom:8px;
-}
-.me-item .left{display:flex;align-items:center;gap:12px;}
-.me-item .icon-box{
-  width:40px;
-  height:40px;
-  border-radius:14px;
-  background:var(--primary-soft);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.me-item .icon-box img{width:22px;height:22px;}
-.me-item .title{font-size:15px;font-weight:800;}
-.me-item .desc{font-size:12px;color:var(--sub);margin-top:2px;}
-
-/* 开关 */
-.switch{
-  width:50px;
-  height:28px;
-  border-radius:14px;
-  background:#ffe4e9;
-  position:relative;
-  cursor:pointer;
-  transition:.3s;
-}
-.switch.active{background:var(--primary);}
-.switch-dot{
-  width:24px;
-  height:24px;
-  background:#fff;
-  border-radius:50%;
-  position:absolute;
-  top:2px;
-  left:2px;
-  transition:.3s;
-  box-shadow:0 2px 6px rgba(0,0,0,.15);
-}
-.switch.active .switch-dot{left:24px;}
-
-/* ===== 日历页 ===== */
-.calendar-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:12px;
-}
-.calendar-head h3{font-size:18px;font-weight:800;}
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:6px;
-  margin-bottom:10px;
-}
-.calendar-cell{
-  aspect-ratio:1;
-  border-radius:14px;
-  background:var(--card);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:6px;
-  box-shadow:var(--shadow);
-  position:relative;
-  cursor:pointer;
-}
-.calendar-cell.today{border:2px solid var(--primary);}
-.calendar-cell.empty{background:transparent;box-shadow:none;}
-.calendar-cell .day{font-weight:800;font-size:14px;}
-.calendar-cell .dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--primary);
-  margin-top:4px;
-}
-.weekday{
-  text-align:center;
-  font-size:12px;
-  color:var(--sub);
-  font-weight:700;
-  padding:6px 0;
-}
-
-/* ===== 备忘录页 ===== */
-.memo-item{
-  background:var(--card);
-  border-radius:var(--radius-sm);
-  padding:14px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow);
-}
-.memo-item .mt{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-.memo-item .title{font-weight:800;font-size:15px;}
-.memo-item .time{font-size:12px;color:var(--sub);margin-top:4px;}
-.memo-item .content{font-size:13px;color:var(--text);margin-top:8px;line-height:1.5;}
-
-/* ===== 姨妈页 ===== */
-.period-card{
-  background:var(--card);
-  border-radius:24px;
   padding:20px;
-  box-shadow:var(--shadow);
+  margin-bottom:16px;
 }
-.period-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px 0;
-  border-bottom:1px dashed var(--line);
+.item-row{
+  margin-bottom:12px;
 }
-.period-row:last-child{border-bottom:none;}
-.period-row .label{font-weight:800;font-size:15px;}
-.period-row .value{color:var(--sub);font-size:14px;}
-.tag-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-.tag{
-  padding:8px 12px;
-  border-radius:20px;
-  background:var(--primary-soft);
-  color:var(--text);
-  font-size:12px;
-  font-weight:700;
+label{
+  display:block;
+  margin-bottom:6px;
+  font-size:14px;
 }
-.tag.pink{background:#ffe4f0;color:#d6336c;}
-
-/* Toast */
-#toast{
+input,select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+  font-size:16px;
+  background:#fff;
+}
+.btn{
+  width:100%;
+  border:none;
+  background:var(--primary);
+  color:white;
+  padding:14px;
+  border-radius:14px;
+  font-size:17px;
+  margin-top:10px;
+}
+.record-item{
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+.money-out{
+  color:var(--red);
+}
+.money-in{
+  color:var(--green);
+}
+.bottom-bar{
   position:fixed;
-  left:50%;
-  bottom:110px;
-  transform:translate(-50%,12px);
-  background:#5a3d4a;
-  color:#fff;
-  padding:10px 22px;
-  border-radius:20px;
-  font-size:13px;
-  font-weight:800;
-  opacity:0;
-  transition:.3s;
-  z-index:999;
-  white-space:nowrap;
+  left:0;
+  bottom:0;
+  width:100%;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
+  border-top:1px solid var(--line);
+}
+.tab{
+  font-size:14px;
+  color:var(--sub);
+}
+.tab.active{
+  color:var(--primary);
+  font-weight:bold;
 }
 </style>
 </head>
 <body>
-
-<header class="hd">
-  <h1>
-    <img class="logo-img anim-bounce" id="headerLogo" src="https://img.icons8.com/color/96/cat--v1.png" alt="logo">
-    <span id="pageTitle">萌宠记账本</span>
-  </h1>
-  <div style="display:flex;gap:8px;">
-    <button class="theme-btn" id="soundToggleBtn" onclick="toggleSound()">
-      <img class="theme-img" id="soundIconImg" src="https://img.icons8.com/color/96/medium-volume.png" alt="sound">
-    </button>
-  </div>
-</header>
-
-<main class="main">
-
-  <!-- 记一笔 -->
-  <section class="page active" id="page-add">
-    <div class="balance-card" onclick="openAmountSheet()">
-      <div class="balance-label">本次金额（点击输入）</div>
-      <div class="balance-amount" id="displayAmount">¥ 0.00</div>
-      <div class="balance-footer">
-        <div class="item">
-          <span class="label">今日支出</span>
-          <span class="val" id="todayExp">¥0.00</span>
-        </div>
-        <div class="item">
-          <span class="label">今日收入</span>
-          <span class="val" id="todayInc">¥0.00</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="note-input-card">
-      <div class="pencil">✏️</div>
-      <textarea id="noteInput" rows="1" placeholder="写点什么，比如：今天吃了火锅、打车回家、买了新衣服……"></textarea>
-    </div>
-
-    <div class="section-title">
-      <span>选择分类</span>
-      <span class="sub">点一个对应萌宠</span>
-    </div>
-    <div class="cat-grid" id="catGrid"></div>
-
-    <div class="section-title">
-      <span>快捷备注</span>
-      <span class="sub">点了也能继续改文字</span>
-    </div>
-    <div class="cat-grid" id="quickNotes"></div>
-  </section>
-
-  <!-- 日历/明细 -->
-  <section class="page" id="page-calendar">
-    <div class="me-card">
-      <div class="calendar-head">
-        <button onclick="changeMonth(-1)" style="font-size:22px;font-weight:800;color:var(--primary);">‹</button>
-        <h3 id="calTitle">2025年10月</h3>
-        <button onclick="changeMonth(1)" style="font-size:22px;font-weight:800;color:var(--primary);">›</button>
-      </div>
-      <div class="calendar-grid">
-        <div class="weekday">日</div>
-        <div class="weekday">一</div>
-        <div class="weekday">二</div>
-        <div class="weekday">三</div>
-        <div class="weekday">四</div>
-        <div class="weekday">五</div>
-        <div class="weekday">六</div>
-      </div>
-      <div class="calendar-grid" id="calBody"></div>
-    </div>
-
-    <div class="section-title">
-      <span id="dayListTitle">当日明细</span>
-      <span class="sub" id="selectedDate"></span>
-    </div>
-    <div id="dayList"></div>
-  </section>
-
-  <!-- 备忘录 -->
-  <section class="page" id="page-memo">
-    <div class="me-card">
-      <div class="section-title">
-        <span>📝 我的备忘录</span>
-        <button class="btn-primary" style="width:auto;margin-top:0;" onclick="openMemoEditor()">+ 写备忘</button>
-      </div>
-    </div>
-    <div id="memoList"></div>
-  </section>
-
-  <!-- 我的 -->
-  <section class="page" id="page-me">
-    <div class="me-card">
-      <div class="section-title"><span>我的设置</span></div>
-      <div class="me-item">
-        <div class="left">
-          <div class="icon-box">
-            <img id="soundMeIcon" src="https://img.icons8.com/color/96/medium-volume.png">
-          </div>
-          <div>
-            <div class="title">音效开关</div>
-            <div class="desc">按键音、确认音、提醒音</div>
-          </div>
-        </div>
-        <div class="switch" id="soundSwitch" onclick="toggleSound()">
-          <div class="switch-dot"></div>
-        </div>
-      </div>
-
-      <div class="me-item" onclick="switchPage('remind')">
-        <div class="left">
-          <div class="icon-box">⏰</div>
-          <div>
-            <div class="title">每日提醒</div>
-            <div class="desc" id="remindDesc">设置记账时间与重复方式</div>
-          </div>
-        </div>
-        <span style="color:var(--primary);font-weight:800;">›</span>
-      </div>
-
-      <div class="me-item" onclick="switchPage('period')">
-        <div class="left">
-          <div class="icon-box">🩷</div>
-          <div>
-            <div class="title">姨妈提醒</div>
-            <div class="desc" id="periodDesc">记录经期，预测下次时间</div>
-          </div>
-        </div>
-        <span style="color:var(--primary);font-weight:800;">›</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 每日提醒详情页 -->
-  <section class="page" id="page-remind">
-    <div class="me-card">
-      <div class="section-title"><span>⏰ 每日提醒</span></div>
-      <div class="me-item">
-        <div class="left">
-          <div class="icon-box">🔔</div>
-          <div>
-            <div class="title">开启提醒</div>
-            <div class="desc">到点提醒你记账</div>
-          </div>
-        </div>
-        <div class="switch" id="remindSwitch" onclick="toggleRemind()">
-          <div class="switch-dot"></div>
-        </div>
-      </div>
-
-      <div class="me-item">
-        <div class="left">
-          <div class="icon-box">🕘</div>
-          <div>
-            <div class="title">提醒时间</div>
-            <div class="desc">设置每天提醒的时间</div>
-          </div>
-        </div>
-        <input type="time" id="remindTime" value="20:00" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;">
-      </div>
-
-      <div class="me-item">
-        <div class="left">
-          <div class="icon-box">💬</div>
-          <div>
-            <div class="title">提醒文字</div>
-            <div class="desc">写一句提醒自己</div>
-          </div>
-        </div>
-        <input type="text" id="remindText" placeholder="提醒内容" value="该记账啦，今天花了多少？" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;width:160px;">
-      </div>
-
-      <div class="me-item">
-        <div class="left">
-          <div class="icon-box">🔊</div>
-          <div>
-            <div class="title">预览提醒音</div>
-            <div class="desc">先听听闹钟声音</div>
-          </div>
-        </div>
-        <button class="time-picker" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;" onclick="playAlarmSound()">播放</button>
-      </div>
-
-      <button class="btn-primary" onclick="saveRemind()">保存提醒设置</button>
-    </div>
-  </section>
-
-  <!-- 姨妈提醒详情页 -->
-  <section class="page" id="page-period">
-    <div class="period-card">
-      <div class="section-title"><span>🩷 姨妈提醒</span></div>
-
-      <div class="period-row">
-        <span class="label">最近一次开始</span>
-        <input type="date" id="lastPeriod" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;">
-      </div>
-
-      <div class="period-row">
-        <span class="label">周期天数</span>
-        <input type="number" id="cycleDays" value="28" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;width:140px;">
-      </div>
-
-      <div class="period-row">
-        <span class="label">经期天数</span>
-        <input type="number" id="periodDays" value="5" style="background:var(--primary-soft);padding:8px 14px;border-radius:12px;font-weight:800;width:140px;">
-      </div>
-
-      <button class="btn-primary" onclick="savePeriod()">保存并预测</button>
-
-      <div id="periodResult" style="margin-top:16px;"></div>
-    </div>
-  </section>
-
-</main>
-
-<!-- 底部导航 -->
-<nav class="tabbar" id="tabbar">
-  <button data-page="add" class="active" onclick="switchPage('add')">
-    <img class="ico" src="https://img.icons8.com/color/96/pencil--v1.png">
-    <span>记一笔</span>
-  </button>
-  <button data-page="calendar" onclick="switchPage('calendar')">
-    <img class="ico" src="https://img.icons8.com/color/96/calendar--v1.png">
-    <span>日历</span>
-  </button>
-  <button data-page="memo" onclick="switchPage('memo')">
-    <img class="ico" src="https://img.icons8.com/color/96/create-new.png">
-    <span>备忘录</span>
-  </button>
-  <button data-page="me" onclick="switchPage('me')">
-    <img class="ico" src="https://img.icons8.com/color/96/user-male-circle.png">
-    <span>我的</span>
-  </button>
-</nav>
-
-<!-- 金额输入弹窗 -->
-<div class="overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
-<div class="sheet" id="amountSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">输入金额</div>
-  <div style="text-align:center;font-size:44px;font-weight:800;color:#ff8fab;margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div>
-  <div class="keypad">
-    <button onclick="pressKey('1');playKeypadSound()">1</button>
-    <button onclick="pressKey('2');playKeypadSound()">2</button>
-    <button onclick="pressKey('3');playKeypadSound()">3</button>
-    <button onclick="pressKey('4');playKeypadSound()">4</button>
-    <button onclick="pressKey('5');playKeypadSound()">5</button>
-    <button onclick="pressKey('6');playKeypadSound()">6</button>
-    <button onclick="pressKey('7');playKeypadSound()">7</button>
-    <button onclick="pressKey('8');playKeypadSound()">8</button>
-    <button onclick="pressKey('9');playKeypadSound()">9</button>
-    <button onclick="pressKey('.');playKeypadSound()">.</button>
-    <button onclick="pressKey('0');playKeypadSound()">0</button>
-    <button onclick="pressKey('del');playKeypadSound()">⌫</button>
-    <button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定保存</button>
-  </div>
+<div class="header">
+  <h1>🐿️ 松鼠记账</h1>
 </div>
 
-<!-- 备忘录编辑弹窗 -->
-<div class="overlay" id="memoOverlay" onclick="closeMemoEditor()"></div>
-<div class="sheet" id="memoSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">写备忘录</div>
-  <input type="text" id="memoTitle" placeholder="标题" style="background:var(--bg);padding:14px;border-radius:14px;width:100%;margin-bottom:12px;font-weight:800;">
-  <textarea id="memoContent" rows="6" placeholder="写点内容……" style="background:var(--bg);padding:14px;border-radius:14px;width:100%;"></textarea>
-  <button class="btn-primary" onclick="saveMemo()">保存备忘录</button>
+<div class="card">
+  <div class="item-row">
+    <label>类型</label>
+    <select id="typeSel">
+      <option value="out">支出</option>
+      <option value="in">收入</option>
+    </select>
+  </div>
+  <div class="item-row">
+    <label>金额</label>
+    <input type="number" id="moneyInput" placeholder="输入金额">
+  </div>
+  <div class="item-row">
+    <label>备注</label>
+    <input type="text" id="noteInput" placeholder="例如：买菜、工资">
+  </div>
+  <button class="btn" onclick="addRecord()">添加记录</button>
 </div>
 
-<div id="toast"></div>
+<div class="card">
+  <h3>账单列表</h3>
+  <div id="recordList"></div>
+</div>
+
+<div class="bottom-bar">
+  <div class="tab active">记账</div>
+  <div class="tab">统计</div>
+  <div class="tab">设置</div>
+</div>
 
 <script>
-// ===================== 音效系统 =====================
-let audioCtx = null;
-function initAudio(){
-  if(!audioCtx){
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-}
-function playKeypadSound(){
-  if(!soundOn) return;
-  initAudio();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(720, audioCtx.currentTime);
-  gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.07);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.07);
-}
-function playConfirmSound(){
-  if(!soundOn) return;
-  initAudio();
-  [520,780].forEach((f,i)=>{
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(f, audioCtx.currentTime + i*0.08);
-    gain.gain.setValueAtTime(0.06, audioCtx.currentTime + i*0.08);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i*0.08 + 0.12);
-    osc.start(audioCtx.currentTime + i*0.08);
-    osc.stop(audioCtx.currentTime + i*0.08 + 0.12);
-  });
-}
-function playSwitchSound(){
-  if(!soundOn) return;
-  initAudio();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-  gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.1);
-}
-function playAlarmSound(){
-  if(!soundOn) return;
-  initAudio();
-  let t = audioCtx.currentTime;
-  for(let i=0;i<6;i++){
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(900, t + i*0.25);
-    gain.gain.setValueAtTime(0.04, t + i*0.25);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + i*0.25 + 0.18);
-    osc.start(t + i*0.25);
-    osc.stop(t + i*0.25 + 0.18);
-  }
+// 本地存储账单
+let recordList = JSON.parse(localStorage.getItem("squirrelBill")) || [];
+
+function render(){
+  const wrap = document.getElementById("recordList");
+  wrap.innerHTML = "";
+  recordList.forEach(item=>{
+    const div = document.createElement("div");
+    div.className = "record-item";
+    const cls = item.type==="in"?"money-in":"money-out";
+    const prefix = item.type==="in"? "+":"-";
+    div.innerHTML = `<div>${item.note}</div><div class="${cls}">${prefix}${item.money}</div>`;
+    wrap.appendChild(div);
+  })
 }
 
-// ===================== 漫画萌宠分类图标 =====================
-const catList = [
-  {name:'餐饮', img:'https://img.icons8.com/color/96/hamburger.png'},
-  {name:'饮品', img:'https://img.icons8.com/color/96/tea.png'},
-  {name:'交通', img:'https://img.icons8.com/color/96/taxi.png'},
-  {name:'购物', img:'https://img.icons8.com/color/96/shopping-bag.png'},
-  {name:'居住', img:'https://img.icons8.com/color/96/cottage.png'},
-  {name:'娱乐', img:'https://img.icons8.com/color/96/controller.png'},
-  {name:'学习', img:'https://img.icons8.com/color/96/book.png'},
-  {name:'医疗', img:'https://img.icons8.com/color/96/medical.png'},
-  {name:'人情', img:'https://img.icons8.com/color/96/gift.png'},
-  {name:'宠物', img:'https://img.icons8.com/color/96/cat--v1.png'},
-  {name:'护肤', img:'https://img.icons8.com/color/96/lipstick.png'},
-  {name:'其他', img:'https://img.icons8.com/color/96/more.png'}
-];
-
-const quickNoteList = [
-  {name:'早餐', img:'https://img.icons8.com/color/96/breakfast.png'},
-  {name:'午餐', img:'https://img.icons8.com/color/96/lunch.png'},
-  {name:'晚餐', img:'https://img.icons8.com/color/96/dinner.png'},
-  {name:'火锅', img:'https://img.icons8.com/color/96/bbq.png'},
-  {name:'奶茶', img:'https://img.icons8.com/color/96/iced-coffee.png'},
-  {name:'打车', img:'https://img.icons8.com/color/96/taxi.png'},
-  {name:'网购', img:'https://img.icons8.com/color/96/online-shop.png'},
-  {name:'电影', img:'https://img.icons8.com/color/96/movie.png'},
-  {name:'买书', img:'https://img.icons8.com/color/96/book.png'},
-  {name:'送礼', img:'https://img.icons8.com/color/96/gift.png'},
-  {name:'零食', img:'https://img.icons8.com/color/96/candy.png'},
-  {name:'工资', img:'https://img.icons8.com/color/96/money.png'}
-];
-
-let records = JSON.parse(localStorage.getItem('records') || '[]');
-let memos = JSON.parse(localStorage.getItem('memos') || '[]');
-let selectedCatIndex = 0;
-let formAmount = '0';
-let soundOn = localStorage.getItem('soundOn') !== 'off';
-let calDate = new Date();
-
-function $(id){return document.getElementById(id);}
-function fmt(n){return '¥'+Number(n||0).toFixed(2);}
-function toast(msg){
-  const t=$('toast');
-  t.textContent=msg;
-  t.style.opacity='1';
-  t.style.transform='translate(-50%,0)';
-  setTimeout(()=>{
-    t.style.opacity='0';
-    t.style.transform='translate(-50%,12px)';
-  },1800);
-}
-
-// ===================== 页面切换 =====================
-function switchPage(name){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
-  document.querySelector('.tabbar button[data-page="'+name+'"]').classList.add('active');
-
-  const titles = {
-    add:'记一笔',
-    calendar:'日历',
-    memo:'备忘录',
-    me:'我的',
-    remind:'每日提醒',
-    period:'姨妈提醒'
-  };
-  $('pageTitle').textContent = titles[name] || '萌宠记账本';
-
-  if(name==='calendar') renderCalendar();
-  if(name==='memo') renderMemo();
-  if(name==='period') loadPeriod();
-}
-
-// ===================== 音效开关 =====================
-function toggleSound(){
-  playSwitchSound();
-  soundOn = !soundOn;
-  localStorage.setItem('soundOn', soundOn ? 'on' : 'off');
-  renderSoundIcon();
-  toast(soundOn ? '音效已开启' : '音效已关闭');
-}
-function renderSoundIcon(){
-  const onImg = 'https://img.icons8.com/color/96/medium-volume.png';
-  const offImg = 'https://img.icons8.com/color/96/mute.png';
-  const img = soundOn ? onImg : offImg;
-  $('soundIconImg').src = img;
-  $('soundMeIcon').src = img;
-  $('soundSwitch').classList.toggle('active', soundOn);
-}
-
-// ===================== 金额输入 =====================
-function openAmountSheet(){
-  $('amountOverlay').classList.add('show');
-  $('amountSheet').classList.add('show');
-  formAmount = '0';
-  $('sheetAmount').textContent = '¥ 0.00';
-}
-function closeAmountSheet(){
-  $('amountOverlay').classList.remove('show');
-  $('amountSheet').classList.remove('show');
-}
-function pressKey(k){
-  if(k==='del'){
-    formAmount = formAmount.length>1 ? formAmount.slice(0,-1) : '0';
-  }else if(k==='.'){
-    if(!formAmount.includes('.')) formAmount += '.';
-  }else{
-    formAmount = formAmount==='0' ? k : formAmount + k;
-  }
-  $('sheetAmount').textContent = '¥ ' + formAmount;
-}
-function confirmAmount(){
-  const v = parseFloat(formAmount) || 0;
-  if(v<=0){toast('请输入金额');return;}
-  $('displayAmount').textContent = fmt(v);
-  closeAmountSheet();
-  playConfirmSound();
-  setTimeout(()=>saveRecord(v),200);
-}
-
-// ===================== 保存记录 =====================
-function saveRecord(v){
-  const note = $('noteInput').value.trim();
-  const nowCat = catList[selectedCatIndex];
-
-  records.push({
-    id: Date.now(),
-    date: new Date().toLocaleDateString('zh-CN'),
-    time: new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'}),
-    type: 'expense',
-    amount: v,
-    category: nowCat.name,
-    catImg: nowCat.img,
-    note: note || '未填写备注'
-  });
-
-  localStorage.setItem('records', JSON.stringify(records));
-  toast('已保存 '+fmt(v));
-
-  $('noteInput').value = '';
-  calcToday();
-  $('displayAmount').textContent = '¥ 0.00';
-}
-
-// ===================== 今日统计 =====================
-function calcToday(){
-  const today = new Date().toLocaleDateString('zh-CN');
-  let exp=0, inc=0;
-  records.forEach(r=>{
-    if(r.date===today){
-      if(r.type==='expense') exp += Number(r.amount);
-      else inc += Number(r.amount);
-    }
-  });
-  $('todayExp').textContent = fmt(exp);
-  $('todayInc').textContent = fmt(inc);
-}
-
-// ===================== 渲染分类 =====================
-function renderCatGrid(){
-  $('catGrid').innerHTML = catList.map((c,i)=>`
-    <div class="cat-item ${i===selectedCatIndex?'active':''}" onclick="selectCat(${i})">
-      <img class="mini-img" src="${c.img}" alt="${c.name}">
-      <span class="cat-name">${c.name}</span>
-    </div>
-  `).join('');
-}
-function selectCat(i){
-  playSwitchSound();
-  selectedCatIndex = i;
-  renderCatGrid();
-  toast('已选分类：'+catList[i].name);
-}
-
-// ===================== 快捷备注 =====================
-function renderQuickNotes(){
-  $('quickNotes').innerHTML = quickNoteList.map(n=>`
-    <div class="cat-item" onclick="fillQuickNote('${n.name}')">
-      <img class="mini-img" src="${n.img}" alt="${n.name}">
-      <span class="cat-name">${n.name}</span>
-    </div>
-  `).join('');
-}
-function fillQuickNote(name){
-  const input = $('noteInput');
-  if(input.value.trim()){
-    input.value = input.value + '，' + name;
-  }else{
-    input.value = name;
-  }
-  playSwitchSound();
-  toast('已添加：'+name);
-}
-
-// ===================== 日历 =====================
-function renderCalendar(){
-  const y = calDate.getFullYear();
-  const m = calDate.getMonth();
-  $('calTitle').textContent = y+'年'+(m+1)+'月';
-
-  const firstDay = new Date(y,m,1).getDay();
-  const daysInMonth = new Date(y,m+1,0).getDate();
-  const today = new Date().toLocaleDateString('zh-CN');
-
-  let html = '';
-  for(let i=0;i<firstDay;i++){
-    html += '<div class="calendar-cell empty"></div>';
-  }
-  for(let d=1;d<=daysInMonth;d++){
-    const dateStr = new Date(y,m,d).toLocaleDateString('zh-CN');
-    const hasRecord = records.some(r=>r.date===dateStr);
-    const isToday = dateStr === today;
-    html += `
-      <div class="calendar-cell ${isToday?'today':''}" onclick="selectDate('${dateStr}')">
-        <span class="day">${d}</span>
-        ${hasRecord?'<span class="dot"></span>':''}
-      </div>
-    `;
-  }
-  $('calBody').innerHTML = html;
-}
-function changeMonth(delta){
-  calDate.setMonth(calDate.getMonth()+delta);
-  renderCalendar();
-}
-function selectDate(dateStr){
-  $('selectedDate').textContent = dateStr;
-  $('dayListTitle').textContent = dateStr+' 明细';
-  const list = records.filter(r=>r.date===dateStr);
-  if(!list.length){
-    $('dayList').innerHTML = '<div style="text-align:center;padding:30px;color:var(--sub);">当天没有记录</div>';
+function addRecord(){
+  const type = document.getElementById("typeSel").value;
+  const money = document.getElementById("moneyInput").value;
+  const note = document.getElementById("noteInput").value.trim();
+  if(!money){
+    alert("请填写金额");
     return;
   }
-  $('dayList').innerHTML = list.map(r=>`
-    <div class="rec-card">
-      <div class="rec-icon"><img src="${r.catImg}" alt="${r.category}"></div>
-      <div class="rec-info">
-        <div class="row1"><span class="name">${r.category}</span><span class="rec-amt exp">-${fmt(r.amount)}</span></div>
-        <div class="note">${r.note}</div>
-        <div class="rec-date">${r.time||''}</div>
-      </div>
-    </div>
-  `).join('');
+  recordList.push({type,money,note});
+  localStorage.setItem("squirrelBill",JSON.stringify(recordList));
+  render();
+  document.getElementById("moneyInput").value="";
+  document.getElementById("noteInput").value="";
 }
 
-// ===================== 备忘录 =====================
-function openMemoEditor(){
-  $('memoOverlay').classList.add('show');
-  $('memoSheet').classList.add('show');
-  $('memoTitle').value = '';
-  $('memoContent').value = '';
-}
-function closeMemoEditor(){
-  $('memoOverlay').classList.remove('show');
-  $('memoSheet').classList.remove('show');
-}
-function saveMemo(){
-  const title = $('memoTitle').value.trim();
-  const content = $('memoContent').value.trim();
-  if(!title){toast('请写标题');return;}
-  memos.unshift({
-    id:Date.now(),
-    title,
-    content,
-    time:new Date().toLocaleString('zh-CN')
-  });
-  localStorage.setItem('memos',JSON.stringify(memos));
-  closeMemoEditor();
-  renderMemo();
-  toast('已保存备忘录');
-}
-function renderMemo(){
-  if(!memos.length){
-    $('memoList').innerHTML = '<div style="text-align:center;padding:30px;color:var(--sub);">还没有备忘录</div>';
-    return;
-  }
-  $('memoList').innerHTML = memos.map(m=>`
-    <div class="memo-item">
-      <div class="mt">
-        <span class="title">${m.title}</span>
-        <button onclick="deleteMemo(${m.id})" style="color:var(--red);font-weight:800;">删除</button>
-      </div>
-      <div class="time">${m.time}</div>
-      <div class="content">${m.content || '（无内容）'}</div>
-    </div>
-  `).join('');
-}
-function deleteMemo(id){
-  if(!confirm('删除这条备忘？')) return;
-  memos = memos.filter(m=>m.id!==id);
-  localStorage.setItem('memos',JSON.stringify(memos));
-  renderMemo();
-  toast('已删除');
-}
-
-// ===================== 每日提醒 =====================
-function toggleRemind(){
-  playSwitchSound();
-  const sw = $('remindSwitch');
-  const isOn = !sw.classList.contains('active');
-  if(isOn){
-    sw.classList.add('active');
-    localStorage.setItem('remindSwitch','on');
-    toast('已开启每日提醒');
-  }else{
-    sw.classList.remove('active');
-    localStorage.setItem('remindSwitch','off');
-    toast('已关闭每日提醒');
-  }
-  updateRemindDesc();
-}
-function updateRemindDesc(){
-  const on = localStorage.getItem('remindSwitch') === 'on';
-  const time = localStorage.getItem('remindTime') || '20:00';
-  $('remindDesc').textContent = on ? '每日 '+time+' 提醒记账' : '设置记账时间与重复方式';
-}
-function saveRemind(){
-  playConfirmSound();
-  const time = $('remindTime').value || '20:00';
-  const text = $('remindText').value.trim() || '该记账啦';
-  localStorage.setItem('remindTime', time);
-  localStorage.setItem('remindText', text);
-  updateRemindDesc();
-  toast('提醒设置已保存');
-}
-
-// ===================== 姨妈提醒 =====================
-function loadPeriod(){
-  const last = localStorage.getItem('lastPeriod') || '';
-  const cycle = localStorage.getItem('cycleDays') || 28;
-  const period = localStorage.getItem('periodDays') || 5;
-  $('lastPeriod').value = last;
-  $('cycleDays').value = cycle;
-  $('periodDays').value = period;
-  predictPeriod();
-}
-function savePeriod(){
-  const last = $('lastPeriod').value;
-  const cycle = $('cycleDays').value || 28;
-  const period = $('periodDays').value || 5;
-  if(!last){toast('请选择最近一次日期');return;}
-  localStorage.setItem('lastPeriod',last);
-  localStorage.setItem('cycleDays',cycle);
-  localStorage.setItem('periodDays',period);
-  predictPeriod();
-  toast('已保存');
-}
-function predictPeriod(){
-  const last = localStorage.getItem('lastPeriod');
-  if(!last){
-    $('periodResult').innerHTML = '<div style="color:var(--sub);text-align:center;">请先记录最近一次姨妈日期</div>';
-    return;
-  }
-  const cycle = Number(localStorage.getItem('cycleDays')) || 28;
-  const periodDays = Number(localStorage.getItem('periodDays')) || 5;
-
-  const next = new Date(last);
-  next.setDate(next.getDate()+cycle);
-
-  const ovulationStart = new Date(last);
-  ovulationStart.setDate(ovulationStart.getDate()+cycle/2-4);
-  const ovulationEnd = new Date(last);
-  ovulationEnd.setDate(ovulationEnd.getDate()+cycle/2+4);
-
-  const fmtDate = d=>d.toLocaleDateString('zh-CN');
-
-  $('periodResult').innerHTML = `
-    <div class="period-row">
-      <span class="label">预计下次姨妈</span>
-      <span class="value" style="color:var(--pink);font-weight:800;">${fmtDate(next)}</span>
-    </div>
-    <div class="period-row">
-      <span class="label">经期建议</span>
-      <span class="value">前${periodDays}天注意休息</span>
-    </div>
-    <div class="tag-row">
-      <span class="tag pink">姨妈期</span>
-      <span class="tag">易孕期 ${fmtDate(ovulationStart)}-${fmtDate(ovulationEnd)}</span>
-      <span class="tag">预计下次 ${fmtDate(next)}</span>
-    </div>
-  `;
-}
-
-// ===================== 初始化 =====================
-renderCatGrid();
-renderQuickNotes();
-calcToday();
-renderSoundIcon();
-updateRemindDesc();
-
-$('remindTime').value = localStorage.getItem('remindTime') || '20:00';
-$('remindText').value = localStorage.getItem('remindText') || '该记账啦，今天花了多少？';
-if(localStorage.getItem('remindSwitch') === 'on'){
-  $('remindSwitch').classList.add('active');
-}
+render();
 </script>
 
+<!-- ========== ServiceWorker 注册 & 新版本检测弹窗 ========== -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('./sw.js');
+      console.log("SW注册成功", registration);
+
+      registration.addEventListener('updatefound', () => {
+        const newWorker = registration.installing;
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            if (confirm("✅松鼠记账发现新版本！点击确定立即更新APP")) {
+              newWorker.postMessage({ action: 'skipWaiting' });
+            }
+          }
+        })
+      })
+
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      })
+
+      // 每3小时后台自动检测一次更新
+      setInterval(()=>{
+        registration.update();
+      }, 3 * 60 * 60 * 1000);
+
+    } catch (err) {
+      console.log("SW注册失败：", err);
+    }
+  })
+}
+</script>
 </body>
 </html>
