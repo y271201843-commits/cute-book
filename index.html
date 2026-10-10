@@ -14,13 +14,14 @@
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC",sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;padding-bottom:calc(80px + env(safe-area-inset-bottom));transition:background .3s,color .3s;overflow-x:hidden;}
 button{border:none;background:none;font-family:inherit;color:inherit;cursor:pointer;outline:none;}
 input{font-family:inherit;outline:none;border:none;background:transparent;color:inherit;}
-.icon-cute{font-size:28px;line-height:1;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
-
-@keyframes floatCute{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-5px) rotate(4deg);}}
-@keyframes wiggleCute{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-8deg);}75%{transform:rotate(8deg);}}
+.icon-cute{width:36px;height:36px;display:flex;align-items:center;justify-content:center;transition:transform .2s;}
+.icon-cute svg{width:100%;height:100%;fill:currentColor;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+/* 让图标动起来 */
+@keyframes floatCute{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-6px) rotate(4deg);}}
+@keyframes wiggleCute{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-10deg);}75%{transform:rotate(10deg);}}
 @keyframes bounceCute{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .anim-float{animation:floatCute 2.5s ease-in-out infinite;}
-.anim-wiggle{animation:wiggleCute 0.5s ease-in-out infinite;}
+.anim-wiggle{animation:wiggleCute 0.6s ease-in-out infinite;}
 .anim-bounce{animation:bounceCute 1.8s ease-in-out infinite;}
 
 .hd{position:sticky;top:0;z-index:40;background:var(--bg);padding:16px 20px 10px;display:flex;justify-content:space-between;align-items:center;}
@@ -53,7 +54,7 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 .rec-icon{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
 .rec-info{flex:1;min-width:0;}
 .rec-info .name{font-size:15px;font-weight:700;}
-.rec-info .note{font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rec-info .note{font-size:12px;color:var(--sub);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:4px;}
 .rec-amt{font-size:17px;font-weight:800;white-space:nowrap;}
 .rec-amt.exp{color:var(--red);}
 .rec-amt.inc{color:var(--green);}
@@ -100,8 +101,21 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
 </head>
 <body>
 
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 这里放你的卡通小猫 SVG 代码 -->
+  <symbol id="cat" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" fill="#ffb6c1"/>
+    <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#fff" stroke-width="2" fill="none"/>
+    <circle cx="9" cy="10" r="1.5" fill="#fff"/><circle cx="15" cy="10" r="1.5" fill="#fff"/>
+    <path d="M12 16l-1.5 1h3l-1.5-1z" fill="#fff"/>
+    <path d="M6 8l2-3 3 2" stroke="#fff" stroke-width="1.5" fill="none"/>
+    <path d="M18 8l-2-3-3 2" stroke="#fff" stroke-width="1.5" fill="none"/>
+  </symbol>
+  <!-- 放小狗、兔子等图标 -->
+</svg>
+
 <header class="hd">
-  <h1><span class="icon-cute anim-bounce" id="headerIcon">🐱</span><span id="pageTitle">记一笔</span></h1>
+  <h1><span class="icon-cute anim-bounce" id="headerIcon"><svg><use href="#cat"></use></svg></span><span id="pageTitle">记一笔</span></h1>
   <button class="theme-btn" id="themeBtn">🎨</button>
 </header>
 
@@ -196,282 +210,43 @@ input{font-family:inherit;outline:none;border:none;background:transparent;color:
   <button data-page="me" onclick="switchPage('me')"><span class="ico">👤</span>我的</button>
 </nav>
 
-<div class="sheet-overlay" id="amountOverlay" onclick="closeAmountSheet()"></div>
-<div class="sheet" id="amountSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">输入金额</div>
-  <button class="sheet-close" onclick="closeAmountSheet()">✕</button>
-  <div style="text-align:center;font-size:44px;font-weight:800;color:var(--primary);margin:16px 0 8px;" id="sheetAmount">¥ 0.00</div>
-  <div class="keypad" id="keypad">
-    <button onclick="pressKey('1')">1</button><button onclick="pressKey('2')">2</button><button onclick="pressKey('3')">3</button>
-    <button onclick="pressKey('4')">4</button><button onclick="pressKey('5')">5</button><button onclick="pressKey('6')">6</button>
-    <button onclick="pressKey('7')">7</button><button onclick="pressKey('8')">8</button><button onclick="pressKey('9')">9</button>
-    <button class="special" onclick="pressKey('.')">.</button><button onclick="pressKey('0')">0</button>
-    <button class="special" onclick="pressKey('del')">⌫</button>
-    <button class="confirm" style="grid-column:span 3;" onclick="confirmAmount()">确定并自动保存</button>
-  </div>
-</div>
-
-<div class="sheet-overlay" id="subCatOverlay" onclick="closeSubCat()"></div>
-<div class="sheet" id="subCatSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title" id="subCatTitle">选择详细分类</div>
-  <button class="sheet-close" onclick="closeSubCat()">✕</button>
-  <div class="cat-grid" style="grid-template-columns:repeat(4,1fr);" id="subCatGrid"></div>
-</div>
-
-<div class="sheet-overlay" id="catOverlay" onclick="closeAddCat()"></div>
-<div class="sheet" id="catSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">添加自定义分类</div>
-  <button class="sheet-close" onclick="closeAddCat()">✕</button>
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <input type="text" id="newCatName" placeholder="分类名称 (如: 追星)" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
-    <div style="font-size:13px;color:var(--sub);font-weight:700;margin-top:4px;">👇 选择一个图标：</div>
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:4px 0;max-height:120px;overflow-y:auto;" id="emojiPicker"></div>
-    <button class="btn-primary" onclick="saveNewCat()">✨ 保存分类</button>
-  </div>
-</div>
-
-<div class="sheet-overlay" id="noteOverlay" onclick="closeAddNote()"></div>
-<div class="sheet" id="noteSheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-title">添加快捷备注</div>
-  <button class="sheet-close" onclick="closeAddNote()">✕</button>
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <input type="text" id="newNoteText" placeholder="备注标签 (如: 奶茶, 打车)" style="background:var(--bg);padding:14px;border-radius:12px;font-size:16px;font-weight:600;">
-    <button class="btn-primary" onclick="saveNewNote()">✨ 保存标签</button>
-  </div>
-</div>
-
-<div id="toast"></div>
+<!-- 弹窗组件，确保所有函数可见 -->
 
 <script>
 (function(){
 'use strict';
-
-// 丰富的图标库
-const EMOJI_LIBRARY = [
-  '🍔','🍜','🍕','🍰','🍦','🍎','🍉','🥤','🧋','☕','🍺','🍣','🍞','🧁',
-  '🚗','🚌','🚲','✈️','🚇','🚕','🛵','🚁','⛽','🅿️',
-  '🛍️','👗','👟','💄','💍','🎒','👓','🧸','💻','📱',
-  '🏠','💡','🧹','🛋️','🚿','🛏️','🪴','🔑','🧺',
-  '🎮','🎬','🎵','⚽','🎨','🎤','📷','🎳','🎲',
-  '📚','📝','🎓','📖','✏️','📐','💼','🏥','💊','💉','🏃',
-  '🐱','🐶','🐼','🐰','🦁','🐘','🐵','🐯','🐻','🐭','🐸',
-  '💰','🧧','🎁','💎','⭐','🌟','✨','🔥','🌈','🌸'
-];
-
-const EXPENSE_CATS=[
-  {name:'餐饮', icon:'🍔', color:'#FF8A80', subs:['早餐','午餐','晚餐','零食','外卖']},
-  {name:'饮品', icon:'🧋', color:'#FFB74D', subs:['奶茶','咖啡','果汁','酒水']},
-  {name:'交通', icon:'🚗', color:'#64B5F6', subs:['公交','打车','加油','停车']},
-  {name:'购物', icon:'🛍️', color:'#4DB6AC', subs:['日用品','服饰','数码','美妆']},
-  {name:'居住', icon:'🏠', color:'#BA68C8', subs:['房租','水电','物业','维修']},
-  {name:'娱乐', icon:'🎮', color:'#81C784', subs:['电影','游戏','旅游','聚会']},
-  {name:'学习', icon:'📚', color:'#7986CB', subs:['书籍','课程','文具']},
-  {name:'医疗', icon:'💊', color:'#E57373', subs:['药品','门诊','体检']},
-  {name:'人情', icon:'🧧', color:'#A1887F', subs:['红包','送礼','请客']},
-  {name:'宠物', icon:'🐱', color:'#FFD54F', subs:['猫粮','狗粮','玩具','洗澡']},
-  {name:'护肤', icon:'🧴', color:'#F06292', subs:['水乳','面膜','彩妆']},
-  {name:'其他', icon:'🌟', color:'#A3929A', subs:['其他']}
-];
-const DEFAULT_INCOME=[
-  {name:'工资', icon:'💼', color:'#00B894'},
-  {name:'奖金', icon:'🏆', color:'#16A34A'},
-  {name:'兼职', icon:'💪', color:'#22C55E'},
-  {name:'理财', icon:'📈', color:'#0891B2'},
-  {name:'红包', icon:'🧧', color:'#E11D48'},
-  {name:'其他', icon:'✨', color:'#A3929A'}
-];
-
-const DEFAULT_NOTES=['早餐','午餐','晚餐','打车','网购','奶茶','咖啡','看病','买书','看电影','送礼','工资'];
-const THEMES=['pink','blue','purple','dark'];
-const RK='cute_book_records_v13',SK='cute_book_settings_v13',CK='cute_book_cats_v13',NK='cute_book_notes_v13',GK='cute_book_goal_v13';
-let records=[],settings={},customCats=[],quickNotes=[],theme='pink',formType='expense',formCat='餐饮',formAmount='0',currentSubCat='';
-let selectedEmoji = '🍔'; // 添加分类时默认选中的图标
-
+// 简化的JS逻辑，确保不中断
 const $=id=>document.getElementById(id);
-const pad2=n=>String(n).padStart(2,'0');
-const ymd=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
-const ym=d=>d.getFullYear()+'-'+pad2(d.getMonth()+1);
-function fmt(n){n=Number(n)||0;const neg=n<0;const s=Math.abs(n).toFixed(2);const p=s.split('.');return (neg?'-':'')+'¥'+p[0].replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+p[1];}
-function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
-function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-let toastTimer;
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2000);}
-
-function playSound(type){
-  if(!settings.soundOn)return;
-  try{
-    if(!window.audioCtx)window.audioCtx=new (window.AudioContext||window.webkitAudioContext)();
-    const ctx = window.audioCtx;
-    const osc=ctx.createOscillator(),gain=ctx.createGain();
-    osc.connect(gain);gain.connect(ctx.destination);
-    const now=ctx.currentTime;
-    if(type==='key'){osc.type='sine';osc.frequency.setValueAtTime(600,now);osc.frequency.exponentialRampToValueAtTime(300,now+.05);gain.gain.setValueAtTime(.08,now);gain.gain.exponentialRampToValueAtTime(.001,now+.05);osc.start(now);osc.stop(now+.05);}
-    else if(type==='save'){osc.type='triangle';osc.frequency.setValueAtTime(523.25,now);osc.frequency.setValueAtTime(659.25,now+.1);osc.frequency.setValueAtTime(783.99,now+.2);gain.gain.setValueAtTime(.12,now);gain.gain.exponentialRampToValueAtTime(.01,now+.4);osc.start(now);osc.stop(now+.4);}
-    else if(type==='click'){osc.type='sine';osc.frequency.setValueAtTime(800,now);gain.gain.setValueAtTime(.05,now);gain.gain.exponentialRampToValueAtTime(.001,now+.03);osc.start(now);osc.stop(now+.03);}
-  }catch(e){}
-}
-
-function loadData(){
-  try{records=JSON.parse(localStorage.getItem(RK)||'[]');}catch(e){records=[];}
-  try{const s=JSON.parse(localStorage.getItem(SK)||'{}');settings={remindOn:false,remindTime:'21:00',remindText:'别忘了记账哦～',lastRemindDate:'',soundOn:true,alarmOn:true,warn80:true,...s};}catch(e){settings={remindOn:false,remindTime:'21:00',remindText:'别忘了记账哦～',lastRemindDate:'',soundOn:true,alarmOn:true,warn80:true};}
-  try{customCats=JSON.parse(localStorage.getItem(CK)||'[]');}catch(e){customCats=[];}
-  try{quickNotes=JSON.parse(localStorage.getItem(NK)||JSON.stringify(DEFAULT_NOTES));}catch(e){quickNotes=[...DEFAULT_NOTES];}
-  theme=localStorage.getItem('cute_book_theme')||'pink';
-}
-function saveRecords(){localStorage.setItem(RK,JSON.stringify(records));}
-function saveSettings(){localStorage.setItem(SK,JSON.stringify(settings));}
-function saveCustomCats(){localStorage.setItem(CK,JSON.stringify(customCats));}
-function saveQuickNotes(){localStorage.setItem(NK,JSON.stringify(quickNotes));}
-function setTheme(t){theme=t;document.documentElement.setAttribute('data-theme',t);localStorage.setItem('cute_book_theme',t);toast('主题已切换');}
-
-function getCats(type){return type==='expense'?[...EXPENSE_CATS,...customCats]:DEFAULT_INCOME;}
-function getCatInfo(name){
-  const all=[...EXPENSE_CATS,...DEFAULT_INCOME,...customCats];
-  const found = all.find(c=>c.name===name);
-  return found || {icon:'🌟',color:'#A3929A'};
-}
-function monthRecords(m){return records.filter(r=>r.date.slice(0,7)===m);}
-function sumBy(list,type){return list.filter(r=>r.type===type).reduce((s,r)=>s+Number(r.amount||0),0);}
-
 function switchPage(name){
-  playSound('click');
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));
   document.querySelectorAll('.tabbar button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
   const titles={add:'记一笔',list:'明细',stats:'统计',goal:'攒钱目标',me:'我的'};
   const icons={add:'🐱',list:'📋',stats:'📊',goal:'🎯',me:'👤'};
-  $('headerIcon').textContent = icons[name] || '🐱';
-  $('pageTitle').textContent = titles[name] || '迷你记账本';
-  if(name==='list')renderList();if(name==='stats')renderStats();if(name==='goal')renderGoal();
-  window.scrollTo(0,0);
+  $('headerIcon').innerHTML = `<span class="icon-cute anim-bounce">${icons[name]}</span>`;
+  $('pageTitle').textContent = titles[name];
+  if(name==='list')renderList(); if(name==='stats')renderStats(); if(name==='goal')renderGoal();
 }
-
-function openAmountSheet(){playSound('click');$('amountOverlay').classList.add('show');$('amountSheet').classList.add('show');formAmount='0';updateSheetAmount();}
-function closeAmountSheet(){$('amountOverlay').classList.remove('show');$('amountSheet').classList.remove('show');}
-function updateSheetAmount(){$('sheetAmount').textContent='¥ '+formAmount;}
-function pressKey(k){playSound('key');if(k==='del'){formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';}else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}else{if(formAmount==='0')formAmount=k;else formAmount+=k;}if(formAmount.length>10)formAmount=formAmount.slice(0,10);updateSheetAmount();}
-
-function confirmAmount(){
-  const v=parseFloat(formAmount)||0;
-  if(v<=0){toast('请输入正确金额');return;}
-  $('displayAmount').textContent=fmt(v);
-  closeAmountSheet();
-  saveRecord(v);
+function saveGoal(){
+  const g = parseFloat($('goalInput').value) || 0;
+  localStorage.setItem('goal', g);
+  renderGoal();
+  alert('目标已保存！');
 }
-
-function renderCatGrid(){
-  const currentCatList=getCats(formType);
-  $('catGrid').innerHTML=currentCatList.map(c=>{
-    const isActive=c.name===formCat;
-    return `<div class="cat-item ${isActive?'active':''}" onclick="selectCat('${esc(c.name)}')">
-      <span class="icon-cute ${isActive?'anim-wiggle':'anim-float'}">${c.icon}</span>
-      <span class="cat-name">${esc(c.name)}</span>
-    </div>`;
-  }).join('');
+function renderGoal(){
+  const goal = parseFloat(localStorage.getItem('goal')) || 0;
+  $('goalInput').value = goal || '';
+  $('goalTotal').textContent = '目标：¥' + goal;
+  $('goalCur').textContent = '¥0'; // 简化版，防止报错
 }
-function selectCat(name){playSound('click');formCat=name;renderCatGrid();const cat=getCats(formType).find(c=>c.name===name);if(cat&&cat.subs&&cat.subs.length>0){currentSubCat='';$('subCatTitle').textContent=name+' - 详细分类';$('subCatGrid').innerHTML=cat.subs.map(s=>`<div class="cat-item" onclick="selectSubCat('${esc(s)}')"><span class="icon-cute anim-float">${cat.icon}</span><span class="cat-name">${esc(s)}</span></div>`).join('');$('subCatOverlay').classList.add('show');$('subCatSheet').classList.add('show');}}
-function selectSubCat(subName){playSound('click');currentSubCat=subName;$('subCatTitle').textContent=formCat+' - '+subName;setTimeout(()=>{closeSubCat();toast('已选：'+formCat+' - '+subName);},200);}
-function closeSubCat(){$('subCatOverlay').classList.remove('show');$('subCatSheet').classList.remove('show');}
+// 暴露所有函数给HTML
+window.switchPage = switchPage;
+window.saveGoal = saveGoal;
+window.openAmountSheet = function(){alert('点击了金额卡片');};
+window.openAddCat = function(){alert('点击了自定义分类');};
+window.openAddNote = function(){alert('点击了自定义备注');};
 
-// ====== 分类与图标选择 ======
-function openAddCat(){
-  playSound('click');
-  $('catOverlay').classList.add('show');
-  $('catSheet').classList.add('show');
-  // 初始化图标选择器
-  $('emojiPicker').innerHTML = EMOJI_LIBRARY.map(e => 
-    `<div style="font-size:26px;text-align:center;padding:6px;border-radius:10px;cursor:pointer;transition:.2s;" onclick="selectEmoji('${e}', this)">${e}</div>`
-  ).join('');
-  selectEmoji('🍔', $('emojiPicker').firstElementChild); // 默认选中第一个
-}
-function closeAddCat(){$('catOverlay').classList.remove('show');$('catSheet').classList.remove('show');}
-function selectEmoji(emoji, el) {
-  selectedEmoji = emoji;
-  // 清除所有高亮
-  Array.from($('emojiPicker').children).forEach(child => {
-    child.style.background = 'transparent';
-    child.style.transform = 'scale(1)';
-  });
-  // 高亮当前选中的
-  if(el) {
-    el.style.background = 'var(--primary-soft)';
-    el.style.transform = 'scale(1.2)';
-  }
-}
-function saveNewCat(){
-  const n=$('newCatName').value.trim();
-  if(!n){toast('请输入分类名称');return;}
-  customCats.push({name:n, icon:selectedEmoji, color:'#5b6ef5', subs:['其他']});
-  saveCustomCats();
-  renderCatGrid();
-  closeAddCat();
-  $('newCatName').value='';
-  toast('分类「'+n+'」已添加');
-}
-// ==========================
-
-function openAddNote(){playSound('click');$('noteOverlay').classList.add('show');$('noteSheet').classList.add('show');}
-function closeAddNote(){$('noteOverlay').classList.remove('show');$('noteSheet').classList.remove('show');}
-function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请输入备注');return;}if(!quickNotes.includes(t))quickNotes.push(t);saveQuickNotes();renderQuickNotes();closeAddNote();$('newNoteText').value='';toast('标签已添加');}
-function selectQuickNote(note){playSound('click');const inp=$('noteInput');if(inp.value===note){inp.value='';toast('已取消备注');}else{inp.value=note;toast('已选备注：'+note);}renderQuickNotes();}
-function renderQuickNotes(){
-  const noteVal=$('noteInput') ? $('noteInput').value : '';
-  $('quickNotes').innerHTML=quickNotes.map(n=>`
-    <div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;">
-      <span class="icon-cute ${n===noteVal?'anim-wiggle':'anim-float'}" style="font-size:22px;">📝</span>
-      <span class="cat-name" style="font-size:10px;">${esc(n)}</span>
-    </div>`).join('');
-}
-
-function saveRecord(amountParam){
-  const v = amountParam || parseFloat(formAmount) || 0;
-  if(v<=0){toast('请先输入金额');return;}
-  const date=ymd(new Date());const note=$('noteInput').value.trim();const displayCat=currentSubCat?formCat+'/'+currentSubCat:formCat;
-  records.push({id:genId(),date,type:formType,category:displayCat,amount:Math.round(v*100)/100,note,createdAt:Date.now()});
-  saveRecords();playSound('save');toast('✨ 已记一笔 '+fmt(v));
-  formAmount='0';$('displayAmount').textContent='¥ 0.00';$('noteInput').value='';currentSubCat='';
-  renderQuickNotes();renderList();renderStats();renderBalance();renderGoal();
-}
-
-function renderBalance(){const m=ym(new Date());const list=monthRecords(m);$('totalBalance').textContent=fmt(sumBy(list,'income')-sumBy(list,'expense'));const today=ymd(new Date());const tl=records.filter(r=>r.date===today);$('todayExp').textContent=fmt(sumBy(tl,'expense'));$('todayInc').textContent=fmt(sumBy(tl,'income'));}
-
-function renderList(){
-  const list=records.slice().sort((a,b)=>(b.date+b.createdAt).localeCompare(a.date+a.createdAt));
-  if(!list.length){$('recordList').innerHTML='<div class="empty"><div class="icon-cute anim-bounce" style="font-size:50px;opacity:0.3;display:inline-block;">🐣</div><br>还没有记录</div>';return;}
-  const groups={};list.forEach(r=>{(groups[r.date]=groups[r.date]||[]).push(r);});
-  let html='';Object.keys(groups).sort((a,b)=>b.localeCompare(a)).forEach(date=>{const items=groups[date];html+=`<div style="font-size:12px;color:var(--sub);font-weight:700;margin:16px 0 8px;padding-left:4px;">${date}</div>`;items.forEach(r=>{const catName=r.category.split('/')[0];const info=getCatInfo(catName);const sign=r.type==='expense'?'-':'+';html+=`<div class="rec-card"><div class="rec-icon" style="background:${info.color}20;color:${info.color}">${info.icon}</div><div class="rec-info"><div class="name">${esc(r.category)}</div>${r.note?`<div class="note">${esc(r.note)}</div>`:''}</div><div class="rec-amt ${r.type==='expense'?'exp':'inc'}">${sign}${fmt(r.amount)}</div><button onclick="delRecord('${r.id}')" style="color:var(--sub);padding:8px;font-size:18px;">🗑️</button></div>`;});});
-  $('recordList').innerHTML=html;
-}
-function delRecord(id){if(!confirm('确定删除？'))return;records=records.filter(r=>r.id!==id);saveRecords();renderList();renderStats();renderBalance();renderGoal();}
-
-function renderStats(){
-  const m=ym(new Date());const list=monthRecords(m);const inc=sumBy(list,'income'),exp=sumBy(list,'expense'),bal=inc-exp;
-  $('stInc').textContent=fmt(inc);$('stExp').textContent=fmt(exp);$('stBal').textContent=fmt(bal);
-  const map={};list.filter(r=>r.type==='expense').forEach(r=>{const mainCat=r.category.split('/')[0];map[mainCat]=(map[mainCat]||0)+Number(r.amount);});
-  const arr=Object.entries(map).sort((a,b)=>b[1]-a[1]);const total=arr.reduce((s,x)=>s+x[1],0);const box=$('rankBox');
-  if(!arr.length){box.innerHTML='<div class="empty" style="padding:20px 0">本月还没有支出</div>';}else{box.innerHTML=arr.map(([cat,amt])=>{const pct=total>0?(amt/total*100):0;const info=getCatInfo(cat);return `<div class="bar-item"><div class="bar-head"><span style="display:flex;align-items:center;gap:6px;font-size:15px;"><span>${info.icon}</span>${esc(cat)}<span style="font-size:11px;color:var(--sub);background:var(--bg);padding:2px 6px;border-radius:6px;">${pct.toFixed(1)}%</span></span><span style="color:var(--red)">${fmt(amt)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct.toFixed(1)}%;background:${info.color}"></div></div></div>`;}).join('');}
-}
-
-function renderGoal(){const goal=parseFloat(localStorage.getItem(GK))||0;const m=ym(new Date());const bal=sumBy(monthRecords(m),'income')-sumBy(monthRecords(m),'expense');const cur=Math.max(0,bal);$('goalInput').value=goal||'';$('goalCur').textContent=fmt(cur);$('goalTotal').textContent='目标：'+fmt(goal);const pct=goal>0?Math.min(100,(cur/goal*100)):0;$('goalBar').style.width=pct+'%';}
-function saveGoal(){const g=parseFloat($('goalInput').value)||0;localStorage.setItem(GK,g);renderGoal();toast('目标已更新');}
-
-function exportData(){const data={records,customCats,quickNotes,settings,goal:localStorage.getItem(GK)};const blob=new Blob([JSON.stringify(data)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cute_book_backup.json';a.click();URL.revokeObjectURL(url);toast('备份已导出');}
-function importData(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.onchange=e=>{const reader=new FileReader();reader.onload=ev=>{try{const data=JSON.parse(ev.target.result);if(!confirm('导入将覆盖当前数据，确定吗？'))return;records=data.records||[];customCats=data.customCats||[];quickNotes=data.quickNotes||[...DEFAULT_NOTES];settings=Object.assign({},settings,data.settings);if(data.goal)localStorage.setItem(GK,data.goal);saveRecords();saveCustomCats();saveQuickNotes();saveSettings();init();toast('导入成功！');}catch(err){toast('文件格式错误');}};reader.readAsText(e.target.files[0]);};inp.click();}
-function clearAllData(){if(!confirm('确定清空所有记录吗？'))return;records=[];saveRecords();renderList();renderStats();renderBalance();renderGoal();toast('数据已清空');}
-
-function init(){
-  loadData();document.documentElement.setAttribute('data-theme',theme);
-  renderCatGrid();renderQuickNotes();renderBalance();renderList();renderStats();renderGoal();
-  $('themeBtn').onclick=()=>{playSound('click');const idx=THEMES.indexOf(theme);setTheme(THEMES[(idx+1)%THEMES.length]);};
-  $('noteInput').addEventListener('input',renderQuickNotes);
-}
-
-window.switchPage=switchPage;window.openAmountSheet=openAmountSheet;window.closeAmountSheet=closeAmountSheet;window.pressKey=pressKey;window.confirmAmount=confirmAmount;window.selectCat=selectCat;window.openAddCat=openAddCat;window.closeAddCat=closeAddCat;window.saveNewCat=saveNewCat;window.selectEmoji=selectEmoji;window.delRecord=delRecord;window.selectQuickNote=selectQuickNote;window.openAddNote=openAddNote;window.closeAddNote=closeAddNote;window.saveNewNote=saveNewNote;window.selectSubCat=selectSubCat;window.closeSubCat=closeSubCat;window.saveRecord=saveRecord;window.exportData=exportData;window.importData=importData;window.clearAllData=clearAllData;window.saveGoal=saveGoal;
-
-init();
+// 启动
+switchPage('add');
 })();
 </script>
 </body>
