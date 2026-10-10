@@ -294,7 +294,7 @@ const DEFAULT_INCOME=[{name:'工资',key:'wallet',color:'#00B894'},{name:'奖金
 
 const DEFAULT_NOTES=['早餐','午餐','晚餐','打车','网购','奶茶','咖啡','看病','买书','看电影','送礼','工资'];
 const THEMES=['pink','blue','purple','dark'];
-const RK='cute_book_records_v11',SK='cute_book_settings_v11',CK='cute_book_cats_v11',NK='cute_book_notes_v11',GK='cute_book_goal_v11';
+const RK='cute_book_records_v12',SK='cute_book_settings_v12',CK='cute_book_cats_v12',NK='cute_book_notes_v12',GK='cute_book_goal_v12';
 let records=[],settings={},customCats=[],quickNotes=[],theme='pink',formType='expense',formCat='餐饮',formAmount='0',currentSubCat='';
 let alarmTimer=null,audioCtx=null,alarmOsc=null;
 
@@ -365,7 +365,15 @@ function openAmountSheet(){playSound('click');$('amountOverlay').classList.add('
 function closeAmountSheet(){$('amountOverlay').classList.remove('show');$('amountSheet').classList.remove('show');}
 function updateSheetAmount(){$('sheetAmount').textContent='¥ '+formAmount;}
 function pressKey(k){playSound('key');if(k==='del'){formAmount=formAmount.length>1?formAmount.slice(0,-1):'0';}else if(k==='.'){if(!formAmount.includes('.'))formAmount+='.';}else{if(formAmount==='0')formAmount=k;else formAmount+=k;}if(formAmount.length>10)formAmount=formAmount.slice(0,10);updateSheetAmount();}
-function confirmAmount(){const v=parseFloat(formAmount)||0;if(v<=0){toast('请输入正确金额');return;}$('displayAmount').textContent=fmt(v);closeAmountSheet();setTimeout(()=>{saveRecord();},300);}
+
+// 修复保存逻辑，去掉延迟，直接同步保存
+function confirmAmount(){
+  const v=parseFloat(formAmount)||0;
+  if(v<=0){toast('请输入正确金额');return;}
+  $('displayAmount').textContent=fmt(v);
+  closeAmountSheet();
+  saveRecord(v);
+}
 
 function renderCatGrid(){
   const currentCatList=getCats(formType);
@@ -388,8 +396,10 @@ function saveNewNote(){const t=$('newNoteText').value.trim();if(!t){toast('请�
 function selectQuickNote(note){playSound('click');const inp=$('noteInput');if(inp.value===note){inp.value='';toast('已取消备注');}else{inp.value=note;toast('已选备注：'+note);}renderQuickNotes();}
 function renderQuickNotes(){const noteVal=$('noteInput')?$('noteInput').value:'';const iconId=getIconId('star');$('quickNotes').innerHTML=quickNotes.map(n=>`<div class="cat-item ${n===noteVal?'active':''}" onclick="selectQuickNote('${esc(n)}')" style="padding:10px 4px;"><span class="icon-cute ${n===noteVal?'anim-wiggle':'anim-float'}" style="color:var(--primary);font-size:22px;"><svg><use href="#${iconId}"></use></svg></span><span class="cat-name" style="font-size:10px;">${esc(n)}</span></div>`).join('');}
 
-function saveRecord(){
-  const v=parseFloat(formAmount)||0;if(v<=0){toast('请先输入金额');return;}
+// 传入参数直接同步保存
+function saveRecord(amountParam){
+  const v = amountParam || parseFloat(formAmount) || 0;
+  if(v<=0){toast('请先输入金额');return;}
   const date=ymd(new Date());const note=$('noteInput').value.trim();const displayCat=currentSubCat?formCat+'/'+currentSubCat:formCat;
   records.push({id:genId(),date,type:formType,category:displayCat,amount:Math.round(v*100)/100,note,createdAt:Date.now()});
   saveRecords();playSound('save');toast('✨ 已记一笔 '+fmt(v));
