@@ -13,8 +13,10 @@ body{background:#fff5f8;font-family:system-ui,sans-serif;color:#5a3d4a;padding-b
 .content{padding:20px;}
 .card{background:#fff;border-radius:24px;padding:20px;margin-bottom:16px;box-shadow:0 6px 16px #00000010;}
 .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#fff;display:flex;height:72px;border-top:1px solid #ffe4e9;z-index:99;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:#b3929f;}
-.nav-item.active{color:#ff8fab;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;color:#b3929f;cursor:pointer;}
+.nav-item.active{color:#ff8fab;font-weight:bold;}
+.page{display:none;}
+.page.show{display:block;}
 </style>
 </head>
 <body>
@@ -22,20 +24,50 @@ body{background:#fff5f8;font-family:system-ui,sans-serif;color:#5a3d4a;padding-b
     <h1>松鼠记</h1>
 </div>
 <div class="content">
-    <div class="card">
-        <h3>💰今日记账</h3>
-        <p style="margin-top:10px">页面加载成功！说明基础环境没问题，接下来我们再加记账功能</p>
+    <!-- 首页页面 -->
+    <div id="page-home" class="page show">
+        <div class="card">
+            <h3>💰今日记账</h3>
+            <p style="margin-top:10px">首页，后面在这里添加记账输入功能</p>
+        </div>
+    </div>
+    <!-- 统计页面 -->
+    <div id="page-stat" class="page">
+        <div class="card">
+            <h3>📊统计报表</h3>
+            <p style="margin-top:10px">统计页面，后续增加收支图表</p>
+        </div>
+    </div>
+    <!-- 我的页面 -->
+    <div id="page-me" class="page">
+        <div class="card">
+            <h3>⚙️个人设置</h3>
+            <p style="margin-top:10px">声音开关｜清除缓存｜导出账单 后续放在这里</p>
+        </div>
     </div>
 </div>
 <!--底部导航-->
 <div class="bottom-nav">
-    <div class="nav-item active">首页</div>
-    <div class="nav-item">统计</div>
-    <div class="nav-item">我的</div>
+    <div class="nav-item active" data-page="home">首页</div>
+    <div class="nav-item" data-page="stat">统计</div>
+    <div class="nav-item" data-page="me">我的</div>
 </div>
 <script>
-//极简测试JS，保证不会报错白屏
-console.log("页面正常启动");
+//导航切换逻辑
+const navItems = document.querySelectorAll('.nav-item');
+const pages = document.querySelectorAll('.page');
+navItems.forEach(item=>{
+    item.addEventListener('click',()=>{
+        //移除全部激活状态
+        navItems.forEach(n=>n.classList.remove('active'));
+        pages.forEach(p=>p.classList.remove('show'));
+        //激活当前项
+        item.classList.add('active');
+        const targetPage = item.getAttribute('data-page');
+        document.getElementById(`page-${targetPage}`).classList.add('show');
+    })
+})
+console.log("导航脚本加载完成，可以点击切换页面");
 </script>
 </body>
 </html>
