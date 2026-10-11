@@ -17,6 +17,18 @@ body{background:#fff5f8;font-family:system-ui,sans-serif;color:#5a3d4a;padding-b
 .nav-item.active{color:#ff8fab;font-weight:bold;}
 .page{display:none;}
 .page.show{display:block;}
+
+/* 记账样式 */
+.tab-row{display:flex;margin-bottom:16px;}
+.tab{flex:1;text-align:center;padding:12px;border-radius:16px;cursor:pointer;background:#fff0f5;margin:0 4px;}
+.tab.active{background:#ff8fab;color:white;}
+.input-money{width:100%;font-size:24px;padding:12px;border:1px solid #ffe4e9;border-radius:16px;margin:12px 0;}
+.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;}
+.category-item{text-align:center;padding:10px;border-radius:16px;background:#fff0f5;cursor:pointer;}
+.category-item.selected{background:#ff8fab;color:white;}
+.icon-animal{font-size:24px;margin-bottom:4px;display:block;}
+.btn-save{width:100%;padding:14px;border:none;background:#ff8fab;color:#fff;border-radius:16px;margin-top:16px;font-size:16px;}
+.set-item{padding:14px;border-bottom:1px solid #ffe4e9;display:flex;justify-content:space-between;align-items:center;}
 </style>
 </head>
 <body>
@@ -24,25 +36,62 @@ body{background:#fff5f8;font-family:system-ui,sans-serif;color:#5a3d4a;padding-b
     <h1>松鼠记</h1>
 </div>
 <div class="content">
-    <!-- 首页页面 -->
+    <!-- 首页记账 -->
     <div id="page-home" class="page show">
         <div class="card">
-            <h3>💰今日记账</h3>
-            <p style="margin-top:10px">首页，后面在这里添加记账输入功能</p>
+            <div class="tab-row">
+                <div class="tab active" data-type="exp">支出</div>
+                <div class="tab" data-type="inc">收入</div>
+            </div>
+            <input class="input-money" id="moneyInput" placeholder="输入金额">
+            <div>分类选择</div>
+            <div class="category-grid" id="cateGrid">
+                <div class="category-item" data-cate="餐饮">
+                    <span class="icon-animal">🐿️</span>餐饮
+                </div>
+                <div class="category-item" data-cate="交通">
+                    <span class="icon-animal">🐰</span>交通
+                </div>
+                <div class="category-item" data-cate="购物">
+                    <span class="icon-animal">🐱</span>购物
+                </div>
+                <div class="category-item" data-cate="娱乐">
+                    <span class="icon-animal">🦊</span>娱乐
+                </div>
+                <div class="category-item" data-cate="工资">
+                    <span class="icon-animal">🐻</span>工资
+                </div>
+                <div class="category-item" data-cate="红包">
+                    <span class="icon-animal">🐥</span>红包
+                </div>
+            </div>
+            <button class="btn-save" id="saveBtn">保存记账</button>
         </div>
     </div>
+
     <!-- 统计页面 -->
     <div id="page-stat" class="page">
         <div class="card">
             <h3>📊统计报表</h3>
-            <p style="margin-top:10px">统计页面，后续增加收支图表</p>
+            <p style="margin-top:10px">后续增加收支图表、月度汇总</p>
         </div>
     </div>
+
     <!-- 我的页面 -->
     <div id="page-me" class="page">
         <div class="card">
-            <h3>⚙️个人设置</h3>
-            <p style="margin-top:10px">声音开关｜清除缓存｜导出账单 后续放在这里</p>
+            <div class="set-item">
+                <span>🔊音效开关</span>
+                <span id="soundToggle">关闭</span>
+            </div>
+            <div class="set-item" id="clearCache">
+                <span>🗑️清除缓存</span>
+                <span>点击清除记账数据</span>
+            </div>
+            <div class="set-item" id="exportBtn">
+                <span>📄导出账单</span>
+                <span>导出明细</span>
+            </div>
         </div>
     </div>
 </div>
@@ -52,22 +101,93 @@ body{background:#fff5f8;font-family:system-ui,sans-serif;color:#5a3d4a;padding-b
     <div class="nav-item" data-page="stat">统计</div>
     <div class="nav-item" data-page="me">我的</div>
 </div>
+
 <script>
-//导航切换逻辑
+//导航切换
 const navItems = document.querySelectorAll('.nav-item');
 const pages = document.querySelectorAll('.page');
 navItems.forEach(item=>{
     item.addEventListener('click',()=>{
-        //移除全部激活状态
         navItems.forEach(n=>n.classList.remove('active'));
         pages.forEach(p=>p.classList.remove('show'));
-        //激活当前项
         item.classList.add('active');
         const targetPage = item.getAttribute('data-page');
         document.getElementById(`page-${targetPage}`).classList.add('show');
     })
 })
-console.log("导航脚本加载完成，可以点击切换页面");
+
+//收支切换
+const tabs = document.querySelectorAll('.tab');
+let billType = 'exp';
+tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        billType = tab.getAttribute('data-type');
+    })
+})
+
+//分类选择
+const cateItems = document.querySelectorAll('.category-item');
+let selectCate = '';
+cateItems.forEach(cate=>{
+    cate.addEventListener('click',()=>{
+        cateItems.forEach(c=>c.classList.remove('selected'));
+        cate.classList.add('selected');
+        selectCate = cate.getAttribute('data-cate');
+    })
+})
+
+//记账保存
+const saveBtn = document.getElementById('saveBtn');
+const moneyInput = document.getElementById('moneyInput');
+saveBtn.addEventListener('click',()=>{
+    const money = moneyInput.value.trim();
+    if(!money || !selectCate){
+        alert("请填写金额并且选择分类！");
+        return;
+    }
+    let billList = JSON.parse(localStorage.getItem("billData")) || [];
+    billList.push({
+        type:billType,
+        money:money,
+        category:selectCate,
+        time:new Date().toLocaleString()
+    })
+    localStorage.setItem("billData",JSON.stringify(billList));
+    alert("记账保存成功✅");
+    moneyInput.value = "";
+    cateItems.forEach(c=>c.classList.remove('selected'));
+    selectCate = "";
+})
+
+//清除缓存
+document.getElementById('clearCache').addEventListener('click',()=>{
+    if(confirm("确定清空全部记账数据吗？无法恢复！")){
+        localStorage.removeItem("billData");
+        alert("数据已经清空");
+    }
+})
+
+//导出账单（简易csv导出）
+document.getElementById('exportBtn').addEventListener('click',()=>{
+    let billList = JSON.parse(localStorage.getItem("billData")) || [];
+    if(billList.length === 0){
+        alert("暂无账单可以导出");
+        return;
+    }
+    let csv = "类型,金额,分类,时间\n";
+    billList.forEach(b=>{
+        csv += `${b.type === 'exp'?'支出':'收入'},${b.money},${b.category},${b.time}\n`
+    })
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "松鼠记账单.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+})
 </script>
 </body>
 </html>
