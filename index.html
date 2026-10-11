@@ -2,153 +2,40 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>温馨记账</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#ffb6c1">
+<title>松鼠记</title>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, -apple-system, "PingFang SC", sans-serif;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  background-color: #fff7fb;
-  padding-bottom: 90px;
-  color: #333;
-}
-
-/* 顶部栏 */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: #fff7fb;
-  padding: 20px 20px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.topbar-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 22px;
-  font-weight: 800;
-  color: #4b2e3b;
-}
-
-.home-icon {
-  width: 28px;
-  height: 28px;
-  animation: breathe 2.6s ease-in-out infinite;
-}
-
-.voice-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 4px 14px rgba(255, 182, 193, .2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.voice-icon svg {
-  width: 20px;
-  height: 20px;
-  animation: bounce 1.8s ease-in-out infinite;
-}
-
-/* 备注输入 */
-.remark-input-wrap {
-  margin: 14px 20px 22px;
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 16px 18px;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  box-shadow: 0 6px 20px rgba(255, 182, 193, .12);
-}
-
-.pen-icon {
-  width: 22px;
-  height: 22px;
-  animation: breathe 2.4s ease-in-out infinite;
-}
-
-#topRemark {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  background: transparent;
-  color: #4b2e3b;
-}
-
-.section-title {
-  padding: 0 20px 12px;
-  display: flex;
-  justify-content: space-between;
-  color: #4b2e3b;
-  font-weight: 800;
-  font-size: 16px;
-}
-
-.section-title .tip {
-  color: #b3929f;
-  font-weight: 700;
-  font-size: 12px;
-}
-
-/* 分类网格【小动物图标】 */
-.cate-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  padding: 0 20px 28px;
-}
-
-.cate-item {
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 18px 8px 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 6px 20px rgba(255, 182, 193, .12);
-  cursor: pointer;
-  border: 3px solid transparent;
-  transition: .2s;
-}
-
-.cate-item:active {
-  transform: scale(.94);
-}
-
-.cate-item.selected {
-  border-color: #ff8fab;
-  background: #fff0f6;
-}
-
-.cate-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: float 3s ease-in-out infinite;
-  transition: .25s;
-}
-
-.cate-item.selected .cate-icon {
-  animation: pop .4s ease;
-  transform: scale(1.12);
-}...
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:#fff5f8;font-family:system-ui,sans-serif;color:#5a3d4a;padding-bottom:80px;}
+.header{background:#fff;padding:18px 20px;border-radius:0 0 24px 24px;box-shadow:0 4px 12px #00000010;}
+.header h1{font-size:20px;font-weight:600;text-align:center;}
+.content{padding:20px;}
+.card{background:#fff;border-radius:24px;padding:20px;margin-bottom:16px;box-shadow:0 6px 16px #00000010;}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#fff;display:flex;height:72px;border-top:1px solid #ffe4e9;z-index:99;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:#b3929f;}
+.nav-item.active{color:#ff8fab;}
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>松鼠记</h1>
+</div>
+<div class="content">
+    <div class="card">
+        <h3>💰今日记账</h3>
+        <p style="margin-top:10px">页面加载成功！说明基础环境没问题，接下来我们再加记账功能</p>
+    </div>
+</div>
+<!--底部导航-->
+<div class="bottom-nav">
+    <div class="nav-item active">首页</div>
+    <div class="nav-item">统计</div>
+    <div class="nav-item">我的</div>
+</div>
+<script>
+//极简测试JS，保证不会报错白屏
+console.log("页面正常启动");
+</script>
+</body>
+</html>
